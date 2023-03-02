@@ -5,6 +5,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /*CONFIGURACION PERSONALIZADA*/
 /*Colores*/
+*{
+    margin: 0;
+}
+
 .txtops-indigo{
     color:#12293f
 }
