@@ -2,3 +2,31 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/*CONFIGURACION PERSONALIZADA*/
+/*Colores*/
+.txtops-indigo{
+    color:#12293f
+}
+.txtops-chartreuse{
+    color:#dfff00
+}
+.txtops-gray{
+    color:#616161
+}
+.txtwhite{
+    color: #FFFFFF;
+}
+.bgops-indigo{
+    background-color: #12293f;
+}
+.bgops-chartreuse{
+    background-color: #dfff00;
+}
+.bgops-gray{
+    background-color: #616161;
+}
+.bgwhite{
+    background-color: #FFFFFF;
+}
+
