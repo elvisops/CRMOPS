@@ -16,49 +16,16 @@ export class AuthService {
   constructor(private http:HttpClient, private snack:MatSnackBar) { }
 
   api = environment.api
-
-  get jsonFormatter():any{
-    return {
-      stringify: (cipherParams: any) => {
-        const jsonObj = { ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64), iv: null, s: null };
-        if (cipherParams.iv) {
-          jsonObj.iv = cipherParams.iv.toString();
-        }
-        if (cipherParams.salt) {
-          jsonObj.s = cipherParams.salt.toString();
-        }
-        return JSON.stringify(jsonObj);
-      },
-      parse: (jsonStr:any) => {
-        const jsonObj = JSON.parse(jsonStr);
-        // extract ciphertext from json object, and create cipher params object
-        const cipherParams = CryptoJS.lib.CipherParams.create({
-          ciphertext: CryptoJS.enc.Base64.parse(jsonObj.ct)
-        });
-        if (jsonObj.iv) {
-          cipherParams.iv = CryptoJS.enc.Hex.parse(jsonObj.iv);
-        }
-        if (jsonObj.s) {
-          cipherParams.salt = CryptoJS.enc.Hex.parse(jsonObj.s);
-        }
-        return cipherParams;
-      }
-    };
-  }
+  
 
   encriptar(text:any){
-    const key = environment.crypto_key
-    text = text instanceof String ? text: JSON.stringify(text)
-    const textEncripted = CryptoJS.AES.encrypt(text,key,
-      {format:this.jsonFormatter, mode: CryptoJS.mode.CBC}).toString();
-      return textEncripted
+    return CryptoJS.AES.encrypt(text,environment.crypto_key);
   }
 
   desencriptar(textEncripted:any):any{
-    const key = environment.crypto_key
-    const textDecripted = CryptoJS.AES.decrypt(textEncripted, key,
-      {format: this.jsonFormatter}).toString(CryptoJS.enc.Utf8);
-    return JSON.parse(textDecripted)
+    var info = CryptoJS.AES.decrypt(textEncripted,environment.crypto_key);
+    var respuesta = info.toString(CryptoJS.enc.Utf8)
+    return respuesta
   }
 
   /*Cerrar sesion*/
