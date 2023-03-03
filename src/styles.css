@@ -5,32 +5,33 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /*CONFIGURACION PERSONALIZADA*/
 /*Colores*/
-*{
-    margin: 0;
-}
 
 .txtops-indigo{
-    color:#12293f
+    color:#12293f !important;
 }
 .txtops-chartreuse{
-    color:#dfff00
+    color:#dfff00 !important;
 }
 .txtops-gray{
-    color:#616161
+    color:#616161 !important;
 }
 .txtwhite{
-    color: #FFFFFF;
+    color: #FFFFFF !important;
 }
 .bgops-indigo{
-    background-color: #12293f;
+    background-color: #12293f !important;
 }
 .bgops-chartreuse{
-    background-color: #dfff00;
+    background-color: #dfff00 !important;
 }
 .bgops-gray{
-    background-color: #616161;
+    background-color: #616161 !important;
 }
 .bgwhite{
-    background-color: #FFFFFF;
+    background-color: #FFFFFF !important;
+}
+
+.pull-to-end{
+    justify-content: flex-end;
 }
 
