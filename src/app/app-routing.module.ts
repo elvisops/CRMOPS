@@ -14,7 +14,8 @@ const routes: Routes = [
     path:'inicio', 
     loadChildren:() => 
       import('./modules/public/public.module').then(m=>m.PublicModule)
-  },  
+  },
+  { path: 'administracion', loadChildren: () => import('./modules/administracion/administracion.module').then(m => m.AdministracionModule) },  
   {
     path:'**',
     component:PageNotFoundComponent
