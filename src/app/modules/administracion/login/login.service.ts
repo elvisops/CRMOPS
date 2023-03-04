@@ -41,6 +41,7 @@ export class LoginService {
               catchError(this.handleError("Error al iniciar la sesion"))
             )
   }
+  
 
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{

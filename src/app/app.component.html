@@ -1,5 +1,5 @@
 <mat-toolbar class="bgops-indigo txtwhite">
-  <button mat-icon-button >
+  <button mat-icon-button *ngIf="isLogged">
     <mat-icon>menu</mat-icon>
   </button>
   <span>{{title}}</span>  

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot,  RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,9 @@ export class AuthGuard implements CanActivate {
     
     if(!this.VerificarEstado()){
       this.router.navigate(['./login'])
+      console.log("no hay sesion valida")
       return false;  
+      
     }else{
       return true;
     }
@@ -22,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
   public VerificarEstado():boolean{
     let EstadoSesion = false;
-    EstadoSesion = (sessionStorage.getItem('logged')=="true")?true:false;
+    EstadoSesion = (sessionStorage.getItem('logged')=="true" || sessionStorage.getItem('logged') != undefined)?true:false;
     return EstadoSesion;
   }
   

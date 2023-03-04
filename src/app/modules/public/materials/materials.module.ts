@@ -36,8 +36,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { HttpClientModule } from '@angular/common/http';
 
-const modules = [
-    BrowserModule,
+const modules = [    
     MatCheckboxModule,
     MatCheckboxModule,
     MatButtonModule,
@@ -81,7 +80,7 @@ const modules = [
   imports: [
     modules,
     CommonModule,
-    BrowserAnimationsModule,
+    
   ],
   exports:[modules],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

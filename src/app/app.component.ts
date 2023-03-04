@@ -8,6 +8,10 @@ import { Component } from '@angular/core';
 export class AppComponent { 
   
   title = 'CRM OPS';
+  isLogged:boolean = false
 
+  ValidarSesion(){
+    this.isLogged = (sessionStorage.getItem('logged')=="true")?true:false;
+  }
   
 }
