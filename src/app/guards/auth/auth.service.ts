@@ -35,6 +35,11 @@ export class AuthService {
     sessionStorage.removeItem('permisos')
   }
 
+  /*inicializar variables de sessionStorage*/
+  setSessionStorage(){
+    sessionStorage.setItem('logged','true')
+  }
+
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{
       horizontalPosition:"center",

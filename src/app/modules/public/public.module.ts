@@ -18,7 +18,8 @@ import { MaterialsModule } from './materials/materials.module';
   imports: [
     CommonModule,
     PublicRoutingModule,
-    NgbModule,    
+    NgbModule,  
+    MaterialsModule  
   ],
   exports:[
     
