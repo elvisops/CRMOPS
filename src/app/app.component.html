@@ -1,8 +1,55 @@
-<mat-toolbar class="bgops-indigo txtwhite">
-  <button mat-icon-button *ngIf="isLogged">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>{{title}}</span>  
-</mat-toolbar>
-<router-outlet></router-outlet>
+<mat-drawer-container class="nav-container" autosize="">
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <div *ngIf="isLogged">
+      
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let modulo of modulos">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              {{modulo}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div *ngFor="let permiso of permisos">
+            <a 
+              mat-button 
+              color="primary" 
+              *ngIf="permiso.MODULO == modulo"
+              routerLink="{{modulo | lowercase}}/{{permiso.VISTA | lowercase}}"
+            >
+              {{permiso.VISTA}}
+            </a>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-drawer>
+
+  <div class="sidenav-content">
+    <mat-toolbar class="bgops-indigo txtwhite barra-tareas">
+  
+      <button mat-icon-button *ngIf="isLogged" (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <a routerLink="./inicio" mat-button class="txtwhite">{{title}}</a>  
+  
+      <span class="barra-tareas-separador"></span>
+      <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/perfil">Perfil</button>
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>
+      </mat-menu>
+    
+    
+  
+    
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+  </div>
+
+</mat-drawer-container>
+
+
+
 

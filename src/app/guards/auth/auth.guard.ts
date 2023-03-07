@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
   public VerificarEstado():boolean{
     let EstadoSesion = false;
-    EstadoSesion = (sessionStorage.getItem('logged')=="true" || sessionStorage.getItem('logged') != undefined)?true:false;
+    EstadoSesion = (sessionStorage.getItem('logged')=="true" && sessionStorage.getItem('logged') != undefined)?true:false;
     return EstadoSesion;
   }
   

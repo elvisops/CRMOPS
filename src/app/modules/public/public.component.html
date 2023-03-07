@@ -1,1 +1,15 @@
-<p>public works!</p>
+<div class="container mt-4">
+    <mat-card *ngFor="let modulo of modulos">
+        <mat-card-header>
+            <h2>{{modulo}}</h2>
+        </mat-card-header>
+        <mat-card-content>
+            <div *ngFor="let permiso of permisos">
+                {{permiso.VISTA}}
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button class="bgops-indigo txtwhite">Abrir modulo</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

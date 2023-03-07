@@ -41,6 +41,42 @@ export class LoginService {
               catchError(this.handleError("Error al iniciar la sesion"))
             )
   }
+
+  getPermisos(){
+    var token = sessionStorage.getItem('token')
+    if(token==undefined || token==""){
+      this.sesionDestroy()
+      return
+    }
+    token = this.auth.desencriptar(token)
+    var payload = this.mkpayload({proc:"user_permisos",token:token})
+
+    return this.http.post<any>(`${this.api}/api/get`,{proc:"get_permisos",payload:payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener los permisos de usuario"))
+    )
+
+  }
+
+  sesionDestroy(){
+    /*sessionStorage.removeItem('username')
+    sessionStorage.setItem('logged','false')
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('usuario')*/
+    sessionStorage.clear()
+    window.location.href = './'
+  }
+
+  leerPermisos():any{
+    if(sessionStorage.getItem('permisos')!=undefined){
+      var permisos:any = sessionStorage.getItem('permisos')
+      permisos = this.auth.desencriptar(permisos)
+      permisos = JSON.parse(permisos)    
+      return permisos;
+    }
+    
+  }
   
 
   notificacion(msg:string):void{
