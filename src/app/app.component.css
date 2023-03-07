@@ -1,0 +1,13 @@
+.barra-tareas-separador{
+    flex: 1 1 auto;
+}
+
+.nav-container{
+    width: 100%;;
+    height: 100%;
+    
+}
+
+.sidenav-content{
+    height: 100%;
+}
