@@ -28,17 +28,15 @@ export class AuthService {
     return respuesta
   }
 
-  /*Cerrar sesion*/
-  logout():void{
-    sessionStorage.setItem('logged','false');
-    sessionStorage.removeItem('token')
-    sessionStorage.removeItem('permisos')
+  mkpayload(data:any){
+    /*Crea el objeto para ejecutar el procedimiento almacenado desde el API Server*/
+    /*OJO*/
+    /*Matener el orden de ejecucion de las variables del procedimiento de la base de
+    datos desde la interfaz*/
+    data = this.encriptar(JSON.stringify(data)).toString();
+    return data;
   }
-
-  /*inicializar variables de sessionStorage*/
-  setSessionStorage(){
-    sessionStorage.setItem('logged','true')
-  }
+  
 
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{

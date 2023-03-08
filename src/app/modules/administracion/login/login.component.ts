@@ -48,12 +48,7 @@ export class LoginComponent implements OnInit {
   }
 
   validarSesionActiva(){
-    if(sessionStorage.getItem('logged')=="true"){
-      this.service.getPermisos()?.subscribe(res=>{
-        console.log(res)
-        var permisos = res.data        
-        sessionStorage.setItem('permisos',permisos)
-      })
+    if(sessionStorage.getItem('logged')=="true"){      
       this.router.navigate(['./inicio'])
     }
   }
@@ -68,35 +63,39 @@ export class LoginComponent implements OnInit {
       this.notificacion("Ingrese el usuario y contraseña")      
       return;
     }
-
     this.service.login(this.usuario,this.password).subscribe(res=>{
       var respuesta = JSON.parse(this.auth.desencriptar(res.response))
+      console.log(respuesta)
       respuesta = respuesta[0]            
       if(respuesta.status == 1){
-        
+      
         this.notificacion("Bienvenido "+this.usuario)                  
         var obj = JSON.parse(respuesta.data)
         obj = obj[0]
 
         var token = this.auth.encriptar(obj.token).toString()        
         var username = (obj.username)
-
+        
         console.log(respuesta.data[0])
         sessionStorage.setItem("token",token)
         sessionStorage.setItem('usuario',username)
-        this.auth.setSessionStorage()        
-
+        this.service.setSessionStorage()    
         window.location.href="./"
+      
       }else{
         //Validar si el usuario esta inactivo
         if(respuesta.data == "-1"){
           this.inactive = true
           this.inactiveMsg = "Su usuario esta bloqueado o deshabilitado, pongase en contacto con un administrador"          
         }
-        this.notificacion(respuesta.message)        
+        this.notificacion(respuesta.message)  
+
+
       }
     })
 
   } 
+
+  
 
 }

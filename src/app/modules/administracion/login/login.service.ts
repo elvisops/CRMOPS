@@ -23,24 +23,14 @@ export class LoginService {
     private snack:MatSnackBar
   ) { }
 
-  mkpayload(data:any){
-    /*Crea el objeto para ejecutar el procedimiento almacenado desde el API Server*/
-    /*OJO*/
-    /*Matener el orden de ejecucion de las variables del procedimiento de la base de
-    datos desde la interfaz*/
-    data = this.auth.encriptar(JSON.stringify(data)).toString();
-    return data;
-  }
-
-
   login(usuario:string,password:string):Observable<any>{
-    var payload = this.mkpayload({proc:"user_auth",usuario:usuario,password:password})
+    var payload = this.auth.mkpayload({proc:"user_auth",usuario:usuario,password:password})
     return this.http.post<any>(`${this.api}/api/proc`,{proc:"login",payload:payload})
             .pipe(
               tap(),
               catchError(this.handleError("Error al iniciar la sesion"))
             )
-  }
+  }  
 
   getPermisos(){
     var token = sessionStorage.getItem('token')
@@ -49,7 +39,7 @@ export class LoginService {
       return
     }
     token = this.auth.desencriptar(token)
-    var payload = this.mkpayload({proc:"user_permisos",token:token})
+    var payload = this.auth.mkpayload({proc:"user_permisos",token:token})
 
     return this.http.post<any>(`${this.api}/api/get`,{proc:"get_permisos",payload:payload})
     .pipe(
@@ -59,14 +49,12 @@ export class LoginService {
 
   }
 
-  sesionDestroy(){
-    /*sessionStorage.removeItem('username')
-    sessionStorage.setItem('logged','false')
-    sessionStorage.removeItem('token')
-    sessionStorage.removeItem('usuario')*/
-    sessionStorage.clear()
-    window.location.href = './'
+  /*inicializar variables de sessionStorage*/
+  setSessionStorage(){
+    sessionStorage.setItem('logged','true')    
   }
+
+  
 
   leerPermisos():any{
     if(sessionStorage.getItem('permisos')!=undefined){
@@ -78,6 +66,10 @@ export class LoginService {
     
   }
   
+  sesionDestroy(){    
+    sessionStorage.clear()
+    window.location.href = './'
+  }
 
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{
