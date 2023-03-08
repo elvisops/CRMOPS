@@ -1,4 +1,4 @@
-import { Component,  HostListener, OnInit } from '@angular/core';
+import { Component,  HostListener, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from './guards/auth/auth.service';
 import { LoginService } from './modules/administracion/login/login.service';
 
@@ -18,12 +18,15 @@ export class AppComponent implements OnInit {
   constructor(
     private LoginService:LoginService,
     private auth:AuthService
-  ){}
+  ){
+    this.ValidarSesion()
+  }
 
   @HostListener('window:storage',['$event'])
   onStorageChange(event:StorageEvent){
     if(event.newValue == 'token' || event.key == 'token'){            
       this.ValidarSesion()
+      
     }    
   } 
 
@@ -33,11 +36,19 @@ export class AppComponent implements OnInit {
     this.permisos = this.LoginService.leerPermisos()    
     this.ListModulos()
   }
-
   
   
   ValidarSesion(){
-    this.isLogged = (sessionStorage.getItem('logged')=="true")?true:false;    
+    this.isLogged = (sessionStorage.getItem('logged')=="true")?true:false;  
+    if(sessionStorage.getItem('logged')=="true"){
+      this.LoginService.getPermisos()?.subscribe(res=>{
+        var permisos = res.data
+        sessionStorage.setItem("permisos",permisos)
+        this.permisos = this.LoginService.leerPermisos()
+        this.ListModulos()
+      })
+    }  
+    
   }
 
   cerrarSesion(){
