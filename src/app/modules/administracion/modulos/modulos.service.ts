@@ -31,22 +31,11 @@ export class ModulosService {
     )
   }
 
-  // getListaRoles():Observable<any>{
-  //   var token = sessionStorage.getItem('token')
-  //   token = this.auth.desencriptar(token)
-  //   var payload = this.auth.mkpayload({proc:"roles_lista",token:token})
-  //   return this.http.post<any>(`${this.api}/api/get`,{payload})
-  //   .pipe(
-  //     tap(),
-  //     catchError(this.handleError("Error al leer la lista de usuarios"))
-  //   )
-  // }
-
-  Crear(usuario:string,modulo:string,descripcion:string):Observable<any>{
+  Crear(modulo:string,descripcion:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
         proc:"modulos_create",
-        usuario:usuario,
+        token:token,
         modulo:modulo,
         descripcion:descripcion        
       })

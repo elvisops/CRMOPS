@@ -12,13 +12,6 @@ import { ModulosService } from '../modulos.service';
 })
 export class ModulosCrearComponent implements OnInit{
 
-  /*variables*/
-  hide:boolean = true
-  usuario:string=""
-  modulo:string=""
-  descripcion:string=""
-  
-  ListaRoles:any[] = []
 
   constructor(
     private dialogRef:MatDialogRef<ModulosCrearComponent>,
@@ -28,17 +21,24 @@ export class ModulosCrearComponent implements OnInit{
 
   ){}
 
+ /*variables*/
+ hide:boolean = true
+ usuario:string=""
+ modulo:string=""
+ descripcion:string=""
+ 
+ ListaModulos:any[] = []
 
   ngOnInit(): void {
-    
+    this.genListaModulos()
   }
 
   CrearModulo(){
-    if(this.usuario == "" || this.modulo == ""||this.descripcion==""){
+    if(this.modulo == ""||this.descripcion==""){
       this.service.notificacion("Debe llenar todos los campos del formulario")
       return;
     }
-    this.service.Crear(this.usuario,this.modulo,this.descripcion).subscribe(r=>{
+    this.service.Crear(this.modulo,this.descripcion).subscribe(r=>{
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
@@ -54,9 +54,16 @@ export class ModulosCrearComponent implements OnInit{
     })
   }
 
+  genListaModulos(){
+    this.service.getListaModulos().subscribe(r=>{
+      var res = this.auth.desencriptar(r.data)
+      this.ListaModulos = JSON.parse(res)
+    })
+  }
+
   resetForm(){
     this.usuario="";
-    this.modulo="0";
+    this.modulo="";
     this.descripcion="";
   }
 
