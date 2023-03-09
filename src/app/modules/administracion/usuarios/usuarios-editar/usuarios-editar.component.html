@@ -6,41 +6,79 @@
     </mat-card-header>
     <mat-divider class="my-4"></mat-divider>
     <mat-card-content class="px-4">
+        <div *ngIf="!chPass">
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Nombre Usuario</mat-label>
+                <input matInput [(ngModel)]="usuario" type="text" >
+            </mat-form-field>        
+    
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Rol de usuario</mat-label>
+                <mat-select [(ngModel)]="rolid">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let rol of ListaRoles" [value]="rol.ROLID">
+                        {{rol.ROL}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+    
+            <div class="w-100 my-2 border p-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-label>Estado de Usuario:</mat-label>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-slide-toggle [(ngModel)]="estado">
+                            {{txtEstado}}
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+        
 
-        <mat-form-field appearance="outline" class="w-100 my-2">
-            <mat-label>Nombre Usuario</mat-label>
-            <input matInput [(ngModel)]="usuario" type="text" >
-        </mat-form-field>
+        
 
+        <mat-checkbox [(ngModel)]="chPass"> Cambiar Clave</mat-checkbox>
+        <div *ngIf="chPass">
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Contraseña</mat-label>
+                <input 
+                    matInput 
+                    [(ngModel)]="clave" 
+                    type="text" 
+                    [type]="hide ? 'password' : 'text'"
+                >
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-100 my-2">
-            <mat-label>Contraseña</mat-label>
-            <input 
-                matInput 
-                [(ngModel)]="clave" 
-                type="text" 
-                [type]="hide ? 'password' : 'text'"
-            >
-            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="w-100 my-2">
-            <mat-label>Rol de usuario</mat-label>
-            <mat-select [(ngModel)]="rolid">
-                <mat-option></mat-option>
-                <mat-option *ngFor="let rol of ListaRoles" [value]="rol.ROLID">
-                    {{rol.ROL}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100 my-2">
+                <mat-label>Contraseña</mat-label>
+                <input 
+                    matInput 
+                    [(ngModel)]="claveConfirm" 
+                    type="text" 
+                    [type]="hide ? 'password' : 'text'"
+                >
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        
 
     </mat-card-content>
     <mat-divider class="my-4"></mat-divider>
     <mat-card-actions>
-        <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="EditarUsuario()">Crear</button>
+        <button *ngIf="chPass" mat-raised-button class="bgops-chartreuse txt-gray" (click)="CambiarClave()">Cambiar Clave</button>
+        <button *ngIf="!chPass" mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="GuardarCambios()">Actualizar</button>
         <button mat-raised-button color="warn" class="mx-2" (click)="CloseDialog()">Cancelar</button>
     </mat-card-actions>
 </mat-card>
