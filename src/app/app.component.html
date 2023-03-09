@@ -1,7 +1,14 @@
 <mat-drawer-container class="nav-container" autosize="">
   <mat-drawer #drawer class="sidenav" mode="side">
     <div *ngIf="isLogged">
+      <div class="logo-toolbar p-2" style="justify-content: center;text-align: center;">
+        <img src="../assets/img/logo1.png" style="width: 150px; height: auto;">
+      </div>
+
+      <mat-divider class="mt-4"></mat-divider>
       
+      
+
       <mat-accordion>
         <mat-expansion-panel *ngFor="let modulo of modulos">
           <mat-expansion-panel-header>

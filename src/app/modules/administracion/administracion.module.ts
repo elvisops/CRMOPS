@@ -9,6 +9,8 @@ import { PanelInicioComponent } from './panel-inicio/panel-inicio.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuariosCrearComponent } from './usuarios/usuarios-crear/usuarios-crear.component';
 import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-editar.component';
+import { ModulosComponent } from './modulos/modulos.component';
+import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-edi
     PanelInicioComponent,
     UsuariosComponent,
     UsuariosCrearComponent,
-    UsuariosEditarComponent
+    UsuariosEditarComponent,
+    ModulosComponent,
+    ModulosCrearComponent
   ],
   imports: [
     CommonModule,
