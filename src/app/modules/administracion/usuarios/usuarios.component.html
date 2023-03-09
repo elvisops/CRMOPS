@@ -15,13 +15,13 @@
 
                     <ng-container matColumnDef="ESTADO">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-                        <td mat-cell *matCellDef="let element">
+                        <td mat-cell *matCellDef="let element" >
                             
-                            <span class="bg-success txtwhite p-4" *ngIf="element.ESTADO == 1; else Inactivo">
+                            <span class="bg-success txtwhite p-1"  *ngIf="element.ESTADO == 1; else Inactivo">
                                 Activo
                             </span>
                             <ng-template #Inactivo>
-                                <span class="bg-danger txtwhite p-4" >
+                                <span class="bg-danger txtwhite p-1" >
                                     Inactivo
                                 </span>
                             </ng-template>

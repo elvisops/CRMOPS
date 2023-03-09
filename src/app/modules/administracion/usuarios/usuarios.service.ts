@@ -41,8 +41,7 @@ export class UsuariosService {
     )
   }
 
-  Crear(usuario:string,clave:string,rolid:number|string):Observable<any>{
-    var token = sessionStorage.getItem('token')
+  Crear(usuario:string,clave:string,rolid:number|string):Observable<any>{    
     var payload = this.auth.mkpayload({
         proc:"user_create",
         usuario:usuario,
@@ -55,6 +54,50 @@ export class UsuariosService {
       catchError(this.handleError("Error al leer la lista de usuarios"))
     )
   }
+
+  Update(UsuarioID:number,Usuario:string,RolID:number,Estado:boolean):Observable<any>{
+    var estadodb = (Estado)?'1':'0'
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc:"user_update",
+      token:token,
+      UsuarioID:UsuarioID,
+      Usuario:Usuario,
+      RolID:RolID,
+      Estado:estadodb
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al actualizar el usuario"))
+    )
+  }
+
+  ChEstado(UsuarioID:number,accion:string):Observable<any>{
+    var payload = this.auth.mkpayload({
+      proc:"user_"+accion,
+      UsuarioID:UsuarioID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cambiar el estado del usuario"))
+    )
+  }
+
+  ChPass(Usuario:string,Clave:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({proc:"user_chpass",Usuario:Usuario,Clave:Clave})
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cambiar la clave de usuario"))
+    )
+  }
+
+
   
 
   notificacion(msg:string):void{
