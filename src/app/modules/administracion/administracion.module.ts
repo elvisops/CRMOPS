@@ -11,6 +11,7 @@ import { UsuariosCrearComponent } from './usuarios/usuarios-crear/usuarios-crear
 import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-editar.component';
 import { ModulosComponent } from './modulos/modulos.component';
 import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.component';
+import { ModulosEditarComponent } from './modulos/modulos-editar/modulos-editar.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.com
     UsuariosCrearComponent,
     UsuariosEditarComponent,
     ModulosComponent,
-    ModulosCrearComponent
+    ModulosCrearComponent,
+    ModulosEditarComponent
   ],
   imports: [
     CommonModule,

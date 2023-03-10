@@ -17,6 +17,7 @@ export class ModulosService {
     private snack:MatSnackBar
   ) { }
 
+  
 
   api = environment.api
     
@@ -45,6 +46,24 @@ export class ModulosService {
       catchError(this.handleError("Error al leer la lista de Modulos"))
     )
   }
+
+  update(moduloID:number, modulo:string, descripcion:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    var payload = this.auth.mkpayload({
+
+      proc:"modulos_update",
+      token:token,
+      moduloID:moduloID,
+      modulo:modulo,
+      descripcion:descripcion
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Modificar el Modulos"))
+    )
+  }
+
   
 
   notificacion(msg:string):void{

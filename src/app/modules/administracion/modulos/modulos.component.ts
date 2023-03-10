@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 /*Material Dialog - ventana emergente */
 import { MatDialog } from '@angular/material/dialog';
 import { ModulosCrearComponent } from './modulos-crear/modulos-crear.component';
+import { ModulosEditarComponent } from './modulos-editar/modulos-editar.component';
 
 @Component({
   selector: 'app-modulos',
@@ -58,6 +59,21 @@ export class ModulosComponent implements OnInit{
       data:null,
       disableClose:true
     });
+
+    dialogRef.afterClosed().subscribe(datos=>{     
+      
+      this.genListaModulos()
+    })
+  }
+
+  OpenDialogEditar(element:any){
+    const dialogRef = this.dialog.open(ModulosEditarComponent,{
+      width:'40%',
+      data:element,
+      disableClose:true
+    });
+
+    
 
     dialogRef.afterClosed().subscribe(datos=>{     
       
