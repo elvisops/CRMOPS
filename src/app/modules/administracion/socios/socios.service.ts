@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable({
   providedIn: 'root'
 })
-export class ModulosService {
+export class SociosService {
 
   constructor(
     private http:HttpClient,
@@ -17,25 +17,13 @@ export class ModulosService {
     private snack:MatSnackBar
   ) { }
 
-  
-
   api = environment.api
-    
-  getListaModulos():Observable<any>{
-    var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({proc:"modulos_lista",token:token})
-    return this.http.post<any>(`${this.api}/api/get`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al leer la lista de modulos"))
-    )
-  }
+
 
   Crear(modulo:string,descripcion:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
-        proc:"modulos_create",
+        proc:"socios_create",
         token:token,
         modulo:modulo,
         descripcion:descripcion        
@@ -43,28 +31,44 @@ export class ModulosService {
     return this.http.post<any>(`${this.api}/api/proc`,{payload})
     .pipe(
       tap(),
-      catchError(this.handleError("Error al leer la lista de Modulos"))
+      catchError(this.handleError("Error al leer la lista de Socios"))
     )
   }
 
-  update(moduloID:number, modulo:string, descripcion:string):Observable<any>{
+  update(socioID:number, socio:string, descripcion:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
 
-      proc:"modulos_update",
+      proc:"socios_update",
       token:token,
-      moduloID:moduloID,
-      modulo:modulo,
+      socioID:socioID,
+      socio:socio,
       descripcion:descripcion
     })
     return this.http.post<any>(`${this.api}/api/proc`,{payload})
     .pipe(
       tap(),
-      catchError(this.handleError("Error al Modificar el Modulos"))
+      catchError(this.handleError("Error al Modificar el socio"))
     )
   }
 
+//Llamado de proc para listar socios
 
+getListaSocios():Observable<any>{
+  var token = sessionStorage.getItem('token')
+  token = this.auth.desencriptar(token)
+  var payload = this.auth.mkpayload({proc:"socios_lista",token:token})
+  return this.http.post<any>(`${this.api}/api/get`,{payload})
+  .pipe(
+    tap(),
+    catchError(this.handleError("Error al leer la lista de socios"))
+  )
+}
+
+
+
+
+//manejo de errores mensaje
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{
       horizontalPosition:"center",
