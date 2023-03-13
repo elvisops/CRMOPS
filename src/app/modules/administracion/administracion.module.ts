@@ -16,8 +16,13 @@ import { SociosComponent } from './socios/socios.component';
 import { SociosCrearComponent } from './socios/socios-crear/socios-crear.component';
 import { SociosEditarComponent } from './socios/socios-editar/socios-editar.component';
 import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+
 import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { ContactosComponent } from './socios/contactos/contactos.component';
+
+import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
+import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
+
 
 @NgModule({
   declarations: [
@@ -34,8 +39,13 @@ import { ContactosComponent } from './socios/contactos/contactos.component';
     SociosCrearComponent,
     SociosEditarComponent,
     TiposCorreosComponent,
+
     ProyectosComponent,
     ContactosComponent
+
+    TiposCorreosCrearComponent,
+    TiposCorreosEditarComponent
+
   ],
   imports: [
     CommonModule,

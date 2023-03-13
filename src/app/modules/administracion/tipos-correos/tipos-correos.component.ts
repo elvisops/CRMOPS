@@ -8,8 +8,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 /*Material Dialog - ventana emergente */
 import { MatDialog } from '@angular/material/dialog';
-// import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear.component';
-// import { TiposCorreosEditarComponent } from './tipos-correos-editar/tipos-correos-editar.component';
+import { TiposCorreosCrearComponent } from './tipos-correos-crear/tipos-correos-crear.component';
+import { TiposCorreosEditarComponent } from './tipos-correos-editar/tipos-correos-editar.component';
 
 
 @Component({
@@ -51,33 +51,33 @@ export class TiposCorreosComponent implements OnInit {
     this.DataSource.paginator = this.paginator
   }
 
-  // OpenDialogCrear(){
-  //   const dialogRef = this.dialog.open(SociosCrearComponent,{
-  //     width:'40%',
-  //     data:null,
-  //     disableClose:true
-  //   });
+  OpenDialogCrear(){
+    const dialogRef = this.dialog.open(TiposCorreosCrearComponent,{
+      width:'40%',
+      data:null,
+      disableClose:true
+    });
 
-  //   dialogRef.afterClosed().subscribe(datos=>{     
+    dialogRef.afterClosed().subscribe(datos=>{     
       
-  //     this.genListaSocios()
-  //   })
-  // }
+      this.genListaTcorreos()
+    })
+  }
 
-  // OpenDialogEditar(element:any){
-  //   const dialogRef = this.dialog.open(SociosEditarComponent,{
-  //     width:'40%',
-  //     data:element,
-  //     disableClose:true
-  //   });
+  OpenDialogEditar(element:any){
+    const dialogRef = this.dialog.open(TiposCorreosEditarComponent,{
+      width:'40%',
+      data:element,
+      disableClose:true
+    });
 
     
 
-  //   dialogRef.afterClosed().subscribe(datos=>{     
+    dialogRef.afterClosed().subscribe(datos=>{     
       
-  //     this.genListaSocios()
-  //   })
-  // }
+      this.genListaTcorreos()
+    })
+  }
 
 
 }
