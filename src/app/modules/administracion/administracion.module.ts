@@ -41,7 +41,7 @@ import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-edita
     TiposCorreosComponent,
 
     ProyectosComponent,
-    ContactosComponent
+    ContactosComponent,
 
     TiposCorreosCrearComponent,
     TiposCorreosEditarComponent
