@@ -8,7 +8,7 @@
             <div class="table-responsive">
 
                 <table mat-table [dataSource]="DataSource" matSort class="w-100">
-                    <ng-container matColumnDef="TIPOCORREO">
+                    <ng-container matColumnDef="TIPO_CORREO">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Socio</th>
                         <td mat-cell *matCellDef="let element">{{element.TIPOCORREO}}</td>
                     </ng-container>
@@ -28,7 +28,7 @@
                         <th mat-header-cell *matHeaderCellDef>Opciones</th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-icon-button color="primary" 
-                           
+                           (click)="OpenDialogEditar(element)"
                             
                             >
                                 <mat-icon>edit</mat-icon>
@@ -57,7 +57,7 @@
             <button 
                 mat-raised-button 
                 class="bgops-indigo txtwhite" 
-                       
+                (click)="OpenDialogCrear()"
             >
                 Crear
             </button>

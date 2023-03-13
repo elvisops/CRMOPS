@@ -16,6 +16,8 @@ import { SociosComponent } from './socios/socios.component';
 import { SociosCrearComponent } from './socios/socios-crear/socios-crear.component';
 import { SociosEditarComponent } from './socios/socios-editar/socios-editar.component';
 import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
+import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
     SociosComponent,
     SociosCrearComponent,
     SociosEditarComponent,
-    TiposCorreosComponent
+    TiposCorreosComponent,
+    TiposCorreosCrearComponent,
+    TiposCorreosEditarComponent
   ],
   imports: [
     CommonModule,

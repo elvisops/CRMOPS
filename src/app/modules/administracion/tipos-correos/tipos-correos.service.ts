@@ -20,37 +20,34 @@ export class TiposCorreosService {
   api = environment.api
 
 
-  // Crear(modulo:string,descripcion:string):Observable<any>{
-  //   var token = sessionStorage.getItem('token')
-  //   var payload = this.auth.mkpayload({
-  //       proc:"socios_create",
-  //       token:token,
-  //       modulo:modulo,
-  //       descripcion:descripcion        
-  //     })
-  //   return this.http.post<any>(`${this.api}/api/proc`,{payload})
-  //   .pipe(
-  //     tap(),
-  //     catchError(this.handleError("Error al leer la lista de Socios"))
-  //   )
-  // }
+  Crear(tipocorreo:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    var payload = this.auth.mkpayload({
+        proc:"tipos_correos_create",
+        token:token,
+        tipocorreo:tipocorreo        
+      })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al leer la lista de Tipos de correos"))
+    )
+  }
 
-  // update(socioID:number, socio:string, descripcion:string):Observable<any>{
-  //   var token = sessionStorage.getItem('token')
-  //   var payload = this.auth.mkpayload({
-
-  //     proc:"socios_update",
-  //     token:token,
-  //     socioID:socioID,
-  //     socio:socio,
-  //     descripcion:descripcion
-  //   })
-  //   return this.http.post<any>(`${this.api}/api/proc`,{payload})
-  //   .pipe(
-  //     tap(),
-  //     catchError(this.handleError("Error al Modificar el socio"))
-  //   )
-  // }
+  update(tipocorreoID:number,tipocorreo:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    var payload = this.auth.mkpayload({
+      proc:"tipos_correos_update",
+      token:token,
+      tipocorreoID:tipocorreoID,
+      tipocorreo:tipocorreo
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Modificar el Tipo de Correo"))
+    )
+  }
 
 //Llamado de proc para listar tipos correos
 
