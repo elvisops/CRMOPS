@@ -33,11 +33,17 @@
                         <th mat-header-cell *matHeaderCellDef>Opciones</th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-icon-button color="primary" 
-                            (click)="OpenDialogEditar(element)"
-                            
+                            (click)="OpenDialogEditar(element)"                            
                             >
                                 <mat-icon>edit</mat-icon>
                             </button>
+
+                            <button mat-icon-button color="primary" 
+                            (click)="OpenDialogSociosContacts(element.SOCIOID)"                            
+                            >
+                                <mat-icon>perm_contact_calendar</mat-icon>
+                            </button>
+
                         </td>
                     </ng-container>
 

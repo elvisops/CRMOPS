@@ -52,11 +52,29 @@ export class SociosService {
     )
   }
 
+  CrearContacto(SocioID:number,Nombre:string,Telefono:string,Correo:string,Descripcion:string,Puesto:string):Observable<any>{
+    var token = this.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:"socios_contactos_create",
+      token:token,
+      SocioID:SocioID,
+      Nombre:Nombre,
+      Telefono:Telefono,
+      Correo:Correo,
+      Puesto:Puesto,
+      Descripcion:Descripcion
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al crear el contacto"))
+    )
+  }
+
 //Llamado de proc para listar socios
 
 getListaSocios():Observable<any>{
-  var token = sessionStorage.getItem('token')
-  token = this.auth.desencriptar(token)
+  var token = this.ParseToken()
   var payload = this.auth.mkpayload({proc:"socios_lista",token:token})
   return this.http.post<any>(`${this.api}/api/get`,{payload})
   .pipe(
@@ -65,8 +83,24 @@ getListaSocios():Observable<any>{
   )
 }
 
+getSociosContacts(SocioID:number):Observable<any>{
+  var token = this.ParseToken()
+  var payload = this.auth.mkpayload({proc:'sp_socios_contactos',token:token,SocioID:SocioID})
+  return this.http.post<any>(`${this.api}/api/get`,{payload})
+  .pipe(
+    tap(),
+    catchError(this.handleError("No se pudo obtener la lista de contactos"))
+  )
+}
 
 
+
+
+ParseToken(){
+  var token = sessionStorage.getItem('token')
+  token = this.auth.desencriptar(token)
+  return token;
+}
 
 //manejo de errores mensaje
   notificacion(msg:string):void{

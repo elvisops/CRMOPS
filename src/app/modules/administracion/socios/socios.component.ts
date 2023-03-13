@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { SociosCrearComponent } from './socios-crear/socios-crear.component';
 import { SociosEditarComponent } from './socios-editar/socios-editar.component';
+import { ContactosComponent } from './contactos/contactos.component';
 
 @Component({
   selector: 'app-socios',
@@ -69,13 +70,22 @@ export class SociosComponent implements OnInit{
       data:element,
       disableClose:true
     });
-
-    
-
-    dialogRef.afterClosed().subscribe(datos=>{     
-      
+    dialogRef.afterClosed().subscribe(datos=>{           
       this.genListaSocios()
     })
+  }
+
+  OpenDialogSociosContacts(SocioID:any){
+    const dialogRef = this.dialog.open(ContactosComponent,{
+      width:'80%',
+      data:SocioID,
+      disableClose:true
+    });
+
+    dialogRef.afterClosed().subscribe(datos=>{
+      
+    })
+
   }
 
 }
