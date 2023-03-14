@@ -22,6 +22,12 @@ import { ContactosComponent } from './socios/contactos/contactos.component';
 
 import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
 import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
+import { PaisesComponent } from './paises/paises.component';
+import { PaisesCrearComponent } from './paises/paises-crear/paises-crear.component';
+import { PaisesEditarComponent } from './paises/paises-editar/paises-editar.component';
+import { TiposProductosComponent } from './tipos-productos/tipos-productos.component';
+import { TiposProductosCrearComponent } from './tipos-productos/tipos-productos-crear/tipos-productos-crear.component';
+import { TiposProductosEditarComponent } from './tipos-productos/tipos-productos-editar/tipos-productos-editar.component';
 
 
 @NgModule({
@@ -41,10 +47,16 @@ import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-edita
     TiposCorreosComponent,
 
     ProyectosComponent,
-    ContactosComponent
+    ContactosComponent,
 
     TiposCorreosCrearComponent,
-    TiposCorreosEditarComponent
+    TiposCorreosEditarComponent,
+    PaisesComponent,
+    PaisesCrearComponent,
+    PaisesEditarComponent,
+    TiposProductosComponent,
+    TiposProductosCrearComponent,
+    TiposProductosEditarComponent
 
   ],
   imports: [

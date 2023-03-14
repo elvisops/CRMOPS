@@ -7,6 +7,8 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ModulosComponent } from './modulos/modulos.component';
 import { SociosComponent } from './socios/socios.component';
 import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+import { PaisesComponent } from './paises/paises.component';
+import { TiposProductosComponent } from './tipos-productos/tipos-productos.component';
 
 const routes: Routes = [
   { path: '', component: AdministracionComponent },
@@ -14,7 +16,9 @@ const routes: Routes = [
   { path: 'usuarios',component:UsuariosComponent},
   { path: 'modulos',component:ModulosComponent},
   { path: 'socios',component:SociosComponent},
-  { path: 'tipos_correos',component:TiposCorreosComponent}
+  { path: 'tipos_correos',component:TiposCorreosComponent},
+  { path: 'paises',component:PaisesComponent},
+  { path: 'tipos_productos',component:TiposProductosComponent}
 ];
 
 @NgModule({
