@@ -12,6 +12,10 @@ import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-edi
 import { ModulosComponent } from './modulos/modulos.component';
 import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.component';
 import { ModulosEditarComponent } from './modulos/modulos-editar/modulos-editar.component';
+// Roles
+import { RolesComponent } from './roles/roles.component';
+import { RolesCrearComponent } from './roles/roles-crear/roles-crear.component'; 
+import { RolesEditarComponent } from './roles/roles-editar/roles-editar.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,10 @@ import { ModulosEditarComponent } from './modulos/modulos-editar/modulos-editar.
     UsuariosEditarComponent,
     ModulosComponent,
     ModulosCrearComponent,
-    ModulosEditarComponent
+    ModulosEditarComponent,
+    RolesComponent,
+    RolesCrearComponent,
+    RolesEditarComponent
   ],
   imports: [
     CommonModule,
