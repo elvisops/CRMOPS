@@ -12,10 +12,24 @@ import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-edi
 import { ModulosComponent } from './modulos/modulos.component';
 import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.component';
 import { ModulosEditarComponent } from './modulos/modulos-editar/modulos-editar.component';
+
 // Roles
 import { RolesComponent } from './roles/roles.component';
 import { RolesCrearComponent } from './roles/roles-crear/roles-crear.component'; 
 import { RolesEditarComponent } from './roles/roles-editar/roles-editar.component';
+
+import { SociosComponent } from './socios/socios.component';
+import { SociosCrearComponent } from './socios/socios-crear/socios-crear.component';
+import { SociosEditarComponent } from './socios/socios-editar/socios-editar.component';
+import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+
+import { ProyectosComponent } from './socios/proyectos/proyectos.component';
+import { ContactosComponent } from './socios/contactos/contactos.component';
+
+import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
+import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
+
+
 
 @NgModule({
   declarations: [
@@ -28,9 +42,21 @@ import { RolesEditarComponent } from './roles/roles-editar/roles-editar.componen
     ModulosComponent,
     ModulosCrearComponent,
     ModulosEditarComponent,
+
     RolesComponent,
     RolesCrearComponent,
-    RolesEditarComponent
+    RolesEditarComponent,
+    SociosComponent,
+    SociosCrearComponent,
+    SociosEditarComponent,
+    TiposCorreosComponent,
+
+    ProyectosComponent,
+    ContactosComponent,
+
+    TiposCorreosCrearComponent,
+    TiposCorreosEditarComponent
+
   ],
   imports: [
     CommonModule,
