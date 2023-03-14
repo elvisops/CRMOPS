@@ -1,0 +1,56 @@
+<mat-card>
+    <mat-card-header class="bgops-indigo txtwhite">
+        <mat-card-title>Editar Contacto</mat-card-title>
+    </mat-card-header>
+    <mat-divider class="mb-4"></mat-divider>
+    <mat-card-content>
+        <mat-form-field class="w-100">
+            <mat-label>Nombre</mat-label>
+            <input matInput [(ngModel)]="data.NOMBRE">
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>Telefono</mat-label>
+            <input matInput [(ngModel)]="data.TELEFONO">
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>Correo</mat-label>
+            <input matInput [(ngModel)]="data.CORREO">
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>Puesto</mat-label>
+            <input matInput [(ngModel)]="data.PUESTO">
+        </mat-form-field>
+
+        <mat-form-field class="w-100">
+            <mat-label>Descipcion</mat-label>
+            <input matInput [(ngModel)]="data.DESCRIPCION">
+        </mat-form-field>
+
+        
+
+
+    </mat-card-content>
+    <mat-divider class="mt-4"></mat-divider>
+    <mat-card-actions class="pull-to-end">
+        <button
+            mat-raised-button 
+            color="warn"
+            (click)="CloseDialog()"
+            style="margin-right: 4px;"
+        >Cancelar        
+    </button>
+        
+        
+        <button 
+            mat-raised-button 
+            class="bgops-indigo txtwhite"
+            (click)="ActualizarContacto()"
+        >Actualizar
+        </button>
+
+
+    </mat-card-actions>
+</mat-card>

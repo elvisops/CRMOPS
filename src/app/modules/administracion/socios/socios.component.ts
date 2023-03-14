@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { Socios } from './socios';
 import { SociosService } from './socios.service';
+import { Router } from '@angular/router'
 /*Material Table*/
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -25,7 +26,8 @@ export class SociosComponent implements OnInit{
   constructor(
     private service: SociosService,
     private auth: AuthService,
-    private dialog:MatDialog
+    private dialog:MatDialog,
+    private router:Router
   ){}
 
   ListaSocios: Socios[] = []
@@ -49,6 +51,11 @@ export class SociosComponent implements OnInit{
     this.DataSource = new MatTableDataSource(Datos)
     this.DataSource.sort = this.sort
     this.DataSource.paginator = this.paginator
+  }
+
+  ShowProyects(SocioID:number){
+    var id = this.auth.encriptar(SocioID.toString()).toString()    
+    this.router.navigate(['administración/socios/proyectos/'+id])
   }
 
   OpenDialogCrear(){
