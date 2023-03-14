@@ -71,6 +71,39 @@ export class SociosService {
     )
   }
 
+  EditContacto(SocioContactoID:number,Nombre:string,Telefono:string,Correo:string,Descripcion:string,Puesto:string):Observable<any>{
+    var token = this.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:"socios_contactos_edit",
+      token:token,
+      SocioContactoID:SocioContactoID,
+      Nombre:Nombre,
+      Telefono:Telefono,
+      Correo:Correo,
+      Puesto:Puesto,
+      Descripcion:Descripcion
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al editar el contacto"))
+    )
+  }
+
+  DeleteContacto(SocioContactoID:number):Observable<any>{
+    var token = this.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:"socios_contactos_delete",
+      token:token,
+      SocioContactoID:SocioContactoID      
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al eliminar el contacto"))
+    )
+  }
+
 //Llamado de proc para listar socios
 
 getListaSocios():Observable<any>{
@@ -90,6 +123,16 @@ getSociosContacts(SocioID:number):Observable<any>{
   .pipe(
     tap(),
     catchError(this.handleError("No se pudo obtener la lista de contactos"))
+  )
+}
+
+getSociosProyectos(SocioID:number):Observable<any>{
+  var token = this.ParseToken()
+  var payload = this.auth.mkpayload({proc:'sp_socios_proyectos',token:token,SocioID:SocioID})
+  return this.http.post<any>(`${this.api}/api/get`,{payload})
+  .pipe(
+    tap(),
+    catchError(this.handleError("No se pudo obtener la lista de proyectos"))
   )
 }
 

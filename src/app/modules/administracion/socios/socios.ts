@@ -18,3 +18,11 @@ export interface SociosContactos{
     CREACION:string,
     ACTUALIZACION:string
 }
+
+export interface SociosProyectos{
+    PROYECTOID:number | null, 
+    SOCIOID:number | null,
+    PROYECTO:string, 
+    CREACION:string, 
+    ACTUALIZACION:string    
+}
