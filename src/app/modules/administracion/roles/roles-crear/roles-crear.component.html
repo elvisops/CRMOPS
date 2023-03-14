@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-header class="bgops-indigo">
+        <mat-card-title class="txtwhite">
+            <h1>Creacion de Roles</h1>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="my-4"></mat-divider>
+    <mat-card-content>
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Nombre del Permiso</mat-label>
+            <input matInput [(ngModel)]="rol" type="text">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Descripción</mat-label>
+            <input matInput [(ngModel)]="descripcion" type="text">
+        </mat-form-field>
+    </mat-card-content>
+    <mat-divider class="my-4"></mat-divider>
+    <mat-card-actions>
+        <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="CrearRol()">Crear</button>
+        <button mat-raised-button color="warn" (click)="CloseDialog()">Cancelar</button>
+    </mat-card-actions>
+</mat-card>
