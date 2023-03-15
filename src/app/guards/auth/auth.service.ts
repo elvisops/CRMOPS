@@ -36,6 +36,18 @@ export class AuthService {
     data = this.encriptar(JSON.stringify(data)).toString();
     return data;
   }
+
+  mkurl_enc(txt:any){
+    var tmp = this.encriptar(txt.toString()).toString()
+    tmp = btoa(tmp).toString()
+    return tmp
+  }
+
+  mkurl_dec(txt:any){
+    var tmp = atob(txt.toString()).toString()
+    tmp = this.desencriptar(tmp).toString()
+    return tmp
+  }
   
 
   notificacion(msg:string):void{
@@ -44,6 +56,12 @@ export class AuthService {
       verticalPosition:"top",
       duration:5000
     })
+  }
+
+  ParseToken(){
+    var token = sessionStorage.getItem('token')
+    token = this.desencriptar(token)
+    return token;
   }
 
   private handleError<T>(operation = 'operation',result?:T){

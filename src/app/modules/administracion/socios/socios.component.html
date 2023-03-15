@@ -1,3 +1,4 @@
+
 <div class="container mt-4">
     <mat-card>
         <mat-card-header>
@@ -7,6 +8,10 @@
         <mat-card-content>
             <div class="table-responsive">
 
+                <mat-form-field  class="w-100">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="filtrar($event)" #input>
+                </mat-form-field>
                 <table mat-table [dataSource]="DataSource" matSort class="w-100">
                     <ng-container matColumnDef="SOCIO">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Socio</th>
