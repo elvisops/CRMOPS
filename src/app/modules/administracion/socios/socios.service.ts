@@ -12,154 +12,184 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SociosService {
 
   constructor(
-    private http:HttpClient,
-    private auth:AuthService,
-    private snack:MatSnackBar
+    private http: HttpClient,
+    private auth: AuthService,
+    private snack: MatSnackBar
   ) { }
 
   api = environment.api
 
 
-  Crear(modulo:string,descripcion:string):Observable<any>{
+  Crear(modulo: string, descripcion: string): Observable<any> {
+    var token = sessionStorage.getItem('token')
+    var payload = this.auth.mkpayload({proc: "socios_create",token: token,modulo: modulo,descripcion: descripcion})
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al leer la lista de Socios"))
+      )
+  }
+
+  update(socioID: number, socio: string, descripcion: string): Observable<any> {
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
-        proc:"socios_create",
-        token:token,
-        modulo:modulo,
-        descripcion:descripcion        
-      })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al leer la lista de Socios"))
-    )
+      proc: "socios_update",
+      token: token,
+      socioID: socioID,
+      socio: socio,
+      descripcion: descripcion
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al Modificar el socio"))
+      )
   }
 
-  update(socioID:number, socio:string, descripcion:string):Observable<any>{
-    var token = sessionStorage.getItem('token')
+  getNameSocio(SocioID: number): Observable<any> {
+    var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
-
-      proc:"socios_update",
-      token:token,
-      socioID:socioID,
-      socio:socio,
-      descripcion:descripcion
+      proc: 'SOCIOS_GET_NAME',
+      token: token,
+      SocioID: SocioID
     })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al Modificar el socio"))
-    )
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al obtener el nombre de socio"))
+      )
   }
 
-  CrearContacto(SocioID:number,Nombre:string,Telefono:string,Correo:string,Descripcion:string,Puesto:string):Observable<any>{
-    var token = this.ParseToken()
+  CrearContacto(SocioID: number, Nombre: string, Telefono: string, Correo: string, Descripcion: string, Puesto: string): Observable<any> {
+    var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
-      proc:"socios_contactos_create",
-      token:token,
-      SocioID:SocioID,
-      Nombre:Nombre,
-      Telefono:Telefono,
-      Correo:Correo,
-      Puesto:Puesto,
-      Descripcion:Descripcion
+      proc: "socios_contactos_create",
+      token: token,
+      SocioID: SocioID,
+      Nombre: Nombre,
+      Telefono: Telefono,
+      Correo: Correo,
+      Puesto: Puesto,
+      Descripcion: Descripcion
     })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al crear el contacto"))
-    )
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al crear el contacto"))
+      )
   }
 
-  EditContacto(SocioContactoID:number,Nombre:string,Telefono:string,Correo:string,Descripcion:string,Puesto:string):Observable<any>{
-    var token = this.ParseToken()
+  EditContacto(SocioContactoID: number, Nombre: string, Telefono: string, Correo: string, Descripcion: string, Puesto: string): Observable<any> {
+    var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
-      proc:"socios_contactos_edit",
-      token:token,
-      SocioContactoID:SocioContactoID,
-      Nombre:Nombre,
-      Telefono:Telefono,
-      Correo:Correo,
-      Puesto:Puesto,
-      Descripcion:Descripcion
+      proc: "socios_contactos_edit",
+      token: token,
+      SocioContactoID: SocioContactoID,
+      Nombre: Nombre,
+      Telefono: Telefono,
+      Correo: Correo,
+      Puesto: Puesto,
+      Descripcion: Descripcion
     })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al editar el contacto"))
-    )
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al editar el contacto"))
+      )
   }
 
-  DeleteContacto(SocioContactoID:number):Observable<any>{
-    var token = this.ParseToken()
+  DeleteContacto(SocioContactoID: number): Observable<any> {
+    var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
-      proc:"socios_contactos_delete",
-      token:token,
-      SocioContactoID:SocioContactoID      
+      proc: "socios_contactos_delete",
+      token: token,
+      SocioContactoID: SocioContactoID
     })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al eliminar el contacto"))
-    )
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al eliminar el contacto"))
+      )
   }
 
-//Llamado de proc para listar socios
+  CrearProyecto(SocioID: number, Proyecto: string): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: 'socios_proyectos_create',
+      token: token,
+      SocioID: SocioID,
+      Proyecto: Proyecto
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al crear el nuevo proyecto"))
+      )
+  }
 
-getListaSocios():Observable<any>{
-  var token = this.ParseToken()
-  var payload = this.auth.mkpayload({proc:"socios_lista",token:token})
-  return this.http.post<any>(`${this.api}/api/get`,{payload})
-  .pipe(
-    tap(),
-    catchError(this.handleError("Error al leer la lista de socios"))
-  )
-}
+  UpdateProyecto(ProyectoID: number, Proyecto: string): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: 'SOCIOS_PROYECTOS_UDPATE',
+      token: token,
+      ProyectoID: ProyectoID,
+      Proyecto: Proyecto
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al crear el nuevo proyecto"))
+      )
+  }
 
-getSociosContacts(SocioID:number):Observable<any>{
-  var token = this.ParseToken()
-  var payload = this.auth.mkpayload({proc:'sp_socios_contactos',token:token,SocioID:SocioID})
-  return this.http.post<any>(`${this.api}/api/get`,{payload})
-  .pipe(
-    tap(),
-    catchError(this.handleError("No se pudo obtener la lista de contactos"))
-  )
-}
+  //Llamado de proc para listar socios
 
-getSociosProyectos(SocioID:number):Observable<any>{
-  var token = this.ParseToken()
-  var payload = this.auth.mkpayload({proc:'sp_socios_proyectos',token:token,SocioID:SocioID})
-  return this.http.post<any>(`${this.api}/api/get`,{payload})
-  .pipe(
-    tap(),
-    catchError(this.handleError("No se pudo obtener la lista de proyectos"))
-  )
-}
+  getListaSocios(): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: "socios_lista", token: token })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al leer la lista de socios"))
+      )
+  }
+
+  getSociosContacts(SocioID: number): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: 'sp_socios_contactos', token: token, SocioID: SocioID })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de contactos"))
+      )
+  }
+
+  getSociosProyectos(SocioID: number): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: 'sp_socios_proyectos', token: token, SocioID: SocioID })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de proyectos"))
+      )
+  }
 
 
-
-
-ParseToken(){
-  var token = sessionStorage.getItem('token')
-  token = this.auth.desencriptar(token)
-  return token;
-}
-
-//manejo de errores mensaje
-  notificacion(msg:string):void{
-    this.snack.open(msg,"Cerrar",{
-      horizontalPosition:"center",
-      verticalPosition:"top",
-      duration:5000
+  //manejo de errores mensaje
+  notificacion(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000
     })
   }
 
-  private handleError<T>(operation = 'operacion', result?:T){
-    return(error:any):Observable<T>=>{
-      console.log('Error en la aplicacion: '+JSON.stringify(error));
+  private handleError<T>(operation = 'operacion', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log('Error en la aplicacion: ' + JSON.stringify(error));
       this.notificacion(operation)
       console.log(error)
-      return of(result as T)      
+      return of(result as T)
     }
   }
 

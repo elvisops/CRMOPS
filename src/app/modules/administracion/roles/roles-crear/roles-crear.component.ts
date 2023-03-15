@@ -18,8 +18,7 @@ export class RolesCrearComponent {
   constructor(
     private dialogRef: MatDialogRef<RolesCrearComponent>,
     private service: RolesService,
-    private auth:AuthService,
-    // private auth: AuthService,
+    private auth:AuthService,    
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 

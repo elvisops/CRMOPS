@@ -37,6 +37,14 @@ export class SociosComponent implements OnInit{
   ngOnInit(): void {
     this.genListaSocios()
   }
+
+  filtrar(evt:Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value;
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage()
+    }
+  }
   
 
   genListaSocios() {
@@ -54,8 +62,8 @@ export class SociosComponent implements OnInit{
   }
 
   ShowProyects(SocioID:number){
-    var id = this.auth.encriptar(SocioID.toString()).toString()    
-    this.router.navigate(['administración/socios/proyectos/'+id])
+    var id = this.auth.mkurl_enc(SocioID.toString()).toString()    
+    this.router.navigate(['administracion/socios/proyectos/'+id])
   }
 
   OpenDialogCrear(){
