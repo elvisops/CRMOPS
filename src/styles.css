@@ -4,6 +4,20 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /*CONFIGURACION PERSONALIZADA*/
+::ng-deep .mat-input-element {
+    border: none !important;
+    background-color: transparent !important;
+  }
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {    
+    border: none !important;
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    border-radius: 4px;
+    padding: 0.75em 0.75em 0 0.75em;
+    border: 1px solid #f94747;
+  }
+
 /*Colores*/
 
 .txtops-indigo{

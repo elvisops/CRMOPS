@@ -28,6 +28,10 @@ import { ContactosComponent } from './socios/contactos/contactos.component';
 
 import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
 import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
+import { ContactoEditarComponent } from './socios/contactos/contacto-editar/contacto-editar.component';
+import { ProyectoCrearComponent } from './socios/proyectos/proyecto-crear/proyecto-crear.component';
+import { ProyectoEditarComponent } from './socios/proyectos/proyecto-editar/proyecto-editar.component';
+import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 
 
 
@@ -55,7 +59,11 @@ import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-edita
     ContactosComponent,
 
     TiposCorreosCrearComponent,
-    TiposCorreosEditarComponent
+    TiposCorreosEditarComponent,
+    ContactoEditarComponent,
+    ProyectoCrearComponent,
+    ProyectoEditarComponent,
+    CarterasComponent
 
   ],
   imports: [

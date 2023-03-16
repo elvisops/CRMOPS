@@ -1,6 +1,5 @@
 import { NgModule  } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/guards/auth/auth.guard';
 import { AdministracionComponent } from './administracion.component';
 import { PanelInicioComponent } from './panel-inicio/panel-inicio.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
@@ -10,6 +9,8 @@ import { RolesComponent } from './roles/roles.component';
 
 import { SociosComponent } from './socios/socios.component';
 import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+import { ProyectosComponent } from './socios/proyectos/proyectos.component';
+import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 
 
 const routes: Routes = [
@@ -19,8 +20,9 @@ const routes: Routes = [
   { path: 'modulos',component:ModulosComponent},
 
   { path: 'roles',component:RolesComponent},
-
-  { path: 'socios',component:SociosComponent},
+  { path: 'socios',component:SociosComponent},  
+  {path:'socios/proyectos/:id',component:ProyectosComponent},  
+  { path: 'socios/carteras/:proyectoid',component:CarterasComponent},
   { path: 'tipos_correos',component:TiposCorreosComponent}
 
 ];
