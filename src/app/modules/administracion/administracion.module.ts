@@ -32,6 +32,8 @@ import { ContactoEditarComponent } from './socios/contactos/contacto-editar/cont
 import { ProyectoCrearComponent } from './socios/proyectos/proyecto-crear/proyecto-crear.component';
 import { ProyectoEditarComponent } from './socios/proyectos/proyecto-editar/proyecto-editar.component';
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
+import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
+import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carteras/tipos-carteras.component';
 
 
 
@@ -63,7 +65,9 @@ import { CarterasComponent } from './socios/proyectos/carteras/carteras.componen
     ContactoEditarComponent,
     ProyectoCrearComponent,
     ProyectoEditarComponent,
-    CarterasComponent
+    CarterasComponent,
+    CarterasCrearComponent,
+    TiposCarterasComponent
 
   ],
   imports: [
