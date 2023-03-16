@@ -11,6 +11,7 @@ import { SociosComponent } from './socios/socios.component';
 import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
 import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
+import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'socios',component:SociosComponent},  
   {path:'socios/proyectos/:id',component:ProyectosComponent},  
   { path: 'socios/carteras/:proyectoid',component:CarterasComponent},
+  { path: 'socios/crear-cartera/:proyectoid',component:CarterasCrearComponent},
   { path: 'tipos_correos',component:TiposCorreosComponent}
 
 ];

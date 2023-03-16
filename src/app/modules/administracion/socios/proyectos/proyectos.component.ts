@@ -79,8 +79,8 @@ export class ProyectosComponent implements OnInit{
     this.DataSource.paginator = this.paginator
   }
 
-  GotoCarteras(proyecto:any){
-    var id = this.auth.mkurl_enc(proyecto.toString()).toString()    
+  GotoCarteras(proyecto:any){    
+    var id = this.auth.mkurl_enc(JSON.stringify(proyecto)).toString()    
     this.navigate.navigate(['administracion/socios/carteras/'+id])
   }
 
