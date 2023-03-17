@@ -45,6 +45,22 @@ export class CarterasService {
     )
   }
 
+  Create(ProyectoID:number, TipoCarteraID:number, NombreCartera:string){
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'carteras_create',
+      token:token,
+      ProyectoID:ProyectoID,
+      TipoCarteraID:TipoCarteraID,
+      NombreCartera:NombreCartera
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener los tipos de carteras"))
+    )
+  }
+
   notificacion(msg: string): void {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",

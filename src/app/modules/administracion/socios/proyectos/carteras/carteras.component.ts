@@ -9,6 +9,8 @@ import { Carteras } from './carteras';
 import { MatTableDataSource } from '@angular/material/table';
 
 
+
+
 @Component({
   selector: 'app-carteras',
   templateUrl: './carteras.component.html',
@@ -16,12 +18,15 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CarterasComponent implements OnInit{
 
+  
+
   constructor(
     private auth:AuthService,
     private router:Router,
     private ActivatedRoute:ActivatedRoute,
     private dialog:MatDialog,
-    private service:CarterasService
+    private service:CarterasService,
+
   ){}
 
   Proyecto:any

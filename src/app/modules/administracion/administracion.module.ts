@@ -21,19 +21,17 @@ import { RolesEditarComponent } from './roles/roles-editar/roles-editar.componen
 import { SociosComponent } from './socios/socios.component';
 import { SociosCrearComponent } from './socios/socios-crear/socios-crear.component';
 import { SociosEditarComponent } from './socios/socios-editar/socios-editar.component';
-// import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
 
 import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { ContactosComponent } from './socios/contactos/contactos.component';
 
-// import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
-// import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
 import { ContactoEditarComponent } from './socios/contactos/contacto-editar/contacto-editar.component';
 import { ProyectoCrearComponent } from './socios/proyectos/proyecto-crear/proyecto-crear.component';
 import { ProyectoEditarComponent } from './socios/proyectos/proyecto-editar/proyecto-editar.component';
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
 import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carteras/tipos-carteras.component';
+
 
 
 
@@ -62,7 +60,9 @@ import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carter
     ProyectoEditarComponent,
     CarterasComponent,
     CarterasCrearComponent,
-    TiposCarterasComponent
+    TiposCarterasComponent,
+
+    
 
   ],
   imports: [

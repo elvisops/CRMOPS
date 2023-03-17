@@ -9,6 +9,8 @@
 
 
             <mat-vertical-stepper [linear]="true" #stepper [animationDuration]="'100'">
+
+              <!-- PASO DE REGISTRO DE CARTERA -->
                 <mat-step [stepControl]="firstFormGroup" [completed]="StepOneCompleted">
                   <form [formGroup]="firstFormGroup">
                     <ng-template matStepLabel>Ingrese el nombre y el tipo de la cartera</ng-template>
@@ -23,18 +25,25 @@
                                 [value]="opcion.TIPOCARTERAID"
                             >
                             {{opcion.TIPOCARTERA}}
-                            </mat-option>
+                            </mat-option>                            
                         </mat-select>
+
+                        
                     </mat-form-field>
+
+                    
                     <div>
-                        <button mat-raised-button class="bgops-indigo txtwhite" *ngIf="!StepOneCompleted" (click)="CrearCartera()">Crear</button>
+                      <button mat-raised-button class="bgops-indigo txtwhite" *ngIf="!StepOneCompleted" (click)="CrearCartera()">Crear</button>
                       <button mat-raised-button class="bg-success txtwhite" matStepperNext *ngIf="StepOneCompleted">Siguiente</button>
                     </div>
                   </form>
                 </mat-step>
+                <!-- PASO DE REGISTRO DE CARTERA -->
+
+                <!-- CARGA DE ARCHIVO DE CARTERA -->
                 <mat-step [stepControl]="secondFormGroup">
                   <form [formGroup]="secondFormGroup">
-                    <ng-template matStepLabel>Fill out your address</ng-template>
+                    <ng-template matStepLabel>Cargar archivo</ng-template>
                     <mat-form-field>
                       <input matInput placeholder="Address" formControlName="secondCtrl" required>
                     </mat-form-field>
@@ -52,7 +61,91 @@
                     <button mat-button (click)="stepper.reset()">Reset</button>
                   </div>
                 </mat-step>
+                <!-- CARGA DE ARCHIVO DE CARTERA -->
+
+
               </mat-vertical-stepper>
+
+
+              <div *ngIf="!LoadingFile">
+                <div class="w-100">
+                  <mat-label>Seleccionar el archivo para la cartera</mat-label><br>
+                  <button mat-button>
+                    <mat-icon>attach_file</mat-icon>
+                    Cargar archivo
+                    <input type="file" #archivoInput (change)="convertirExcelToJson()">
+                  </button>          
+                </div>
+  
+                <mat-divider class="m-4"></mat-divider>
+  
+                <div *ngIf="Encabezados.length > 0">
+  
+                  <div class="alert alert-info">
+                    Seleccion de datos obligatorios para la creacion de una cartera
+                  </div>
+  
+                  <div class="row">                       
+                    <div class="col-md-6">
+                      <mat-form-field class="w-100">
+                        <mat-label>Cuenta sistema</mat-label>
+                        <mat-select [(ngModel)]="EncCuenta" >
+                          <mat-option></mat-option>
+                          <mat-option *ngFor="let enc of Encabezados"  [value]="enc">{{enc}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <h2>Ejemplo: {{jsonData[0][EncCuenta]}} </h2>
+                    </div>
+                  </div>
+  
+                  <mat-divider></mat-divider>
+  
+                  <div class="row"> 
+                    <div class="col-md-6">
+                      <mat-form-field class="w-100">
+                        <mat-label>Identidad Cliente</mat-label>
+                        <mat-select [(ngModel)]="EncIdentidad" >
+                          <mat-option></mat-option>
+                          <mat-option *ngFor="let enc of Encabezados" [value]="enc">{{enc}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <h2>Ejemplo: {{jsonData[0][EncIdentidad]}}</h2>
+                    </div>
+                  </div>
+  
+                  <mat-divider></mat-divider>
+  
+                  <div class="row"> 
+                    <div class="col-md-6">
+                      <mat-form-field class="w-100">
+                        <mat-label>Nombre Cliente</mat-label>
+                        <mat-select [(ngModel)]="EncNombre" >
+                          <mat-option></mat-option>
+                          <mat-option *ngFor="let enc of Encabezados" [value]="enc">{{enc}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <h2>Ejemplo: {{jsonData[0][EncNombre]}}</h2>
+                    </div>
+                  </div>
+                </div>
+                
+
+                <button (click)="GenerarArreglosCarga()" mat-raised-button color="primary">Cargar</button>
+              </div>
+
+              <div *ngIf="LoadingFile">
+                <mat-spinner></mat-spinner>
+              </div>
+              
+               
+
+              
 
 
         </mat-card-content>

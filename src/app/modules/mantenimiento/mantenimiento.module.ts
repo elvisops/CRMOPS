@@ -9,6 +9,12 @@ import { MaterialsModule } from '../public/materials/materials.module';
 import { TiposTelefonosComponent } from './tipos-telefonos/tipos-telefonos.component';
 import { TiposTelefonosCrearComponent } from './tipos-telefonos/tipos-telefonos-crear/tipos-telefonos-crear.component';
 import { TiposTelefonosEditarComponent } from './tipos-telefonos/tipos-telefonos-editar/tipos-telefonos-editar.component';
+import { PaisesComponent } from '../administracion/paises/paises.component';
+import { TiposProductosComponent } from '../administracion/tipos-productos/tipos-productos.component';
+import { PaisesEditarComponent } from '../administracion/paises/paises-editar/paises-editar.component';
+import { TiposProductosCrearComponent } from '../administracion/tipos-productos/tipos-productos-crear/tipos-productos-crear.component';
+import { TiposProductosEditarComponent } from '../administracion/tipos-productos/tipos-productos-editar/tipos-productos-editar.component';
+import { PaisesCrearComponent } from '../administracion/paises/paises-crear/paises-crear.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +24,9 @@ import { TiposTelefonosEditarComponent } from './tipos-telefonos/tipos-telefonos
     TiposCorreosEditarComponent,
     TiposTelefonosComponent,
     TiposTelefonosCrearComponent,
-    TiposTelefonosEditarComponent
-
+    TiposTelefonosEditarComponent,
+    PaisesComponent,PaisesEditarComponent,PaisesCrearComponent,
+    TiposProductosComponent,TiposProductosCrearComponent,TiposProductosEditarComponent
   ],
   imports: [
     CommonModule,
