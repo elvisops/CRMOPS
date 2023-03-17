@@ -45,6 +45,14 @@ export class RolesComponent implements OnInit {
     this.genListaRoles()
   }
 
+  filtrar(evt:Event){
+    const valorFiltrado =(evt.target as HTMLInputElement).value;
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage();
+    }
+  }
+
   //no puede tener el mismo nombre del roles.service.ts
   genListaRoles() {
     this.service.getListaRoles().subscribe(r => {
