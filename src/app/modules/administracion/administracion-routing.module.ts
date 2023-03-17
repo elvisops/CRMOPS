@@ -8,10 +8,10 @@ import { ModulosComponent } from './modulos/modulos.component';
 import { RolesComponent } from './roles/roles.component';
 
 import { SociosComponent } from './socios/socios.component';
-import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
 import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
+import { MantenimientoComponent } from '../mantenimiento/mantenimiento.component';
 
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
   {path:'socios/proyectos/:id',component:ProyectosComponent},  
   { path: 'socios/carteras/:proyectoid',component:CarterasComponent},
   { path: 'socios/crear-cartera/:proyectoid',component:CarterasCrearComponent},
-  { path: 'tipos_correos',component:TiposCorreosComponent}
+  { path: 'mantenimiento', component:MantenimientoComponent}
 
 ];
 

@@ -24,9 +24,10 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },  
   { 
-    path: 'mantenimiento', 
-    loadChildren: () => 
-      import('./modules/mantenimiento/mantenimiento.module').then(m => m.MantenimientoModule),
+
+    path: 'mantenimiento',
+    loadChildren: () =>
+    import('./modules/mantenimiento/mantenimiento.module').then(m => m.MantenimientoModule),
     canActivate:[AuthGuard]
   },
   {
