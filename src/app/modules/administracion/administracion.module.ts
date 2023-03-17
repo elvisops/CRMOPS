@@ -12,22 +12,29 @@ import { UsuariosEditarComponent } from './usuarios/usuarios-editar/usuarios-edi
 import { ModulosComponent } from './modulos/modulos.component';
 import { ModulosCrearComponent } from './modulos/modulos-crear/modulos-crear.component';
 import { ModulosEditarComponent } from './modulos/modulos-editar/modulos-editar.component';
+
+// Roles
+import { RolesComponent } from './roles/roles.component';
+import { RolesCrearComponent } from './roles/roles-crear/roles-crear.component'; 
+import { RolesEditarComponent } from './roles/roles-editar/roles-editar.component';
+
 import { SociosComponent } from './socios/socios.component';
 import { SociosCrearComponent } from './socios/socios-crear/socios-crear.component';
 import { SociosEditarComponent } from './socios/socios-editar/socios-editar.component';
-import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
+// import { TiposCorreosComponent } from './tipos-correos/tipos-correos.component';
 
 import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { ContactosComponent } from './socios/contactos/contactos.component';
 
-import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
-import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
-import { PaisesComponent } from './paises/paises.component';
-import { PaisesCrearComponent } from './paises/paises-crear/paises-crear.component';
-import { PaisesEditarComponent } from './paises/paises-editar/paises-editar.component';
-import { TiposProductosComponent } from './tipos-productos/tipos-productos.component';
-import { TiposProductosCrearComponent } from './tipos-productos/tipos-productos-crear/tipos-productos-crear.component';
-import { TiposProductosEditarComponent } from './tipos-productos/tipos-productos-editar/tipos-productos-editar.component';
+// import { TiposCorreosCrearComponent } from './tipos-correos/tipos-correos-crear/tipos-correos-crear.component';
+// import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-editar/tipos-correos-editar.component';
+import { ContactoEditarComponent } from './socios/contactos/contacto-editar/contacto-editar.component';
+import { ProyectoCrearComponent } from './socios/proyectos/proyecto-crear/proyecto-crear.component';
+import { ProyectoEditarComponent } from './socios/proyectos/proyecto-editar/proyecto-editar.component';
+import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
+import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
+import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carteras/tipos-carteras.component';
+
 
 
 @NgModule({
@@ -41,22 +48,21 @@ import { TiposProductosEditarComponent } from './tipos-productos/tipos-productos
     ModulosComponent,
     ModulosCrearComponent,
     ModulosEditarComponent,
+
+    RolesComponent,
+    RolesCrearComponent,
+    RolesEditarComponent,
     SociosComponent,
     SociosCrearComponent,
     SociosEditarComponent,
-    TiposCorreosComponent,
-
     ProyectosComponent,
     ContactosComponent,
-
-    TiposCorreosCrearComponent,
-    TiposCorreosEditarComponent,
-    PaisesComponent,
-    PaisesCrearComponent,
-    PaisesEditarComponent,
-    TiposProductosComponent,
-    TiposProductosCrearComponent,
-    TiposProductosEditarComponent
+    ContactoEditarComponent,
+    ProyectoCrearComponent,
+    ProyectoEditarComponent,
+    CarterasComponent,
+    CarterasCrearComponent,
+    TiposCarterasComponent
 
   ],
   imports: [

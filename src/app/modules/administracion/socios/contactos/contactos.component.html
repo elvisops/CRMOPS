@@ -31,17 +31,28 @@
 
                 <ng-container matColumnDef="CREACION">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Creacion</th>
-                    <td mat-cell *matCellDef="let contacto">{{contacto.CREACION | date:'dd/MM/YYYY'}} {{contacto.CREACION | date:'hh:mm:ss'}}</td>
+                    <td mat-cell *matCellDef="let contacto">{{contacto.CREACION | date:'dd/MM/YYYY'}}
+                        {{contacto.CREACION | date:'hh:mm:ss'}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="ACTUALIZACION">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Actualizacion</th>
-                    <td mat-cell *matCellDef="let contacto">{{contacto.ACTUALIZACION | date:'dd/MM/YYYY'}} {{contacto.ACTUALIZACION | date:'hh:mm:ss'}}</td>
+                    <td mat-cell *matCellDef="let contacto">{{contacto.ACTUALIZACION}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="OPCIONES">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Opciones</th>
                     <td mat-cell *matCellDef="let contacto">
+                        <mat-button-toggle-group>
+                            <mat-button-toggle  (click)="OpenDialogEditar(contacto)">
+                                <mat-icon class="text-warning">edit</mat-icon>
+                            </mat-button-toggle>
+
+                            <mat-button-toggle  (click)="EliminarContacto(contacto.SOCIOCONTACTOID)">
+                                <mat-icon class="text-danger">delete_forever</mat-icon>
+                            </mat-button-toggle>
+
+                        </mat-button-toggle-group>
 
                     </td>
                 </ng-container>

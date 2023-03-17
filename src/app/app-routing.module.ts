@@ -18,11 +18,18 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },
   { 
-    path: 'administración', 
+    path: 'administracion', 
     loadChildren: () => 
       import('./modules/administracion/administracion.module').then(m => m.AdministracionModule),
     canActivate:[AuthGuard]
   },  
+  { 
+
+    path: 'mantenimiento',
+    loadChildren: () =>
+    import('./modules/mantenimiento/mantenimiento.module').then(m => m.MantenimientoModule),
+    canActivate:[AuthGuard]
+  },
   {
     path:'**',
     component:PageNotFoundComponent

@@ -24,7 +24,7 @@ export class ModulosService {
   getListaModulos():Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({proc:"modulos_lista",token:token})
+    var payload = this.auth.mkpayload({ proc:"modulos_lista",token:token })
     return this.http.post<any>(`${this.api}/api/get`,{payload})
     .pipe(
       tap(),

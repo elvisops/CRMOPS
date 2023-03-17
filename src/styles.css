@@ -4,6 +4,35 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /*CONFIGURACION PERSONALIZADA*/
+::ng-deep .mat-input-element {
+    border: none !important;
+    background-color: transparent !important;
+  }
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {    
+    border: none !important;
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    border-radius: 4px;
+    padding: 0.75em 0.75em 0 0.75em;
+    border: 1px solid #f94747;
+  }
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled){
+    background-color: transparent !important;
+}
+
+.mdc-text-field--filled::before .mdc-text-field{
+    background-color: transparent !important;
+}
+
+mat-card-header{
+    background-color: #12293f;
+    color:white;
+    padding: 5px 0px 5px 0px;
+    margin-bottom: 10px;
+}
+
 /*Colores*/
 
 .txtops-indigo{
