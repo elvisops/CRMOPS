@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-header class="bgops-indigo" >
+        <mat-card-title class="txtwhite">
+            <h1>Modificacion de Tipo de Producto</h1>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="my-4"></mat-divider>
+    <mat-card-content>
+
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Nombre Tipo de Producto</mat-label>
+            <input matInput [(ngModel)]="tipoProducto" type="text" >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Nombre Descripcion</mat-label>
+            <input matInput [(ngModel)]="descripcion" type="text" >
+        </mat-form-field>
+
+
+    </mat-card-content>
+    <mat-divider class="my-4"></mat-divider>
+    <mat-card-actions>
+        <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="ActualizarTproducto()">Modificar</button>
+        <button mat-raised-button color="warn" class="mx-2" (click)="CloseDialog()">Cancelar</button>
+    </mat-card-actions>
+</mat-card>
