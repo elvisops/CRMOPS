@@ -21,13 +21,11 @@ export class TiposTelefonosEditarComponent implements OnInit{
   telefonoTipoID:number=this.data.TELEFONOTIPOID;
   tipo:string=this.data.TIPO;
 
-  ngOnInit(): void {
-    
-  }
+ 
 
   ActualizarTipoTelefono(){
     if(this.tipo == ""){
-      this.servicio.notificacion("Debe de llenar el tipo de telefono")
+      this.servicio.notificacion("Debe ingresar el tipo de telefono")
       return
     }
     this.servicio.update(this.telefonoTipoID,this.tipo).subscribe(r =>{
@@ -40,8 +38,12 @@ export class TiposTelefonosEditarComponent implements OnInit{
       }
     })
   }
+  ngOnInit(): void {
+    
+  }
 
   CloseDialog():void{
     this.dialogRef.close()
   }
+  
 }

@@ -9,6 +9,7 @@ import { MaterialsModule } from '../public/materials/materials.module';
 import { TiposTelefonosComponent } from './tipos-telefonos/tipos-telefonos.component';
 import { TiposTelefonosCrearComponent } from './tipos-telefonos/tipos-telefonos-crear/tipos-telefonos-crear.component';
 import { TiposTelefonosEditarComponent } from './tipos-telefonos/tipos-telefonos-editar/tipos-telefonos-editar.component';
+import { TiposDireccionesComponent } from './tipos-direcciones/tipos-direcciones.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TiposTelefonosEditarComponent } from './tipos-telefonos/tipos-telefonos
     TiposCorreosEditarComponent,
     TiposTelefonosComponent,
     TiposTelefonosCrearComponent,
-    TiposTelefonosEditarComponent
+    TiposTelefonosEditarComponent,
+    TiposDireccionesComponent
 
   ],
   imports: [
