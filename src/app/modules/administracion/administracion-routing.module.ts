@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'socios',component:SociosComponent},  
   {path:'socios/proyectos/:id',component:ProyectosComponent},  
   { path: 'socios/carteras/:proyectoid',component:CarterasComponent},
-  { path: 'socios/crear-cartera/:proyecto',component:CarterasCrearComponent},
+  { path: 'socios/crear-cartera/:proyectoid',component:CarterasCrearComponent},
   { path: 'mantenimiento', component:MantenimientoComponent}
 
 ];

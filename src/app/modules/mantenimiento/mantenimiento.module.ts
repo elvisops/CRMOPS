@@ -15,6 +15,9 @@ import { PaisesEditarComponent } from '../administracion/paises/paises-editar/pa
 import { TiposProductosCrearComponent } from '../administracion/tipos-productos/tipos-productos-crear/tipos-productos-crear.component';
 import { TiposProductosEditarComponent } from '../administracion/tipos-productos/tipos-productos-editar/tipos-productos-editar.component';
 import { PaisesCrearComponent } from '../administracion/paises/paises-crear/paises-crear.component';
+import { TiposDireccionesComponent } from './tipos-direcciones/tipos-direcciones.component';
+import { TiposDireccionesCrearComponent } from './tipos-direcciones/tipos-direcciones-crear/tipos-direcciones-crear.component';
+import { TiposDireccionesEditarComponent } from './tipos-direcciones/tipos-direcciones-editar/tipos-direcciones-editar.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { PaisesCrearComponent } from '../administracion/paises/paises-crear/pais
     TiposTelefonosCrearComponent,
     TiposTelefonosEditarComponent,
     PaisesComponent,PaisesEditarComponent,PaisesCrearComponent,
-    TiposProductosComponent,TiposProductosCrearComponent,TiposProductosEditarComponent
+    TiposProductosComponent,TiposProductosCrearComponent,TiposProductosEditarComponent,
+    TiposDireccionesComponent,
+    TiposDireccionesCrearComponent,
+    TiposDireccionesEditarComponent
   ],
   imports: [
     CommonModule,
