@@ -12,6 +12,7 @@ import { ProyectosComponent } from './socios/proyectos/proyectos.component';
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
 import { MantenimientoComponent } from '../mantenimiento/mantenimiento.component';
+import { VistasComponent } from './modulos/vistas/vistas.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'panel-inicio', component:PanelInicioComponent, },
   { path: 'usuarios',component:UsuariosComponent},
   { path: 'modulos',component:ModulosComponent},
+  { path: 'modulos/vistas/:id', component:VistasComponent },
 
   { path: 'roles',component:RolesComponent},
   { path: 'socios',component:SociosComponent},  

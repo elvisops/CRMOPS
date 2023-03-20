@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { Modulos } from './modulos';
 import { ModulosService } from './modulos.service';
+import { Router } from  '@angular/router';
 /*Material Table*/
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -27,7 +28,8 @@ export class ModulosComponent implements OnInit{
   constructor(
     private service: ModulosService,
     private auth: AuthService,
-    private dialog:MatDialog
+    private dialog:MatDialog,
+    private router: Router
   ){}
 
   ListaModulos: Modulos[] = []
@@ -80,6 +82,12 @@ export class ModulosComponent implements OnInit{
       this.genListaModulos()
     })
   }
+
+  ShowViews(ModuloID:number){
+    var id = this.auth.mkurl_enc(ModuloID.toString()).toString()
+    this.router.navigate(['administracion/modulos/vistas/'+id])
+  }
   
+
 
 }
