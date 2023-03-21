@@ -34,8 +34,7 @@ export class CarterasCrearComponent implements OnInit {
 
   //Arreglos sin duplicados para crear registros en la base de datos
   ArrIdentidadesNombres:string[] = []
-  ArrCuentas:string[] = []
-  
+  ArrCuentas:string[] = [] 
 
 
   
@@ -135,10 +134,50 @@ export class CarterasCrearComponent implements OnInit {
       this.service.notificacion("Los campos obligatorios no pueden estar vacios")
       return
     }
+    var datos = this.jsonData
+    var CuentasIdentidades:any[] = [[]]
+    var contador = 0;
+    var seccion = 0    
+    var maxSection = 0
+    for(var i=0; i<datos.length; i++){         
+        if(contador > 999){
+          contador = 0
+          seccion++
+          CuentasIdentidades.push([])
+        }      
+        CuentasIdentidades[seccion].push([
+            {cuenta:datos[i][this.EncCuenta], identidad:datos[i][this.EncIdentidad], nombre:datos[i][this.EncNombre]}
+          ],          
+        )
+        contador++    
+        if(i== (datos.length) -1 ){
+          maxSection = seccion
+        }  
+    }
+    
+    var selSection = maxSection
+    var ResultadosHTTP:any[] = []
+    
+      const IntervalAct = setInterval(()=>{
+        if(selSection==0){
+          clearInterval(IntervalAct)
+        }
+        
+        //console.log(CuentasIdentidades[selSection]);
+        this.service.SendDataCuenta(CuentasIdentidades[selSection]).subscribe(r=>{
+          var respuesta = this.auth.desencriptar(r.response);
+          console.log(respuesta)
+        })
 
-    const IdentidadesUnicas = [...new Set(this.jsonData.map( (objeto:any) => objeto[this.EncIdentidad]))];
-    console.log(IdentidadesUnicas)
+        selSection--
+      },1000)
+    
+
+    
+
   }
+
+  
 
   
 }
