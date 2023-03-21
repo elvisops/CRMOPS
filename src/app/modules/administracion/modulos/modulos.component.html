@@ -32,10 +32,12 @@
                         <th mat-header-cell *matHeaderCellDef>Opciones</th>
                         <td mat-cell *matCellDef="let element">
                             <button mat-icon-button color="primary" 
-                            (click)="OpenDialogEditar(element)"
-                            
-                            >
-                                <mat-icon>edit</mat-icon>
+                                (click)="OpenDialogEditar(element)"
+                            ><mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button                           
+                                (click)="ShowViews(element.MODULOID)"
+                            ><mat-icon class="text-success">view_carousel</mat-icon>
                             </button>
                         </td>
                     </ng-container>

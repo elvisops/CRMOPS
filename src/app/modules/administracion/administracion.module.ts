@@ -31,6 +31,9 @@ import { ProyectoEditarComponent } from './socios/proyectos/proyecto-editar/proy
 import { CarterasComponent } from './socios/proyectos/carteras/carteras.component';
 import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
 import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carteras/tipos-carteras.component';
+import { VistasComponent } from './modulos/vistas/vistas.component';
+import { VistasCrearComponent } from './modulos/vistas/vistas-crear/vistas-crear.component';
+import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-editar.component';
 
 
 
@@ -61,6 +64,9 @@ import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carter
     CarterasComponent,
     CarterasCrearComponent,
     TiposCarterasComponent,
+    VistasComponent,
+    VistasCrearComponent,
+    VistasEditarComponent,
 
     
 

@@ -64,6 +64,65 @@ export class ModulosService {
     )
   }
 
+  getModulosVistas(ModuloId:number): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: "sp_modulos_vistas",
+      token: token,
+      ModuloId:ModuloId
+    })
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("No se pudo obtener la lista de vistas"))
+    )
+  }
+
+  getNameModuloVista(ModuloId:number):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: "modulos_get_name",
+      token: token,
+      ModuloId: ModuloId
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener el nombre del modulo"))
+    )
+  }
+
+  CrearVista(ModuloId:number, Vista: string, VistaUrl: string): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: 'modulos_vistas_create',
+      token:token,
+      ModuloId:ModuloId,
+      Vista: Vista,
+      VistaUrl: VistaUrl
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al crear la nueva vista"))
+    )
+  }
+
+  UpdateVista(VistaID:number, Vista: string, VistaUrl: string):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: 'MODULOS_VISTAS_UDPATE',
+      token: token,
+      VistaID: VistaID,
+      Vista: Vista,
+      VistaUrl: VistaUrl
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al modificar la vista"))
+    )
+  }
 
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{

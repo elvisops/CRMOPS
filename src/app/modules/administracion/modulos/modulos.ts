@@ -6,3 +6,12 @@ export interface Modulos{
     CREACION:string,
     ACTUALIZACION:string
 }
+
+export interface ModulosVistas{
+    VISTAID:number,
+    VISTA:string,
+    V_URL:string,
+    MODULOID:number,
+    CREACION:string,
+    ACTUALIZACION:string
+}

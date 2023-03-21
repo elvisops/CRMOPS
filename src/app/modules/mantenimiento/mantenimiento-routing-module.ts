@@ -7,6 +7,7 @@ import { TiposCorreosEditarComponent } from './tipos-correos/tipos-correos-edita
 import { TiposTelefonosComponent } from './tipos-telefonos/tipos-telefonos.component';
 import { PaisesComponent } from '../administracion/paises/paises.component';
 import { TiposProductosComponent } from '../administracion/tipos-productos/tipos-productos.component';
+import { TiposDireccionesComponent } from './tipos-direcciones/tipos-direcciones.component';
 
 const routes: Routes = [
     { path: '', component:MantenimientoComponent},
@@ -15,7 +16,8 @@ const routes: Routes = [
     { path:'tipos_correos/tipos-correos-editar', component:TiposCorreosEditarComponent},    
     { path:'paises',component:PaisesComponent},
     { path:'tipos_productos',component:TiposProductosComponent},
-    { path: 'tipos_telefonos', component:TiposTelefonosComponent}
+    { path: 'tipos_telefonos', component:TiposTelefonosComponent},
+    { path: 'tipos_direcciones', component:TiposDireccionesComponent}
 ];
 
 @NgModule({
