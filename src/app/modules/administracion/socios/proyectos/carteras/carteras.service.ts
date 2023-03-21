@@ -60,6 +60,14 @@ export class CarterasService {
       catchError(this.handleError("Error al obtener los tipos de carteras"))
     )
   }
+  SendDataCuenta(data:any):Observable<any>{
+    var payload = this.auth.encriptar(JSON.stringify(data)).toString()
+    return this.http.post(`${this.api}/api/carteras/load/cuentas`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al manejar los datos enviados de cuentas"))
+    )
+  }
 
   notificacion(msg: string): void {
     this.snack.open(msg, "Cerrar", {
