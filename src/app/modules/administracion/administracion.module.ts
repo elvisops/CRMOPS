@@ -34,6 +34,7 @@ import { TiposCarterasComponent } from './socios/proyectos/carteras/tipos-carter
 import { VistasComponent } from './modulos/vistas/vistas.component';
 import { VistasCrearComponent } from './modulos/vistas/vistas-crear/vistas-crear.component';
 import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-editar.component';
+import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas.component';
 
 
 
@@ -67,6 +68,7 @@ import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-edi
     VistasComponent,
     VistasCrearComponent,
     VistasEditarComponent,
+    RolesVistasComponent,
 
     
 

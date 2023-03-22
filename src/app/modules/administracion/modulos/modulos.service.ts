@@ -124,6 +124,68 @@ export class ModulosService {
     )
   }
 
+  getListaRoles(vistaID: any):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "ROLES_VISTAS_LISTA",
+      token:token,
+      vistaID: vistaID
+    })
+    return this.http.post<any>(`${this.api}/api/get`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al lees la lista de usuarios"))
+    )
+  }
+
+  getRolesAsignados(vistaId: any):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "roles_asignados",
+      token: token,
+      vistaId: vistaId
+    })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al leer los permisos asignados"))
+    )
+  }
+
+  Guardar(rolID:any, vistaID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    // vistaID = vistaID
+    var payload = this.auth.mkpayload({
+      proc: "ROLES_VISTAS_CREATE",
+      token: token,
+      rolID:rolID,
+      vistaID: vistaID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al guardar los roles"))
+    )
+  }
+
+  Eliminar(rolID:any, vistaID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "ROLES_VISTAS_DELETE",
+      token: token,
+      rolID: rolID,
+      vistaID: vistaID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al eliminar el rol"))
+    )
+  }
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{
       horizontalPosition:"center",

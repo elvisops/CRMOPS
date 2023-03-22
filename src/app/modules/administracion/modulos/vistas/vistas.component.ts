@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { ModulosVistas } from '../modulos';
 import { ModulosService } from '../modulos.service';
+import { RolesVistasComponent } from './roles-vistas/roles-vistas.component';
 import { VistasCrearComponent } from './vistas-crear/vistas-crear.component';
 import { VistasEditarComponent } from './vistas-editar/vistas-editar.component';
 
@@ -27,7 +28,7 @@ export class VistasComponent implements OnInit {
   ModuloName: string = ""
   ListaVistas: ModulosVistas[] = []
   DataSource: MatTableDataSource<ModulosVistas> = new MatTableDataSource()
-  Columnas: string[] = ['VISTA', 'V_URL', 'CREACION', 'ACTUALIZACION', 'OPCIONES']
+  Columnas: string[] = ['VISTA', 'V_URL', 'CREACION', 'ACTUALIZACION','OPCIONES']
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
 
@@ -81,6 +82,15 @@ export class VistasComponent implements OnInit {
       data:Vista,
       disableClose:true
     })
+  }
+
+  OpenDialogRoles(Vista:any){
+    const dialogRef = this.dialog.open(RolesVistasComponent,{
+      width: '60%',
+      data: Vista,
+      disableClose:true
+    })
+    
   }
 
   FillTable(data: ModulosVistas[]) {
