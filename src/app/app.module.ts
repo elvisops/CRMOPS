@@ -8,7 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Angular Material modules
 import { MaterialsModule } from './modules/public/materials/materials.module';
-import { FormsModule } from '@angular/forms';
+// import { FormsModule } from '@angular/forms';
 
 
 
@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgbModule,    
-    FormsModule,
+    // FormsModule,
     //Angular Material Modules            
     MaterialsModule,
   ],

@@ -11,7 +11,7 @@ export interface ModulosVistas{
     VISTAID:number,
     VISTA:string,
     V_URL:string,
-    MODULOID:number,
     CREACION:string,
     ACTUALIZACION:string
+    ROLID:number
 }

@@ -25,7 +25,7 @@ export class VistasCrearComponent implements OnInit{
 
   CrearVista(){
     if (this.Vista == "") {
-      this.service.notificacion("Debe llenar todos los campos del formulario")
+      this.service.notificacion("Debe agregar el nombre de la vista")
       return
     }
     this.service.CrearVista(this.data, this.Vista, this.VistaUrl).subscribe(r=>{
