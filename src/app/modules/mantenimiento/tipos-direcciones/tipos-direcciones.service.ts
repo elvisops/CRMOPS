@@ -19,40 +19,39 @@ export class TiposDireccionesService {
 
   api = environment.api
 
-  Crear(tipo: string): Observable<any>{
+  Crear(tipo: string): Observable<any> {
     var token = sessionStorage.getItem('token')
-    var payload = this.auth.mkpayload({proc: "tipos_direcciones_create", token: token, tipo: tipo})
-    return this.http.post<any>(`${this.api}/api/proc`, { payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al crear el tipo de direccion"))
-    )
+    var payload = this.auth.mkpayload({ proc: "tipos_direcciones_create", token: token, tipo: tipo })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al crear el tipo de direccion"))
+      )
   }
 
-  update(tipoDireccionId:number,tipo:string): Observable<any>{
+  update(tipoDireccionId: number, tipo: string): Observable<any> {
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
       proc: "tipos_direcciones_update",
       token: token,
-      tipoDireccionId:tipoDireccionId,
+      tipoDireccionId: tipoDireccionId,
       tipo: tipo
     })
     return this.http.post<any>(`${this.api}/api/proc`, { payload })
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al modificar el tipo de direccion"))
-    )
-
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al modificar el tipo de direccion"))
+      )
   }
 
-  ObtenerListaTiposDirecciones():Observable<any>{
+  ObtenerListaTiposDirecciones(): Observable<any> {
     var token = this.auth.ParseToken()
-    var payload = this.auth.mkpayload({proc: "tipos_direcciones_lista", token: token})
-    return this.http.post<any>(`${this.api}/api/get`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("No se pudo obtener la lista de tipos de telefonos"))
-    )
+    var payload = this.auth.mkpayload({ proc: "tipos_direcciones_lista", token: token })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de tipos de telefonos"))
+      )
   }
 
   //manejo de errores mensaje

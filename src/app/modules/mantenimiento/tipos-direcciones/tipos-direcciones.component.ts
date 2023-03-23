@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 import { AuthService } from 'src/app/guards/auth/auth.service';
-import { environment } from 'src/environments/environment';
 import { TiposDireccionesService } from './tipos-direcciones.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,63 +14,62 @@ import { TiposDireccionesEditarComponent } from './tipos-direcciones-editar/tipo
   templateUrl: './tipos-direcciones.component.html',
   styleUrls: ['./tipos-direcciones.component.css']
 })
-export class TiposDireccionesComponent implements OnInit{
+export class TiposDireccionesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private service: TiposDireccionesService,
     private auth: AuthService,
-    private dialog:MatDialog,
+    private dialog: MatDialog,
   ) { }
 
-  ListaTiposDirecciones: TiposDirecciones[] =[]
+  ListaTiposDirecciones: TiposDirecciones[] = []
 
   DataSource: MatTableDataSource<TiposDirecciones> = new MatTableDataSource();
-  Columnas: string[] = ["TIPODIRECCION","CREACION","ACTUALIZACION","OPCIONES"]
+  Columnas: string[] = ["TIPODIRECCION", "CREACION", "ACTUALIZACION", "OPCIONES"]
 
   ngOnInit(): void {
     this.genListaTiposDirecciones()
   }
 
-  Filtrar(evt:Event){
+  Filtrar(evt: Event) {
     const valorFiltrado = (evt.target as HTMLInputElement).value
     this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
-    if(this.DataSource.paginator){
+    if (this.DataSource.paginator) {
       this.DataSource.paginator.firstPage()
     }
   }
-  genListaTiposDirecciones(){
-    this.service.ObtenerListaTiposDirecciones().subscribe( r => {
+  genListaTiposDirecciones() {
+    this.service.ObtenerListaTiposDirecciones().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTiposDirecciones = JSON.parse(data)
       this.FillTable(this.ListaTiposDirecciones)
     })
   }
 
-  FillTable(Datos: TiposDirecciones[]){
+  FillTable(Datos: TiposDirecciones[]) {
     this.DataSource = new MatTableDataSource(Datos)
     this.DataSource.sort = this.sort
     this.DataSource.paginator = this.paginator
   }
 
-  OpenDialogCrear(){
+  OpenDialogCrear() {
     const dialogRef = this.dialog.open(TiposDireccionesCrearComponent, {
       width: '40%',
-      data:null,
+      data: null,
       disableClose: true
     })
   }
 
-  OpenDialogEditar(element:any){
-    const dialogRef = this.dialog.open(TiposDireccionesEditarComponent,{
+  OpenDialogEditar(element: any) {
+    const dialogRef = this.dialog.open(TiposDireccionesEditarComponent, {
       width: '40%',
-      data:element,
-      disableClose:true
+      data: element,
+      disableClose: true
     })
     dialogRef.afterClosed().subscribe(datos => {
       this.genListaTiposDirecciones()
     })
   }
-
 }

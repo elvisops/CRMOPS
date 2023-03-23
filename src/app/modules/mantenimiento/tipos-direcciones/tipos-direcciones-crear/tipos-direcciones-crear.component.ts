@@ -8,29 +8,30 @@ import { TiposDireccionesService } from '../tipos-direcciones.service';
   templateUrl: './tipos-direcciones-crear.component.html',
   styleUrls: ['./tipos-direcciones-crear.component.css']
 })
-export class TiposDireccionesCrearComponent implements OnInit{
+export class TiposDireccionesCrearComponent implements OnInit {
 
   constructor(
-    private dialogRef:MatDialogRef<TiposDireccionesCrearComponent>,
+    private dialogRef: MatDialogRef<TiposDireccionesCrearComponent>,
     private service: TiposDireccionesService,
-    private auth:AuthService,
-    @Inject(MAT_DIALOG_DATA)  public data:any
-  ){}
+    private auth: AuthService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
   // VARIABLES
-  tipo:string=""
-  ListaTiposDirecciones:any[] = []
+  tipo: string = ""
+  ListaTiposDirecciones: any[] = []
+
 
   ngOnInit(): void {
-   
+
   }
 
-  CrearTipoDireccion(){
-    if(this.tipo == ""){
-      this.service.notificacion("Debe ingresar el tipo de direccion")
+  CrearTipoDireccion() {
+    if (this.tipo == "") {
+      this.service.notificacion("Debe llenar el tipo de direccion")
       return
     }
-    this.service.Crear(this.tipo).subscribe( r => {
+    this.service.Crear(this.tipo).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
@@ -38,17 +39,17 @@ export class TiposDireccionesCrearComponent implements OnInit{
         this.data = respuesta.data
         this.ResetForm()
         this.service.notificacion(respuesta.message)
-      }else{
+      } else {
         this.service.notificacion(respuesta.message)
       }
     })
   }
 
-  ResetForm(){
-    this.tipo=""
+  ResetForm() {
+    this.tipo = ""
   }
 
-  CloseDialog():void{
+  CloseDialog(): void {
     this.dialogRef.close()
   }
 }

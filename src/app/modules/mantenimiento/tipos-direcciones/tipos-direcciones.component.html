@@ -16,21 +16,21 @@
                     </ng-container>
                     <ng-container matColumnDef="CREACION">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha creacion</th>
-                        <td mat-cell *matCellDef="let element">{{element.CREACION | date:'dd/MM/YYYY'}} 
+                        <td mat-cell *matCellDef="let element">{{element.CREACION | date:'dd/MM/YYYY'}}
                             {{element.CREACION | date:'hh:mm:ss'}}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="ACTUALIZACION">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Direccion</th>
-                        <td mat-cell *matCellDef="let element">{{element.ACTUALIZACION | date:'dd/MM/YYYY'}} 
+                        <td mat-cell *matCellDef="let element">{{element.ACTUALIZACION | date:'dd/MM/YYYY'}}
                             {{element.ACTUALIZACION | date:'hh:mm:ss'}}</td>
                     </ng-container>
                     <ng-container matColumnDef="OPCIONES">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Opciones</th>
                         <td mat-cell *matCellDef="let element">
                             <mat-button-toggle-group>
-                                <mat-button-toggle>
-                                    <mat-icon class="text-primary" (click)="OpenDialogEditar(element)">edit</mat-icon>
+                                <mat-button-toggle (click)="OpenDialogEditar(element)">
+                                    <mat-icon class="text-primary">edit</mat-icon>
                                 </mat-button-toggle>
                             </mat-button-toggle-group>
                         </td>

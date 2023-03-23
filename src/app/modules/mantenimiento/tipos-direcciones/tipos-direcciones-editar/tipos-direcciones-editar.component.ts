@@ -8,42 +8,42 @@ import { TiposDireccionesService } from '../tipos-direcciones.service';
   templateUrl: './tipos-direcciones-editar.component.html',
   styleUrls: ['./tipos-direcciones-editar.component.css']
 })
-export class TiposDireccionesEditarComponent implements OnInit{
+export class TiposDireccionesEditarComponent implements OnInit {
 
   constructor(
-    private dialogRef:MatDialogRef<TiposDireccionesEditarComponent>,
+    private dialogRef: MatDialogRef<TiposDireccionesEditarComponent>,
     private servicio: TiposDireccionesService,
     private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) public data:any
-  ){}
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
   // variables
-  tipoDireccionId:number = this.data.TIPODIRECCIONID;
-  tipo:string = this.data.TIPODIRECCION
+  tipoDireccionId: number = this.data.TIPODIRECCIONID;
+  tipo: string = this.data.TIPODIRECCION
 
   ngOnInit(): void {
-    
+
   }
 
-  ActualizarTipoDireccion(){
-    if(this.tipo == ""){
+  ActualizarTipoDireccion() {
+    if (this.tipo == "") {
       this.servicio.notificacion("Debe llenar el tipo de direccion")
       return
     }
-    this.servicio.update(this.tipoDireccionId, this.tipo).subscribe( r => {
+    this.servicio.update(this.tipoDireccionId, this.tipo).subscribe(r => {
       var respuesta = this.authService.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      if(respuesta.status == 1){
+      if (respuesta.status == 1) {
         this.servicio.notificacion("Se ha actualizado el tipo de direccion")
         this.CloseDialog();
-      }else{
+      } else {
         this.servicio.notificacion(respuesta.message)
       }
     })
   }
 
-  CloseDialog():void{
+  CloseDialog(): void {
     this.dialogRef.close();
   }
 }

@@ -21,27 +21,27 @@ export class TiposTelefonosComponent implements OnInit {
 
   constructor(
     private service: TiposTelefonosService,
-    private auth:AuthService,
-    private dialog:MatDialog
-  ){}
+    private auth: AuthService,
+    private dialog: MatDialog
+  ) { }
 
   ListaTiposTelefonos: TiposTelefonos[] = []
   DataSource: MatTableDataSource<TiposTelefonos> = new MatTableDataSource();
-  Columnas: string[] = ["TIPO","CREACION","ACTUALIZACION","OPCIONES"]
+  Columnas: string[] = ["TIPO", "CREACION", "ACTUALIZACION", "OPCIONES"]
 
   ngOnInit(): void {
     this.genListaTiposTelefonos()
   }
 
-  filtrar(evt:Event){
+  filtrar(evt: Event) {
     const valorFiltrado = (evt.target as HTMLInputElement).value;
     this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
-    if(this.DataSource.paginator){
+    if (this.DataSource.paginator) {
       this.DataSource.paginator.firstPage();
     }
   }
 
-  genListaTiposTelefonos(){
+  genListaTiposTelefonos() {
     this.service.ObtenerListaTiposTelefonos().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTiposTelefonos = JSON.parse(data)
@@ -49,27 +49,27 @@ export class TiposTelefonosComponent implements OnInit {
     })
   }
 
-  FillTable(Datos: TiposTelefonos[]){
+  FillTable(Datos: TiposTelefonos[]) {
     this.DataSource = new MatTableDataSource(Datos)
     this.DataSource.sort = this.sort
     this.DataSource.paginator = this.paginator
   }
 
-  OpenDialogCrear(){
-    const dialogRef = this.dialog.open(TiposTelefonosCrearComponent,{
+  OpenDialogCrear() {
+    const dialogRef = this.dialog.open(TiposTelefonosCrearComponent, {
       width: '40%',
-      data:null,
-      disableClose:true
+      data: null,
+      disableClose: true
     })
   }
 
-  OpenDialogEditar(element:any){
-    const dialogRef = this.dialog.open(TiposTelefonosEditarComponent,{
-      width:'40%',
-      data:element,
-      disableClose:true
+  OpenDialogEditar(element: any) {
+    const dialogRef = this.dialog.open(TiposTelefonosEditarComponent, {
+      width: '40%',
+      data: element,
+      disableClose: true
     });
-    dialogRef.afterClosed().subscribe(datos=>{
+    dialogRef.afterClosed().subscribe(datos => {
       this.genListaTiposTelefonos()
     })
   }

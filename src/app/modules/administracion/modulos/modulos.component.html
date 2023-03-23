@@ -5,73 +5,55 @@
         </mat-card-header>
         <mat-card-content>
             <div class="table-responsive">
-
+                <mat-form-field class="w-100 mat-form-field-underline-none">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="Filtrar($event)" #input>
+                </mat-form-field>
                 <table mat-table [dataSource]="DataSource" matSort class="w-100">
                     <ng-container matColumnDef="MODULO">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre de Modulo</th>
                         <td mat-cell *matCellDef="let element">{{element.MODULO}}</td>
                     </ng-container>
-
-
                     <ng-container matColumnDef="DESCRIPCION">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</th>
                         <td mat-cell *matCellDef="let element">{{element.DESCRIPCION}}</td>
                     </ng-container>
-
                     <ng-container matColumnDef="CREACION">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha creacion</th>
-                        <td mat-cell *matCellDef="let element">{{element.CREACION | date:'dd/MM/YYYY'}} {{element.CREACION | date:'hh:mm:ss'}}</td>
+                        <td mat-cell *matCellDef="let element">{{element.CREACION | date:'dd/MM/YYYY'}}
+                            {{element.CREACION | date:'hh:mm:ss'}}</td>
                     </ng-container>
-
                     <ng-container matColumnDef="ACTUALIZACION">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Actualizacion</th>
-                        <td mat-cell *matCellDef="let element">{{element.ACTUALIZACION | date:'dd/MM/YYYY'}} {{element.ACTUALIZACION | date:'hh:mm:ss'}}</td>
+                        <td mat-cell *matCellDef="let element">{{element.ACTUALIZACION | date:'dd/MM/YYYY'}}
+                            {{element.ACTUALIZACION | date:'hh:mm:ss'}}</td>
                     </ng-container>
-
                     <ng-container matColumnDef="OPCIONES">
                         <th mat-header-cell *matHeaderCellDef>Opciones</th>
                         <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button color="primary" 
-                                (click)="OpenDialogEditar(element)"
-                            ><mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button                           
-                                (click)="ShowViews(element.MODULOID)"
-                            ><mat-icon class="text-success">view_carousel</mat-icon>
-                            </button>
-                            <!-- <button mat-icon-button                           
-                                (click)="ShowViews(element.MODULOID)"
-                            ><mat-icon class="text-success">view_carousel</mat-icon>
-                            </button> -->
+                            <mat-button-toggle-group>
+                                <mat-button-toggle (click)="OpenDialogEditar(element)">
+                                    <mat-icon class="text-primary">edit</mat-icon>
+                                </mat-button-toggle>
+                                <mat-button-toggle (click)="ShowViews(element.MODULOID)">
+                                    <mat-icon class="text-success">view_carousel</mat-icon>
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
                         </td>
                     </ng-container>
-
                     <tr mat-header-row *matHeaderRowDef="Columnas"></tr>
                     <tr mat-row *matRowDef="let row; columns: Columnas"></tr>
-
                     <tr class="mat-row" *matNoDataRow="">
                         <td class="mat-cell" colspan="4">No se encontraron datos para la tabla</td>
                     </tr>
                 </table>
-
-                <mat-paginator 
-                    [pageSizeOptions]="[10,20,50,100]"
-                    [pageSize]="10"                    
-                >
-
-                </mat-paginator>
-
+                <mat-paginator [pageSizeOptions]="[10,20,50,100]" [pageSize]="10"></mat-paginator>
             </div>
         </mat-card-content>
         <mat-card-actions class="pull-to-end">
-            <button 
-                mat-raised-button 
-                class="bgops-indigo txtwhite" 
-                (click)="OpenDialogCrear()"            
-            >
+            <button mat-raised-button class="bgops-indigo txtwhite" (click)="OpenDialogCrear()">
                 Crear
             </button>
         </mat-card-actions>
     </mat-card>
-    
 </div>
