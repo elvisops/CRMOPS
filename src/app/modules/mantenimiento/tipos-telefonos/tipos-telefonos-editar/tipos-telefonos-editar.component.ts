@@ -8,42 +8,40 @@ import { TiposTelefonosService } from '../tipos-telefonos.service';
   templateUrl: './tipos-telefonos-editar.component.html',
   styleUrls: ['./tipos-telefonos-editar.component.css']
 })
-export class TiposTelefonosEditarComponent implements OnInit{
+export class TiposTelefonosEditarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
     private servicio: TiposTelefonosService,
-    private dialogRef:MatDialogRef<TiposTelefonosEditarComponent>,
-    @Inject(MAT_DIALOG_DATA) public data:any  
-  ){}
+    private dialogRef: MatDialogRef<TiposTelefonosEditarComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
   //variables locales
-  telefonoTipoID:number=this.data.TELEFONOTIPOID;
-  tipo:string=this.data.TIPO;
+  telefonoTipoID: number = this.data.TELEFONOTIPOID;
+  tipo: string = this.data.TIPO;
 
- 
-
-  ActualizarTipoTelefono(){
-    if(this.tipo == ""){
-      this.servicio.notificacion("Debe ingresar el tipo de telefono")
+  ActualizarTipoTelefono() {
+    if (this.tipo == "") {
+      this.servicio.notificacion("Debe llenar el tipo de telefono")
       return
     }
-    this.servicio.update(this.telefonoTipoID,this.tipo).subscribe(r =>{
+    this.servicio.update(this.telefonoTipoID, this.tipo).subscribe(r => {
       var respuesta = this.authService.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      if(respuesta.status == 1){
+      if (respuesta.status == 1) {
         this.servicio.notificacion("El tipo de telefono ha sido modificado correctamente")
         this.CloseDialog()
       }
     })
   }
   ngOnInit(): void {
-    
+
   }
 
-  CloseDialog():void{
+  CloseDialog(): void {
     this.dialogRef.close()
   }
-  
+
 }

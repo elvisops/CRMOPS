@@ -7,27 +7,31 @@
   <mat-card-content>
     <div class="row">
       <div class="w-50">
-        <mat-card class="card_height">
+        <mat-card>
           <mat-card-content>
             <h2>Roles asignados</h2>
-            <div class="example-button-row" *ngFor="let rol of RolesAsignados">
-              <button mat-icon-button matTooltip="Quitar" color="warn" (click)="EliminarRol(rol.ROLID)">
-                <mat-icon>remove_circle_outline</mat-icon>
-              </button>
-              <span>{{rol.ROL}}</span>
+            <div class="card_height">
+              <div *ngFor="let rol of RolesAsignados">
+                <button mat-icon-button matTooltip="Quitar" color="warn" (click)="EliminarRol(rol.ROLID)">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+                <span>{{rol.ROL}}</span>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
       </div>
       <div class="w-50">
-        <mat-card class="card_height">
+        <mat-card>
           <mat-card-content>
             <h2>Roles disponibles</h2>
-            <div class="example-button-row" *ngFor="let rol of ListaRoles">
-              <button mat-icon-button matTooltip="Agregar" color="primary" (click)="AgregarRol(rol.ROLID)">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-              <span style="vertical-align: middle;">{{rol.ROL}}</span>
+            <div class="card_height">
+              <div *ngFor="let rol of ListaRoles">
+                <button mat-icon-button matTooltip="Agregar" color="primary" (click)="AgregarRol(rol.ROLID)">
+                  <mat-icon>add_circle_outline</mat-icon>
+                </button>
+                <span style="vertical-align: middle;">{{rol.ROL}}</span>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

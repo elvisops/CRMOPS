@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { AuthService } from 'src/app/guards/auth/auth.service';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/guards/auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RolesService {
+export class RolesVistasService {
 
   constructor(
     private http: HttpClient,
@@ -19,51 +19,66 @@ export class RolesService {
 
   api = environment.api
 
-  getListaRoles(): Observable<any> {
-    var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({ proc: "roles_lista", token: token })
-    // ´$this.api´ = objeto literal
-    return this.http.post<any>(`${this.api}/api/get`, { payload })
-      .pipe(//pipe solo tiene 2 caminos, si todo esta bien pasa por un lado, si existe error por otro camino
-        tap(), //lo extrae y lo mueve al siguiente observador 
-        catchError(this.handleError("Error al leer la lista de roles"))//this.handleError para leer el error que viene a nivel de http 
-      )
-  }
-
-  //funcon utilizada por el dialog de crear
-  Crear(rol: string, descripcion: string): Observable<any> {
+  getListaRoles(vistaID: any): Observable<any> {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
-      proc: "roles_create",
+      proc: "ROLES_VISTAS_LISTA",
       token: token,
-      rol: rol,
-      descripcion: descripcion
+      vistaID: vistaID
     })
-
-    return this.http.post<any>(`${this.api}/api/proc`, { payload })
-      .pipe(//pipe solo tiene 2 caminos, si todo esta bien pasa por un lado, si existe error por otro camino
-        tap(), //lo extrae y lo mueve al siguiente observador 
-        catchError(this.handleError("Error al leer la lista de roles"))//this.handleError para leer el error que viene a nivel de http 
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al lees la lista de usuarios"))
       )
   }
 
-  Update(rolId: number, rol: string, estado: boolean, descripcion: string): Observable<any> {
-    var estadodb = (estado) ? '1' : '0'
+  getRolesAsignados(vistaId: any): Observable<any> {
     var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
-      proc: "roles_update",
+      proc: "roles_asignados",
       token: token,
-      rolId: rolId,
-      rol: rol,
-      estado: estadodb,
-      descripcion: descripcion
+      vistaId: vistaId
+    })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al leer los permisos asignados"))
+      )
+  }
+
+  Guardar(rolID: any, vistaID: number): Observable<any> {
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    // vistaID = vistaID
+    var payload = this.auth.mkpayload({
+      proc: "ROLES_VISTAS_CREATE",
+      token: token,
+      rolID: rolID,
+      vistaID: vistaID
     })
     return this.http.post<any>(`${this.api}/api/proc`, { payload })
       .pipe(
         tap(),
-        catchError(this.handleError("Error al modificar el Rol"))
+        catchError(this.handleError("Error al guardar los roles"))
+      )
+  }
+
+  Eliminar(rolID: any, vistaID: number): Observable<any> {
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "ROLES_VISTAS_DELETE",
+      token: token,
+      rolID: rolID,
+      vistaID: vistaID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al eliminar el rol"))
       )
   }
 
@@ -84,4 +99,3 @@ export class RolesService {
     }
   }
 }
-

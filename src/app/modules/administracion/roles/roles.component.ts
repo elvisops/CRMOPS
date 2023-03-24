@@ -11,15 +11,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { RolesEditarComponent } from './roles-editar/roles-editar.component';
 
-
-
-
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.css']
 })
-
 
 export class RolesComponent implements OnInit {
   //declaro el paginador y el ordenador de las tablas
@@ -32,7 +28,7 @@ export class RolesComponent implements OnInit {
     private service: RolesService,
     //necesito el servicio de auth para desemcriptar la respuesta que viene del servidor
     private auth: AuthService,
-    private dialog:MatDialog
+    private dialog: MatDialog
   ) { }
   // creo la variable que sera la abstaccion de Roles, como es una lista lo declaro como arreglo y vacio
   ListaRoles: Roles[] = [];
@@ -45,10 +41,10 @@ export class RolesComponent implements OnInit {
     this.genListaRoles()
   }
 
-  filtrar(evt:Event){
-    const valorFiltrado =(evt.target as HTMLInputElement).value;
+  filtrar(evt: Event) {
+    const valorFiltrado = (evt.target as HTMLInputElement).value;
     this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
-    if(this.DataSource.paginator){
+    if (this.DataSource.paginator) {
       this.DataSource.paginator.firstPage();
     }
   }
@@ -64,8 +60,6 @@ export class RolesComponent implements OnInit {
     })
   }
 
-
-
   //funcion con parametro de un objeto de tipo Roles 
   FillTable(Datos: Roles[]) {
     this.DataSource = new MatTableDataSource(Datos)
@@ -73,30 +67,27 @@ export class RolesComponent implements OnInit {
     this.DataSource.paginator = this.paginator
   }
 
-  OpenDialogCrear(){
-    const dialogRef = this.dialog.open(RolesCrearComponent,{
-      width:'40%',
-      data:null,
-      disableClose:true
+  OpenDialogCrear() {
+    const dialogRef = this.dialog.open(RolesCrearComponent, {
+      width: '40%',
+      data: null,
+      disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(datos=>{   
+    dialogRef.afterClosed().subscribe(datos => {
       this.genListaRoles()
     })
   }
 
-  OpenDialogEditar(element:any){
-    const dialogRef = this.dialog.open(RolesEditarComponent,{
-      width:'40%',
-      data:element,
-      disableClose:true
+  OpenDialogEditar(element: any) {
+    const dialogRef = this.dialog.open(RolesEditarComponent, {
+      width: '40%',
+      data: element,
+      disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(datos=>{   
+    dialogRef.afterClosed().subscribe(datos => {
       this.genListaRoles()
     })
   }
-
- 
-
 }

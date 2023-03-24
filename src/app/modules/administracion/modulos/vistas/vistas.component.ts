@@ -6,10 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { ModulosVistas } from '../modulos';
-import { ModulosService } from '../modulos.service';
 import { RolesVistasComponent } from './roles-vistas/roles-vistas.component';
 import { VistasCrearComponent } from './vistas-crear/vistas-crear.component';
 import { VistasEditarComponent } from './vistas-editar/vistas-editar.component';
+import { VistasService } from './vistas.service';
 
 @Component({
   selector: 'app-vistas',
@@ -20,7 +20,7 @@ export class VistasComponent implements OnInit {
   constructor(
     private router: ActivatedRoute,
     private auth: AuthService,
-    private service: ModulosService,
+    private service: VistasService,
     private dialog: MatDialog
   ) { }
 
@@ -28,7 +28,7 @@ export class VistasComponent implements OnInit {
   ModuloName: string = ""
   ListaVistas: ModulosVistas[] = []
   DataSource: MatTableDataSource<ModulosVistas> = new MatTableDataSource()
-  Columnas: string[] = ['VISTA', 'V_URL', 'CREACION', 'ACTUALIZACION','OPCIONES']
+  Columnas: string[] = ['VISTA', 'V_URL', 'CREACION', 'ACTUALIZACION', 'OPCIONES']
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort
 
@@ -65,32 +65,31 @@ export class VistasComponent implements OnInit {
   }
 
   CrearVista(ModuloId: number) {
-    const dialogRef = this.dialog.open(VistasCrearComponent,{
+    const dialogRef = this.dialog.open(VistasCrearComponent, {
       width: '50%',
       data: ModuloId,
-      disableClose:true
+      disableClose: true
     })
-    
+
     dialogRef.afterClosed().subscribe(datos => {
       this.ObtenerListaVistas()
     })
   }
 
-  ActualizarVista(Vista:any){
-    const dialogRef = this.dialog.open(VistasEditarComponent,{
+  ActualizarVista(Vista: any) {
+    const dialogRef = this.dialog.open(VistasEditarComponent, {
       width: '50%',
-      data:Vista,
-      disableClose:true
+      data: Vista,
+      disableClose: true
     })
   }
 
-  OpenDialogRoles(Vista:any){
-    const dialogRef = this.dialog.open(RolesVistasComponent,{
+  OpenDialogRoles(Vista: any) {
+    const dialogRef = this.dialog.open(RolesVistasComponent, {
       width: '60%',
       data: Vista,
-      disableClose:true
+      disableClose: true
     })
-    
   }
 
   FillTable(data: ModulosVistas[]) {
@@ -99,7 +98,7 @@ export class VistasComponent implements OnInit {
     this.DataSource.paginator = this.paginator
   }
 
-  Filtrar(evt:Event){
+  Filtrar(evt: Event) {
     const valorFiltrado = (evt.target as HTMLInputElement).value;
     this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
     if (this.DataSource.paginator) {

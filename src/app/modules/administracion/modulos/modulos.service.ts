@@ -12,194 +12,70 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ModulosService {
 
   constructor(
-    private http:HttpClient,
-    private auth:AuthService,
-    private snack:MatSnackBar
+    private http: HttpClient,
+    private auth: AuthService,
+    private snack: MatSnackBar
   ) { }
 
-  
-
   api = environment.api
-    
-  getListaModulos():Observable<any>{
+
+  getListaModulos(): Observable<any> {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({ proc:"modulos_lista",token:token })
-    return this.http.post<any>(`${this.api}/api/get`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al leer la lista de modulos"))
-    )
-  }
-
-  Crear(modulo:string,descripcion:string):Observable<any>{
-    var token = sessionStorage.getItem('token')
-    var payload = this.auth.mkpayload({
-        proc:"modulos_create",
-        token:token,
-        modulo:modulo,
-        descripcion:descripcion        
-      })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al leer la lista de Modulos"))
-    )
-  }
-
-  update(moduloID:number, modulo:string, descripcion:string):Observable<any>{
-    var token = sessionStorage.getItem('token')
-    var payload = this.auth.mkpayload({
-
-      proc:"modulos_update",
-      token:token,
-      moduloID:moduloID,
-      modulo:modulo,
-      descripcion:descripcion
-    })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al Modificar el Modulos"))
-    )
-  }
-
-  getModulosVistas(ModuloId:number): Observable<any>{
-    var token = this.auth.ParseToken()
-    var payload = this.auth.mkpayload({
-      proc: "sp_modulos_vistas",
-      token: token,
-      ModuloId:ModuloId
-    })
-    return this.http.post<any>(`${this.api}/api/get`,{payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("No se pudo obtener la lista de vistas"))
-    )
-  }
-
-  getNameModuloVista(ModuloId:number):Observable<any>{
-    var token = this.auth.ParseToken()
-    var payload = this.auth.mkpayload({
-      proc: "modulos_get_name",
-      token: token,
-      ModuloId: ModuloId
-    })
-    return this.http.post<any>(`${this.api}/api/proc`, {payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al obtener el nombre del modulo"))
-    )
-  }
-
-  CrearVista(ModuloId:number, Vista: string, VistaUrl: string): Observable<any>{
-    var token = this.auth.ParseToken()
-    var payload = this.auth.mkpayload({
-      proc: 'modulos_vistas_create',
-      token:token,
-      ModuloId:ModuloId,
-      Vista: Vista,
-      VistaUrl: VistaUrl
-    })
-    return this.http.post<any>(`${this.api}/api/proc`, {payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al crear la nueva vista"))
-    )
-  }
-
-  UpdateVista(VistaID:number, Vista: string, VistaUrl: string):Observable<any>{
-    var token = this.auth.ParseToken()
-    var payload = this.auth.mkpayload({
-      proc: 'MODULOS_VISTAS_UDPATE',
-      token: token,
-      VistaID: VistaID,
-      Vista: Vista,
-      VistaUrl: VistaUrl
-    })
-    return this.http.post<any>(`${this.api}/api/proc`, { payload })
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al modificar la vista"))
-    )
-  }
-
-  getListaRoles(vistaID: any):Observable<any>{
-    var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({
-      proc: "ROLES_VISTAS_LISTA",
-      token:token,
-      vistaID: vistaID
-    })
-    return this.http.post<any>(`${this.api}/api/get`, {payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al lees la lista de usuarios"))
-    )
-  }
-
-  getRolesAsignados(vistaId: any):Observable<any>{
-    var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({
-      proc: "roles_asignados",
-      token: token,
-      vistaId: vistaId
-    })
+    var payload = this.auth.mkpayload({ proc: "modulos_lista", token: token })
     return this.http.post<any>(`${this.api}/api/get`, { payload })
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al leer los permisos asignados"))
-    )
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al leer la lista de modulos"))
+      )
   }
 
-  Guardar(rolID:any, vistaID:number):Observable<any>{
+  Crear(modulo: string, descripcion: string): Observable<any> {
     var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    // vistaID = vistaID
     var payload = this.auth.mkpayload({
-      proc: "ROLES_VISTAS_CREATE",
+      proc: "modulos_create",
       token: token,
-      rolID:rolID,
-      vistaID: vistaID
-    })
-    return this.http.post<any>(`${this.api}/api/proc`, {payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al guardar los roles"))
-    )
-  }
-
-  Eliminar(rolID:any, vistaID:number):Observable<any>{
-    var token = sessionStorage.getItem('token')
-    token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({
-      proc: "ROLES_VISTAS_DELETE",
-      token: token,
-      rolID: rolID,
-      vistaID: vistaID
+      modulo: modulo,
+      descripcion: descripcion
     })
     return this.http.post<any>(`${this.api}/api/proc`, { payload })
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al eliminar el rol"))
-    )
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al leer la lista de Modulos"))
+      )
   }
-  notificacion(msg:string):void{
-    this.snack.open(msg,"Cerrar",{
-      horizontalPosition:"center",
-      verticalPosition:"top",
-      duration:5000
+
+  update(moduloID: number, modulo: string, descripcion: string): Observable<any> {
+    var token = sessionStorage.getItem('token')
+    var payload = this.auth.mkpayload({
+
+      proc: "modulos_update",
+      token: token,
+      moduloID: moduloID,
+      modulo: modulo,
+      descripcion: descripcion
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al Modificar el Modulos"))
+      )
+  }
+
+  notificacion(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000
     })
   }
 
-  private handleError<T>(operation = 'operacion', result?:T){
-    return(error:any):Observable<T>=>{
-      console.log('Error en la aplicacion: '+JSON.stringify(error));
+  private handleError<T>(operation = 'operacion', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log('Error en la aplicacion: ' + JSON.stringify(error));
       this.notificacion(operation)
       console.log(error)
-      return of(result as T)      
+      return of(result as T)
     }
   }
 

@@ -12,5 +12,6 @@
 
   /* alto del card de los roles */
   .card_height{
-    height: 100%;
+    overflow-y: auto;
+    max-height: 50vh;
   }
