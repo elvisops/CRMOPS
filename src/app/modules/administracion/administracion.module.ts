@@ -36,9 +36,6 @@ import { VistasCrearComponent } from './modulos/vistas/vistas-crear/vistas-crear
 import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-editar.component';
 import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas.component';
 
-
-
-
 @NgModule({
   declarations: [
     AdministracionComponent,
@@ -69,17 +66,15 @@ import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas
     VistasCrearComponent,
     VistasEditarComponent,
     RolesVistasComponent,
-
-    
-
   ],
   imports: [
     CommonModule,
     AdministracionRoutingModule,
-    MaterialsModule
+    MaterialsModule,
   ],
   schemas:[
     
   ]
 })
 export class AdministracionModule { }
+

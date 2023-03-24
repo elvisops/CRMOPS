@@ -1,32 +1,33 @@
 <mat-card>
-    <mat-card-header class="bgops-indigo" >
+    <mat-card-header class="bgops-indigo">
         <mat-card-title class="txtwhite">
             <h1>Creacion de usuario</h1>
         </mat-card-title>
     </mat-card-header>
     <mat-divider class="my-4"></mat-divider>
     <mat-card-content>
-
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Nombre Usuario</mat-label>
-            <input matInput [(ngModel)]="usuario" type="text" >
+            <input matInput [(ngModel)]="usuario" type="text">
         </mat-form-field>
-
-
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Contraseña</mat-label>
-            <input 
-                matInput 
-                [(ngModel)]="clave" 
-                type="text" 
-                [type]="hide ? 'password' : 'text'"
-            >
+            <input matInput [(ngModel)]="clave" type="text" [type]="hide ? 'password' : 'text'"
+                [formControl]="passwordControl">
+            <div *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+                <div *ngIf="passwordControl.hasError('required')" style="color: red;">La contraseña es requerida</div>
+                <div *ngIf="passwordControl.hasError('pattern')" style="color: red;">La contraseña no es válida</div>
+            </div>
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
-
+        <div class="my-0" *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+            <div style="color: red;">La contraseña debe contener caracteres en mayusculas y minusculas, 
+                numeros y signos de puntuacion, con una longitud minima de 8 caracteres
+            </div>
+        </div>
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Rol de usuario</mat-label>
             <mat-select [(ngModel)]="rolid">
@@ -36,7 +37,6 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-
     </mat-card-content>
     <mat-divider class="my-4"></mat-divider>
     <mat-card-actions>
@@ -44,6 +44,3 @@
         <button mat-raised-button color="warn" class="mx-2" (click)="CloseDialog()">Cancelar</button>
     </mat-card-actions>
 </mat-card>
-
-
-
