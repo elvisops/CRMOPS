@@ -52,7 +52,8 @@ export class CarterasCrearComponent implements OnInit {
   secondFormGroup: FormGroup = this.FormBuilder.group({secondCtrl: ['']});
 
   ngOnInit(): void {
-    var RouteData = this.ActivatedRoute.snapshot.params['proyecto']
+    var RouteData = this.ActivatedRoute.snapshot.params['proyectoid']
+    console.log(RouteData)
     RouteData = this.auth.mkurl_dec(RouteData.toString())
     RouteData = JSON.parse(RouteData)
     this.Proyecto = RouteData
@@ -170,13 +171,13 @@ export class CarterasCrearComponent implements OnInit {
         })
 
         selSection--
-      },1000)
-    
+      },1000)   
 
     
 
   }
 
+  
   
 
   
