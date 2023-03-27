@@ -5,8 +5,7 @@
         <img src="../assets/img/logo1.png" style="width: 150px; height: auto;">
       </div>
 
-      <mat-divider class="mt-4"></mat-divider>
-      
+      <mat-divider class="mt-4"></mat-divider>  
       
 
       <mat-accordion>
@@ -45,8 +44,9 @@
       <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/perfil">Perfil</button>
-        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>        
       </mat-menu>
+      <button mat-icon-button color="accent"><mat-icon>av_timer</mat-icon></button>
     
     
   

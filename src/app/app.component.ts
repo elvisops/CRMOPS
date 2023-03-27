@@ -1,6 +1,8 @@
 import { Component,  HostListener, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from './guards/auth/auth.service';
 import { LoginService } from './modules/administracion/login/login.service';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { EstadosOperativosComponent } from './modules/public/estados-operativos/estados-operativos.component';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +19,17 @@ export class AppComponent implements OnInit {
 
   constructor(
     private LoginService:LoginService,
-    private auth:AuthService
+    private auth:AuthService,
+    private bottomSheet:MatBottomSheet
   ){
     this.ValidarSesion()
+
   }
+
+  AbrirEstados():void{
+    this.bottomSheet.open(EstadosOperativosComponent)
+  }
+
 
   @HostListener('window:storage',['$event'])
   onStorageChange(event:StorageEvent){
@@ -76,3 +85,5 @@ export class AppComponent implements OnInit {
   }
   
 }
+
+
