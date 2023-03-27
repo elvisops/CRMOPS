@@ -1,6 +1,6 @@
-.barra-tareas-separador{
+/* .barra-tareas-separador{
     flex: 1 1 auto;
-}
+} */
 
 .nav-container{
     width: 100%;;
@@ -10,4 +10,9 @@
 
 .sidenav-content{
     height: 100%;
+}
+
+.timer{
+    flex: 1;
+    text-align: center;
 }

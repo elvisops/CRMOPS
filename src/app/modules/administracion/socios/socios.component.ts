@@ -27,7 +27,7 @@ export class SociosComponent implements OnInit{
     private service: SociosService,
     private auth: AuthService,
     private dialog:MatDialog,
-    private router:Router
+    private router:Router,
   ){}
 
   ListaSocios: Socios[] = []
@@ -36,6 +36,7 @@ export class SociosComponent implements OnInit{
 
   ngOnInit(): void {
     this.genListaSocios()
+
   }
 
   filtrar(evt:Event){

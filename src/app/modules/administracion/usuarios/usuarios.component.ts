@@ -24,7 +24,7 @@ export class UsuariosComponent implements OnInit {
   constructor(
     private service: UsuariosService,
     private auth: AuthService,
-    private dialog:MatDialog
+    private dialog:MatDialog,
   ) { }
 
   ListaUsuarios: Usuarios[] = []
@@ -33,6 +33,7 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaUsuarios()
+
   }
 
   genListaUsuarios() {

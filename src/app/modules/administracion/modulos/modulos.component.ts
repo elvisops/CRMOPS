@@ -27,8 +27,11 @@ export class ModulosComponent implements OnInit {
     private service: ModulosService,
     private auth: AuthService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
   ) { }
+
+  elapsedTime?: number;
+  
 
   ListaModulos: Modulos[] = []
   DataSource: MatTableDataSource<Modulos> = new MatTableDataSource();
@@ -36,6 +39,13 @@ export class ModulosComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaModulos()
+
+    // var tiempoVista = this.timerService.getElapsedTime()
+
+    // if(tiempoVista){
+    //   alert((tiempoVista))
+    // }
+    // this.timerService.startTimer('modulos')
   }
 
   genListaModulos() {

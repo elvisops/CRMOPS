@@ -28,7 +28,7 @@ export class RolesComponent implements OnInit {
     private service: RolesService,
     //necesito el servicio de auth para desemcriptar la respuesta que viene del servidor
     private auth: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) { }
   // creo la variable que sera la abstaccion de Roles, como es una lista lo declaro como arreglo y vacio
   ListaRoles: Roles[] = [];
@@ -39,6 +39,8 @@ export class RolesComponent implements OnInit {
   //la funcion oninit, llama a la funcion para llenar el arreglo ListaRoles
   ngOnInit(): void {
     this.genListaRoles()
+
+    
   }
 
   filtrar(evt: Event) {
