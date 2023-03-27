@@ -147,7 +147,11 @@ export class CarterasCrearComponent implements OnInit {
           CuentasIdentidades.push([])
         }      
         CuentasIdentidades[seccion].push([
-            {cuenta:datos[i][this.EncCuenta], identidad:datos[i][this.EncIdentidad], nombre:datos[i][this.EncNombre]}
+            {
+              cuenta:datos[i][this.EncCuenta], 
+              identidad:datos[i][this.EncIdentidad], 
+              nombre:datos[i][this.EncNombre]
+            }
           ],          
         )
         contador++    
@@ -162,8 +166,7 @@ export class CarterasCrearComponent implements OnInit {
       const IntervalAct = setInterval(()=>{
         if(selSection==0){
           clearInterval(IntervalAct)
-        }
-        
+        }        
         //console.log(CuentasIdentidades[selSection]);
         this.service.SendDataCuenta(CuentasIdentidades[selSection]).subscribe(r=>{
           var respuesta = this.auth.desencriptar(r.response);
@@ -171,9 +174,7 @@ export class CarterasCrearComponent implements OnInit {
         })
 
         selSection--
-      },1000)   
-
-    
+      },500)       
 
   }
 

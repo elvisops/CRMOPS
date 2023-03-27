@@ -1,5 +1,6 @@
 import { Component,OnInit } from '@angular/core';
-
+import { AuthService } from 'src/app/guards/auth/auth.service';
+import { EstadosOperativosService } from './estados-operativos.service';
 
 @Component({
   selector: 'app-estados-operativos',
@@ -8,13 +9,28 @@ import { Component,OnInit } from '@angular/core';
 })
 export class EstadosOperativosComponent implements  OnInit{
 
-  constructor() { }
+  constructor(
+    private auth:AuthService,
+    private service:EstadosOperativosService
+  ) { }
+
+  EstadosOperativos: any[] = []
 
   openlink(event: MouseEvent){    
     event.preventDefault();
   }
 
-  ngOnInit(): void {
+  ListarEstadosOperativos(){
+    this.service.getEstadosOperativos().subscribe(res=>{      
+      var respuesta = this.auth.desencriptar(res.data)
+      respuesta = JSON.parse(respuesta)
+      this.EstadosOperativos = respuesta      
+    })    
+  }
+
+
+  ngOnInit(): void {    
+    this.ListarEstadosOperativos()
   }
 
 }

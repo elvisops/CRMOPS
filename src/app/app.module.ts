@@ -9,7 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //Angular Material modules
 import { MaterialsModule } from './modules/public/materials/materials.module';
 // import { FormsModule } from '@angular/forms';
-
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 
 
 
@@ -26,6 +26,7 @@ import { MaterialsModule } from './modules/public/materials/materials.module';
     // FormsModule,
     //Angular Material Modules            
     MaterialsModule,
+    MatBottomSheetModule
   ],
   providers: [],
   bootstrap: [AppComponent],

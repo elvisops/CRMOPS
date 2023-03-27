@@ -1,1 +1,5 @@
-<p>estados-operativos works!</p>
+<mat-nav-list>
+    <a mat-list-item *ngFor="let estado of EstadosOperativos">
+        <span matListItemTitle>{{estado.ESTADOOPERATIVO}}</span>
+    </a>
+</mat-nav-list>
