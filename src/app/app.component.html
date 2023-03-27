@@ -40,16 +40,20 @@
         <mat-icon>menu</mat-icon>
       </button>
       <a routerLink="./inicio" mat-button class="txtwhite">{{title}}</a>  
-  
+      <div class="timer">
+        Tiempo operativo:  {{ elapsedTime }}
+      </div>
       <span class="barra-tareas-separador"></span>
       <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/perfil">Perfil</button>
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>
       </mat-menu>
-    
-    
-  
+
+      <button mat-button [matMenuTriggerFor]="estado" *ngIf="isLogged">Estado</button>
+      <mat-menu #estado="matMenu">
+        <button mat-menu-item (click)="cambiarEstado()">{{status}}</button>
+      </mat-menu>
     
   </mat-toolbar>
   <router-outlet></router-outlet>

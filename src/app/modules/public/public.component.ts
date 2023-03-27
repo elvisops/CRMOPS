@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TimerServiceService } from 'src/app/timer-service.service';
 import { LoginService } from '../administracion/login/login.service';
 
 @Component({
@@ -10,15 +11,23 @@ export class PublicComponent implements OnInit{
   
   permisos:any = []
   modulos:any =[]
+
+  elapsedTime?: number;
   
   constructor(
-    private loginService:LoginService
+    private loginService:LoginService,
+    private timerService: TimerServiceService
   ){}
 
 
   ngOnInit(): void {
     this.permisos = this.loginService.leerPermisos()    
     this.getModulos()
+    // // timer
+    // this.timerService.startTimer();
+    // setInterval(() => {
+    //   this.elapsedTime = this.timerService.getElapsedTime();
+    // }, 500);
   }
 
   getModulos(){

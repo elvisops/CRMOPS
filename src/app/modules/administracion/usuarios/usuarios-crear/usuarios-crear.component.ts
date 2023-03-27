@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from 'src/app/guards/auth/auth.service';
-
-
 import { UsuariosService } from '../usuarios.service';
 
 @Component({
@@ -11,6 +10,11 @@ import { UsuariosService } from '../usuarios.service';
   styleUrls: ['./usuarios-crear.component.css']
 })
 export class UsuariosCrearComponent implements OnInit {
+
+  passwordControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.])[A-Za-z\d.]{8,}$/)
+  ]);
 
   /*variables*/
   hide:boolean = true
@@ -44,6 +48,9 @@ export class UsuariosCrearComponent implements OnInit {
       this.service.notificacion("Debe llenar todos los campos del formulario")
       return;
     }
+    if (this.passwordControl.invalid) {
+      return
+    }
     this.service.Crear(this.usuario,this.clave,this.rolid).subscribe(r=>{
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
@@ -56,7 +63,6 @@ export class UsuariosCrearComponent implements OnInit {
       }else{
         this.service.notificacion(respuesta.message) 
       }
-      
     })
   }
 
@@ -69,4 +75,5 @@ export class UsuariosCrearComponent implements OnInit {
   CloseDialog():void{
     this.dialogRef.close()
   }
+
 }
