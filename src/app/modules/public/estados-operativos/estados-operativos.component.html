@@ -1,5 +1,12 @@
-<mat-nav-list>
-    <a mat-list-item *ngFor="let estado of EstadosOperativos">
+<p>Estado Actual: </p>
+<mat-chip-listbox>
+    <mat-chip-option color="primary" selected>{{EstadoActualName}}</mat-chip-option>
+</mat-chip-listbox>
+
+<mat-divider></mat-divider>
+
+<mat-nav-list>    
+    <a mat-list-item *ngFor="let estado of EstadosOperativos" (click)="ActualizarEstado(estado.ESTADOOPERATIVOID)">
         <span matListItemTitle>{{estado.ESTADOOPERATIVO}}</span>
     </a>
 </mat-nav-list>

@@ -27,11 +27,10 @@ export class AppComponent implements OnInit {
 
   constructor(
     private LoginService:LoginService,
-    private auth:AuthService,
+    private auth:AuthService,    
     private timerService: TimerServiceService,
     private timer: TimerServiceService,
-    private service: AuthService
-    private auth:AuthService,
+    private service: AuthService,    
     private bottomSheet:MatBottomSheet
   ){
     this.ValidarSesion()

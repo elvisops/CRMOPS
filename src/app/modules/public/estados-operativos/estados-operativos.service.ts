@@ -37,6 +37,18 @@ export class EstadosOperativosService {
     }
   }
 
+  SetUserState(estadoOperativoID: number): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: "USER_SET_ESTADO", token: token, estadoOperativoID: estadoOperativoID })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al actualizar el estado operativo"))
+      )
+  }
+
+  
+
   notificacion(msg: string): void {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",

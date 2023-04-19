@@ -38,20 +38,18 @@
       <button mat-icon-button *ngIf="isLogged" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <a routerLink="./inicio" mat-button class="txtwhite">{{title}}</a>  
-      <div class="timer">
-        Tiempo operativo:  {{ elapsedTime }}
-      </div>
+      <a routerLink="./inicio" mat-button class="txtwhite">{{title}}</a>
+      <!--<div class="timer">
+         Tiempo operativo:  {{ elapsedTime }} 
+      </div>-->
+      <div class="timer"></div>
       <span class="barra-tareas-separador"></span>
       <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/perfil">Perfil</button>
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>        
       </mat-menu>
-      <button mat-icon-button class="txtops-chartreuse" (click)="AbrirEstados()"><mat-icon>av_timer</mat-icon></button>
-    
-    
-  
+      <button *ngIf="isLogged" mat-icon-button class="txtops-chartreuse" (click)="AbrirEstados()"><mat-icon>av_timer</mat-icon></button>
     
   </mat-toolbar>
   <router-outlet></router-outlet>
