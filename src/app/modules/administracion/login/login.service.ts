@@ -49,12 +49,33 @@ export class LoginService {
 
   }
 
-  /*inicializar variables de sessionStorage*/
-  setSessionStorage(){
-    sessionStorage.setItem('logged','true')    
+  setLogoutDB():Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({proc:"USER_SET_LOGOUT",token:token})
+    return this.http.post<any>(`${this.api}/api/proc`,{proc:"logout",payload:payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cerrar la sesion"))
+    )
   }
 
+  setUserState(EstadoID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({proc:"USER_SET_ESTADO",token:token,EstadoID:EstadoID})
+    return this.http.post<any>(`${this.api}/api/proc`,{proc:"USER_SET_ESTADO",payload:payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cambiar el estado del usuario"))
+    )
+  }
   
+  /*inicializar variables de sessionStorage*/
+  setSessionStorage(){
+    sessionStorage.setItem('logged','true')  
+      
+  }  
 
   leerPermisos():any{
     if(sessionStorage.getItem('permisos')!=undefined){
@@ -66,9 +87,14 @@ export class LoginService {
     
   }
   
-  sesionDestroy(){    
-    sessionStorage.clear()
-    window.location.href = './'
+  sesionDestroy(){  
+    this.setLogoutDB().subscribe(res=>{
+      console.log(res)      
+      sessionStorage.clear()    
+      window.location.href = './'
+    })
+    
+    
   }
 
   notificacion(msg:string):void{

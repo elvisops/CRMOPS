@@ -77,7 +77,7 @@
                   </button>          
                 </div>
   
-                <mat-divider class="m-4"></mat-divider>
+                <mat-divider class="m-4"></mat-divider>                
   
                 <div *ngIf="Encabezados.length > 0">
   
@@ -133,10 +133,23 @@
                       <h2>Ejemplo: {{jsonData[0][EncNombre]}}</h2>
                     </div>
                   </div>
-                </div>
+                </div>               
                 
 
-                <button (click)="GenerarArreglosCarga()" mat-raised-button color="primary">Cargar</button>
+                <button (click)="sendCsv()" mat-raised-button color="primary">Cargar</button>
+                <button mat-raised-button color="warn" *ngIf="LoadingProcess">Cancelar</button>
+
+                <div *ngIf="CargandoCarteraPorcentaje >0">
+                  <p>Cargando cartera...</p>
+                  <mat-progress-bar                   
+                  [value]="CargandoCarteraPorcentaje"
+                  color="primary"
+                  mode="buffer"
+                  [bufferValue]="bufferPercentage">
+                </mat-progress-bar>
+                </div>
+
+
               </div>
 
               <div *ngIf="LoadingFile">

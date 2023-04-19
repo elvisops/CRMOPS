@@ -5,6 +5,8 @@ import { CarterasTipos } from '../carteras';
 import { CarterasService } from '../carteras.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
+import { concatMap, from } from 'rxjs';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-carteras-crear',
@@ -31,17 +33,21 @@ export class CarterasCrearComponent implements OnInit {
   ListaCarterasTipos:CarterasTipos[] = []
   StepOneCompleted:boolean = false
   LoadingFile:boolean = false
+  CargandoCarteraPorcentaje:number = 0
+  bufferPercentage:number = 0  
+  LoadingProcess:boolean = false
+  
 
   //Arreglos sin duplicados para crear registros en la base de datos
   ArrIdentidadesNombres:string[] = []
-  ArrCuentas:string[] = [] 
-
-
-  
+  ArrCuentas:string[] = []    
   //Cambiar a fromgroup
   EncCuenta:string = ""
   EncIdentidad:string=""
   EncNombre:string = ""
+
+  //arreglo a enviar a la api y base de datos
+  CuentasIdentidades:any[] = [[]]
 
   firstFormGroup: FormGroup = this.FormBuilder.group(
     {
@@ -52,7 +58,8 @@ export class CarterasCrearComponent implements OnInit {
   secondFormGroup: FormGroup = this.FormBuilder.group({secondCtrl: ['']});
 
   ngOnInit(): void {
-    var RouteData = this.ActivatedRoute.snapshot.params['proyecto']
+    var RouteData = this.ActivatedRoute.snapshot.params['proyectoid']
+    console.log(RouteData)
     RouteData = this.auth.mkurl_dec(RouteData.toString())
     RouteData = JSON.parse(RouteData)
     this.Proyecto = RouteData
@@ -102,9 +109,9 @@ export class CarterasCrearComponent implements OnInit {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       this.jsonData = XLSX.utils.sheet_to_json(worksheet);
-      console.log(this.jsonData); // aquí puedes hacer lo que necesites con el objeto JSON
+      //console.log(this.jsonData); 
       this.getEncabezados(this.jsonData);
-      console.log(this.Encabezados)
+      //console.log(this.Encabezados)
       this.LoadingFile = false
     };
     reader.readAsBinaryString(archivo);
@@ -134,8 +141,7 @@ export class CarterasCrearComponent implements OnInit {
       this.service.notificacion("Los campos obligatorios no pueden estar vacios")
       return
     }
-    var datos = this.jsonData
-    var CuentasIdentidades:any[] = [[]]
+    var datos = this.jsonData    
     var contador = 0;
     var seccion = 0    
     var maxSection = 0
@@ -143,40 +149,95 @@ export class CarterasCrearComponent implements OnInit {
         if(contador > 999){
           contador = 0
           seccion++
-          CuentasIdentidades.push([])
+          this.CuentasIdentidades.push([])
         }      
-        CuentasIdentidades[seccion].push([
-            {cuenta:datos[i][this.EncCuenta], identidad:datos[i][this.EncIdentidad], nombre:datos[i][this.EncNombre]}
+        this.CuentasIdentidades[seccion].push([
+            {
+              cuenta:datos[i][this.EncCuenta], 
+              identidad:datos[i][this.EncIdentidad], 
+              nombre:datos[i][this.EncNombre]
+            }
           ],          
         )
         contador++    
         if(i== (datos.length) -1 ){
           maxSection = seccion
         }  
+    }      
+    //console.log(this.CuentasIdentidades)  
+
+    this.service.SendDataCuenta(this.jsonData).subscribe(r=>{
+      var respuesta = this.auth.desencriptar(r.response)
+      respuesta = JSON.parse(respuesta)
+      console.log(respuesta)
+      if(respuesta.status == 1){
+        this.service.notificacion("Cartera cargada con exito")
+      }else{
+        this.service.notificacion(respuesta.messsage)
+        return;
+      }
+    })
+    
+    
+  }  
+
+  async enviarDatos() {
+    const datos = this.jsonData;
+    const lotes: any[] = [];
+    for (let i = 0; i < datos.length; i += 1000) {
+      lotes.push(datos.slice(i, i + 1000));
     }
-    
-    var selSection = maxSection
-    var ResultadosHTTP:any[] = []
-    
-      const IntervalAct = setInterval(()=>{
-        if(selSection==0){
-          clearInterval(IntervalAct)
-        }
-        
-        //console.log(CuentasIdentidades[selSection]);
-        this.service.SendDataCuenta(CuentasIdentidades[selSection]).subscribe(r=>{
-          var respuesta = this.auth.desencriptar(r.response);
-          console.log(respuesta)
-        })
-
-        selSection--
-      },1000)
-    
-
-    
-
+  
+    const enviarLote = async (lote: any[]) => {
+      return this.service.SendDataCuenta(lote).toPromise();
+    };
+  
+    const enviarLotes = async () => {
+      const resultados: boolean[] = [];
+      for (const lote of lotes) {
+        const resultado = await enviarLote(lote);
+        console.log(resultado)
+        resultados.push(resultado);
+      }
+      return resultados;
+    };
+  
+    return enviarLotes();
   }
 
+  public sendCsv(): void {
+    const csvData = this.convertToCsv(this.jsonData);
+    console.log(csvData);
+    this.service.SendDataCuenta(csvData).subscribe(r=>{
+      console.log(r)
+    })
+    /*const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    //FileSaver.saveAs(blob, 'data.csv');
+
+    // Enviar la solicitud POST con el archivo en el cuerpo
+    const formData = new FormData();
+    formData.append('file', blob);
+    // Llamar a tu servicio HTTP para enviar la solicitud POST con la FormData
+    console.log(formData)
+    this.service.SendDataCuenta(formData).subscribe(r=>{
+      console.log(r)
+    })*/
+  }
+
+
+  private convertToCsv(json: any[]): string {
+    const headers = Object.keys(json[0]);
+    const csvRows = [];
+    csvRows.push(headers.join(','));
+    for (const item of json) {
+      const values = headers.map(header => item[header]);
+      csvRows.push(values.join(','));
+    }
+    return csvRows.join('\n');
+  }
+    
+
+  
   
 
   
