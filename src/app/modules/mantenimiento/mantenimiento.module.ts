@@ -18,6 +18,9 @@ import { PaisesCrearComponent } from '../administracion/paises/paises-crear/pais
 import { TiposDireccionesComponent } from './tipos-direcciones/tipos-direcciones.component';
 import { TiposDireccionesCrearComponent } from './tipos-direcciones/tipos-direcciones-crear/tipos-direcciones-crear.component';
 import { TiposDireccionesEditarComponent } from './tipos-direcciones/tipos-direcciones-editar/tipos-direcciones-editar.component';
+import { EstadosOperativosComponent } from './estados-operativos/estados-operativos.component';
+import { EstadosOperativosCrearComponent } from './estados-operativos/estados-operativos-crear/estados-operativos-crear.component';
+import { EstadosOperativosEditarComponent } from './estados-operativos/estados-operativos-editar/estados-operativos-editar.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { TiposDireccionesEditarComponent } from './tipos-direcciones/tipos-direc
     TiposProductosComponent,TiposProductosCrearComponent,TiposProductosEditarComponent,
     TiposDireccionesComponent,
     TiposDireccionesCrearComponent,
-    TiposDireccionesEditarComponent
+    TiposDireccionesEditarComponent,
+    EstadosOperativosComponent,
+    EstadosOperativosCrearComponent,
+    EstadosOperativosEditarComponent
   ],
   imports: [
     CommonModule,

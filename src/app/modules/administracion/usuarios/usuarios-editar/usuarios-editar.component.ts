@@ -46,7 +46,7 @@ export class UsuariosEditarComponent implements OnInit {
     })
   }
   GuardarCambios(){
-    if(this.usuario=="" || this.rolid<1  || this.estado == undefined){
+    if(this.usuario=="" || this.rolid < 1  || this.estado == undefined){
       this.service.notificacion("Debe llenar los campos del formulario")
       return
     }
