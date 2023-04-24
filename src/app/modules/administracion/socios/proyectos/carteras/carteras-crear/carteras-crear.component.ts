@@ -136,7 +136,7 @@ export class CarterasCrearComponent implements OnInit {
     }
   }
 
-  GenerarArreglosCarga(){
+  async GenerarArreglosCarga(){
     if(this.EncCuenta == "" || this.EncIdentidad == "" || this.EncNombre == ""){
       this.service.notificacion("Los campos obligatorios no pueden estar vacios")
       return
@@ -146,13 +146,14 @@ export class CarterasCrearComponent implements OnInit {
     var seccion = 0    
     var maxSection = 0
     for(var i=0; i<datos.length; i++){         
-        if(contador > 999){
+        if(contador > 995){
           contador = 0
           seccion++
           this.CuentasIdentidades.push([])
         }      
         this.CuentasIdentidades[seccion].push([
             {
+              CarteraID:1,
               cuenta:datos[i][this.EncCuenta], 
               identidad:datos[i][this.EncIdentidad], 
               nombre:datos[i][this.EncNombre]
@@ -164,77 +165,46 @@ export class CarterasCrearComponent implements OnInit {
           maxSection = seccion
         }  
     }      
-    //console.log(this.CuentasIdentidades)  
+    //console.log(this.CuentasIdentidades)    
+    var enviando = true;
+    var finalizado = false;    
+    var PaqueteActual = 0;
+    var PaqueteFinal = this.CuentasIdentidades.length - 1
 
-    this.service.SendDataCuenta(this.jsonData).subscribe(r=>{
-      var respuesta = this.auth.desencriptar(r.response)
-      respuesta = JSON.parse(respuesta)
-      console.log(respuesta)
-      if(respuesta.status == 1){
-        this.service.notificacion("Cartera cargada con exito")
-      }else{
-        this.service.notificacion(respuesta.messsage)
-        return;
-      }
-    })
+    var DatosEnviados:any = []
+    this.CuentasIdentidades.map(async (paquete:any)=>{
+      var resultado = await this.EnviarPaquete(paquete)    
+      DatosEnviados.push({datos:paquete, status:resultado})
+    });
+    console.log(DatosEnviados);
+
     
     
   }  
 
-  async enviarDatos() {
-    const datos = this.jsonData;
-    const lotes: any[] = [];
-    for (let i = 0; i < datos.length; i += 1000) {
-      lotes.push(datos.slice(i, i + 1000));
-    }
-  
-    const enviarLote = async (lote: any[]) => {
-      return this.service.SendDataCuenta(lote).toPromise();
-    };
-  
-    const enviarLotes = async () => {
-      const resultados: boolean[] = [];
-      for (const lote of lotes) {
-        const resultado = await enviarLote(lote);
-        console.log(resultado)
-        resultados.push(resultado);
-      }
-      return resultados;
-    };
-  
-    return enviarLotes();
-  }
+  async EnviarPaquete(paquete:any):Promise<boolean>{
+    var resultado = false
 
-  public sendCsv(): void {
-    const csvData = this.convertToCsv(this.jsonData);
-    console.log(csvData);
-    this.service.SendDataCuenta(csvData).subscribe(r=>{
-      console.log(r)
+    this.service.SendDataCuenta(paquete).subscribe(r=>{      
+      //var respuesta = this.auth.desencriptar(r.data)      
+      var respuesta = r
+      //respuesta = JSON.parse(respuesta)
+      //respuesta = respuesta[0]
+      console.log(respuesta)
+      if(r.status == 1){
+        resultado = true
+      }else{
+        resultado = false
+        this.service.notificacion(respuesta.messsage)
+      }      
     })
-    /*const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-    //FileSaver.saveAs(blob, 'data.csv');
 
-    // Enviar la solicitud POST con el archivo en el cuerpo
-    const formData = new FormData();
-    formData.append('file', blob);
-    // Llamar a tu servicio HTTP para enviar la solicitud POST con la FormData
-    console.log(formData)
-    this.service.SendDataCuenta(formData).subscribe(r=>{
-      console.log(r)
-    })*/
+    return resultado
   }
 
+  
 
-  private convertToCsv(json: any[]): string {
-    const headers = Object.keys(json[0]);
-    const csvRows = [];
-    csvRows.push(headers.join(','));
-    for (const item of json) {
-      const values = headers.map(header => item[header]);
-      csvRows.push(values.join(','));
-    }
-    return csvRows.join('\n');
-  }
+  
     
 
   
