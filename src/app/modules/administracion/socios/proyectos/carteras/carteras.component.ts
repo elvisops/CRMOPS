@@ -45,6 +45,14 @@ export class CarterasComponent implements OnInit{
     this.ObtenerListaCarteras()
   }
 
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage()
+    }
+  }
+
   ObtenerListaCarteras(){
     this.service.getCarteras(this.Proyecto.PROYECTOID).subscribe(r=>{
       var respuesta = this.auth.desencriptar(r.data)

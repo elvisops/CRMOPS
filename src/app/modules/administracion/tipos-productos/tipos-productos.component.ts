@@ -35,6 +35,14 @@ export class TiposProductosComponent implements OnInit{
     this.genListaProductos()
   }
 
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage()
+    }
+  }
+
   genListaProductos() {
     this.service.getListaTproductos().subscribe(r => {
       var data = this.auth.desencriptar(r.data)

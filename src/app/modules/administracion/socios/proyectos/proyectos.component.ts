@@ -42,8 +42,14 @@ export class ProyectosComponent implements OnInit{
     RouteID = this.auth.mkurl_dec(RouteID.toString())
     this.SocioID = RouteID
     this.ObtenerListaProyectos()
+  }
 
-    
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage()
+    }
   }
 
   ObtenerListaProyectos(){
