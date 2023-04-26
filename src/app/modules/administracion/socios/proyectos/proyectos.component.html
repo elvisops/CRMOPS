@@ -8,7 +8,11 @@
         </mat-card-header>
         <mat-card-content>
             <div class="table-responsive">
-                <table mat-table [dataSource]="DataSource" matSort class="w-100">
+                <mat-form-field class="w-100 mat-form-field-underline-none">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="Filtrar($event)" #input>
+                </mat-form-field>
+                <table mat-table [dataSource]="DataSource" matSort class="w-100 table">
 
                     <ng-container matColumnDef="PROYECTO">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Proyecto</th>                        
@@ -44,7 +48,9 @@
                     <tr mat-row *matRowDef="let row; columns:Columnas"></tr>
 
                     <tr class="mat-row" *matNoDataRow="">
-                        <td class="mat-cell" colspan="5">No hay proyectos registrados</td>
+                        <td class="mat-cell" colspan="4">
+                            No se encontraron datos para la tabla
+                        </td>
                     </tr>
                 </table>
 

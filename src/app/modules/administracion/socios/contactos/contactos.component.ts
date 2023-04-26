@@ -51,6 +51,14 @@ export class ContactosComponent implements OnInit{
     this.getContactos()
   }
 
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value;
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
+    if(this.DataSource.paginator) {
+      this.DataSource.paginator.firstPage();
+    }
+  }
+
   getContactos(){
     this.service.getSociosContacts(this.SocioID).subscribe(r=>{
       var respuesta = this.auth.desencriptar(r.data)

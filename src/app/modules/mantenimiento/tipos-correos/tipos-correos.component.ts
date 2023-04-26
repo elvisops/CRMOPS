@@ -36,6 +36,13 @@ export class TiposCorreosComponent implements OnInit {
     this.genListaTcorreos();
   }
   
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase()
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage();
+    }
+  }
 
   genListaTcorreos() {
     this.service.getListaTcorreos().subscribe(r => {

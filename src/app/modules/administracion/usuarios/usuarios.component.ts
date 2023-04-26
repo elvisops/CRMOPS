@@ -33,7 +33,14 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaUsuarios()
+  }
 
+  Filtrar(evt: Event){
+    const valorFiltrado = (evt.target as HTMLInputElement).value;
+    this.DataSource.filter = valorFiltrado.trim().toLocaleLowerCase();
+    if(this.DataSource.paginator){
+      this.DataSource.paginator.firstPage();
+    }
   }
 
   genListaUsuarios() {
