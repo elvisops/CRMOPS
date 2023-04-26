@@ -146,7 +146,7 @@ export class CarterasCrearComponent implements OnInit {
     var seccion = 0    
     var maxSection = 0
     for(var i=0; i<datos.length; i++){         
-        if(contador > 995){
+        if(contador > 100){
           contador = 0
           seccion++
           this.CuentasIdentidades.push([])
@@ -165,49 +165,100 @@ export class CarterasCrearComponent implements OnInit {
           maxSection = seccion
         }  
     }      
-    //console.log(this.CuentasIdentidades)    
-    var enviando = true;
-    var finalizado = false;    
-    var PaqueteActual = 0;
-    var PaqueteFinal = this.CuentasIdentidades.length - 1
-
-    var DatosEnviados:any = []
-    this.CuentasIdentidades.map(async (paquete:any)=>{
-      var resultado = await this.EnviarPaquete(paquete)    
+    //console.log(this.CuentasIdentidades)        
+    /*var DatosEnviados:any = []
+    this.CuentasIdentidades.map((paquete:any)=>{
+      var resultado = this.EnviarPaquete(paquete)    
       DatosEnviados.push({datos:paquete, status:resultado})
     });
     console.log(DatosEnviados);
 
+    */
+    ///Enviar paquetes
+    /*var inicio = 0
+    var fin = this.CuentasIdentidades.length - 1
     
+    var paquete:any = []
+    this.jsonData.map((cuenta:any)=>{
+      paquete.push({
+        CARTERAID:1,
+        CUENTA:cuenta[this.EncCuenta], 
+        IDENTIDAD:cuenta[this.EncIdentidad], 
+        NOMBRE:cuenta[this.EncNombre]
+      })
+    })
+    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
+      console.log(r)
+    })*/
+
+    var paquete:any = []
+    this.jsonData.map((cuenta:any)=>{
+      paquete.push({
+        CARTERAID:1,
+        CUENTA:cuenta[this.EncCuenta], 
+        IDENTIDAD:cuenta[this.EncIdentidad], 
+        NOMBRE:cuenta[this.EncNombre]
+      })
+    })
+    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
+      console.log(r)      
+    })
     
-  }  
+   
+    
+  } 
+
+  async espera(){
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
 
   async EnviarPaquete(paquete:any):Promise<boolean>{
     var resultado = false
-
-    this.service.SendDataCuenta(paquete).subscribe(r=>{      
-      //var respuesta = this.auth.desencriptar(r.data)      
-      var respuesta = r
-      //respuesta = JSON.parse(respuesta)
-      //respuesta = respuesta[0]
-      console.log(respuesta)
-      if(r.status == 1){
-        resultado = true
-      }else{
-        resultado = false
-        this.service.notificacion(respuesta.messsage)
-      }      
+    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{      
+      resultado = (r.status == 1)? true : false
+      console.log("resultado: ",resultado)
+      console.log(r)
     })
-
+    setTimeout(()=>{},1000)
+    
     return resultado
   }
 
-  
+  async CargaCuentas(){
+    var datos = this.jsonData    
+    var cuentas = datos.map((cuenta:any)=>{
+      return {
+        CarteraID:1,
+        cuenta:cuenta[this.EncCuenta],
+        identidad:cuenta[this.EncIdentidad],
+        nombre:cuenta[this.EncNombre]
+      }
+    })
 
-  
     
+    await cuentas.map(async (cuenta:any)=>{      
+        const resultado = await this.EnviarCuenta(cuenta)       
+        if(resultado){
+          return false
+        }                 
+        return true
+        
+    })
 
-  
+
+  }
+
+  async EnviarCuenta(cuenta:any):Promise<boolean>{
+    var resultado = false
+    this.service.SendDataCuenta(cuenta).subscribe(r=>{      
+      console.log(r)
+      resultado = (r.status == 1)? true : false      
+      //console.log("resultado: ",resultado)      
+    })
+    setTimeout(() => {}, 1000);
+    return resultado
+  }
+
   
 
   
