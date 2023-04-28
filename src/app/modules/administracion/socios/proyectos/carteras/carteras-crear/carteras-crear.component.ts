@@ -32,10 +32,14 @@ export class CarterasCrearComponent implements OnInit {
   Proyecto:any
   ListaCarterasTipos:CarterasTipos[] = []
   StepOneCompleted:boolean = false
-  LoadingFile:boolean = false
-  CargandoCarteraPorcentaje:number = 0
-  bufferPercentage:number = 0  
+  
+
+
+  //Step 2
+  LoadingFile:boolean = false  
   LoadingProcess:boolean = false
+  FileLoaded:boolean = false
+  CargandoCuentas:boolean = false
   
 
   //Arreglos sin duplicados para crear registros en la base de datos
@@ -137,59 +141,13 @@ export class CarterasCrearComponent implements OnInit {
   }
 
   async GenerarArreglosCarga(){
+
+    this.CargandoCuentas = true
+
     if(this.EncCuenta == "" || this.EncIdentidad == "" || this.EncNombre == ""){
       this.service.notificacion("Los campos obligatorios no pueden estar vacios")
       return
     }
-    var datos = this.jsonData    
-    var contador = 0;
-    var seccion = 0    
-    var maxSection = 0
-    for(var i=0; i<datos.length; i++){         
-        if(contador > 100){
-          contador = 0
-          seccion++
-          this.CuentasIdentidades.push([])
-        }      
-        this.CuentasIdentidades[seccion].push([
-            {
-              CarteraID:1,
-              cuenta:datos[i][this.EncCuenta], 
-              identidad:datos[i][this.EncIdentidad], 
-              nombre:datos[i][this.EncNombre]
-            }
-          ],          
-        )
-        contador++    
-        if(i== (datos.length) -1 ){
-          maxSection = seccion
-        }  
-    }      
-    //console.log(this.CuentasIdentidades)        
-    /*var DatosEnviados:any = []
-    this.CuentasIdentidades.map((paquete:any)=>{
-      var resultado = this.EnviarPaquete(paquete)    
-      DatosEnviados.push({datos:paquete, status:resultado})
-    });
-    console.log(DatosEnviados);
-
-    */
-    ///Enviar paquetes
-    /*var inicio = 0
-    var fin = this.CuentasIdentidades.length - 1
-    
-    var paquete:any = []
-    this.jsonData.map((cuenta:any)=>{
-      paquete.push({
-        CARTERAID:1,
-        CUENTA:cuenta[this.EncCuenta], 
-        IDENTIDAD:cuenta[this.EncIdentidad], 
-        NOMBRE:cuenta[this.EncNombre]
-      })
-    })
-    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
-      console.log(r)
-    })*/
 
     var paquete:any = []
     this.jsonData.map((cuenta:any)=>{
@@ -200,66 +158,18 @@ export class CarterasCrearComponent implements OnInit {
         NOMBRE:cuenta[this.EncNombre]
       })
     })
-    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
-      console.log(r)      
-    })
-    
-   
-    
-  } 
-
-  async espera(){
-    return new Promise(resolve => setTimeout(resolve, 1000));
-  }
-
-  async EnviarPaquete(paquete:any):Promise<boolean>{
-    var resultado = false
-    this.service.SendDataCuenta(paquete).subscribe((r:any)=>{      
-      resultado = (r.status == 1)? true : false
-      console.log("resultado: ",resultado)
-      console.log(r)
-    })
-    setTimeout(()=>{},1000)
-    
-    return resultado
-  }
-
-  async CargaCuentas(){
-    var datos = this.jsonData    
-    var cuentas = datos.map((cuenta:any)=>{
-      return {
-        CarteraID:1,
-        cuenta:cuenta[this.EncCuenta],
-        identidad:cuenta[this.EncIdentidad],
-        nombre:cuenta[this.EncNombre]
-      }
-    })
-
-    
-    await cuentas.map(async (cuenta:any)=>{      
-        const resultado = await this.EnviarCuenta(cuenta)       
-        if(resultado){
-          return false
-        }                 
-        return true
-        
-    })
-
-
-  }
-
-  async EnviarCuenta(cuenta:any):Promise<boolean>{
-    var resultado = false
-    this.service.SendDataCuenta(cuenta).subscribe(r=>{      
-      console.log(r)
-      resultado = (r.status == 1)? true : false      
-      //console.log("resultado: ",resultado)      
-    })
-    setTimeout(() => {}, 1000);
-    return resultado
-  }
-
-  
+     this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
+      var respuesta = this.auth.desencriptar(r.response)
+      respuesta = JSON.parse(respuesta)
+      respuesta = respuesta[0]
+      if(respuesta.status == 1){
+        this.service.notificacion("Cuentas registradas con exito")
+      }else{
+        this.service.notificacion(respuesta.messsage)
+        return;
+      }      
+    })    
+  }   
 
   
 }
