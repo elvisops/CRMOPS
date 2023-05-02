@@ -15,10 +15,10 @@
                   <form [formGroup]="firstFormGroup">
                     <ng-template matStepLabel>Ingrese el nombre y el tipo de la cartera</ng-template>
                     <mat-form-field class="w-100">
-                      <input matInput placeholder="Cartera" formControlName="NombreCartera" required>
+                      <input matInput placeholder="Cartera" formControlName="NombreCartera">
                     </mat-form-field>
                     <mat-form-field class="w-100">
-                        <mat-select formControlName="TipoCartera" required>
+                        <mat-select formControlName="TipoCartera">
                             <mat-option></mat-option>
                             <mat-option 
                                 *ngFor="let opcion of ListaCarterasTipos" 
@@ -41,17 +41,16 @@
                 <!-- PASO DE REGISTRO DE CARTERA -->
 
                 <!-- CARGA DE ARCHIVO DE CARTERA -->
-                <mat-step [stepControl]="secondFormGroup">
-                  <form [formGroup]="secondFormGroup">
+                <mat-step [completed]="SecondStepCompleted">                  
                     <ng-template matStepLabel>Cargar archivo</ng-template>
 
                     <div *ngIf="!LoadingFile">
                       <div class="w-100">
-                        <mat-label>Seleccionar el archivo para la cartera</mat-label><br>
+                        <mat-label>Seleccionar el archivo para la cartera</mat-label><br>                        
                         <button mat-button>
-                          <mat-icon>attach_file</mat-icon>
+                          <mat-icon>attach_file</mat-icon>                          
                           Cargar archivo
-                          <input type="file" #archivoInput (change)="convertirExcelToJson()">
+                          <input type="file" #archivoInput  (change)="convertirExcelToJson()">
                         </button>          
                       </div>
         
@@ -123,8 +122,8 @@
                     
                     <div>                      
                       <button (click)="GenerarArreglosCarga()" mat-raised-button color="primary" *ngIf="!CargandoCuentas">Cargar</button>
-                    </div>
-                  </form>
+                      <button mat-raised-button class="bg-success txtwhite" matStepperNext *ngIf="CargandoCuentas">Siguiente</button>
+                    </div>                  
                 </mat-step>
                 <mat-step>
                   <ng-template matStepLabel>Done</ng-template>

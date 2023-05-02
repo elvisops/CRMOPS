@@ -32,15 +32,16 @@ export class CarterasCrearComponent implements OnInit {
   Proyecto:any
   ListaCarterasTipos:CarterasTipos[] = []
   StepOneCompleted:boolean = false
-  
-
+  CarteraID:number = 0
 
   //Step 2
   LoadingFile:boolean = false  
   LoadingProcess:boolean = false
   FileLoaded:boolean = false
-  CargandoCuentas:boolean = false
-  
+  CargandoCuentas:boolean = false 
+  SecondStepCompleted:boolean = false    
+
+  EncabezadoTablaDetalles:string[] = []
 
   //Arreglos sin duplicados para crear registros en la base de datos
   ArrIdentidadesNombres:string[] = []
@@ -55,12 +56,14 @@ export class CarterasCrearComponent implements OnInit {
 
   firstFormGroup: FormGroup = this.FormBuilder.group(
     {
-      NombreCartera: ['',Validators.required],
-      TipoCartera: ['',Validators.required]
+      NombreCartera: ['',],
+      TipoCartera: ['',]
     }
   );
-  secondFormGroup: FormGroup = this.FormBuilder.group({secondCtrl: ['']});
 
+  secondFormGroup: FormGroup = this.FormBuilder.group({});
+
+  //==========================================================================================================//
   ngOnInit(): void {
     var RouteData = this.ActivatedRoute.snapshot.params['proyectoid']
     console.log(RouteData)
@@ -68,11 +71,10 @@ export class CarterasCrearComponent implements OnInit {
     RouteData = JSON.parse(RouteData)
     this.Proyecto = RouteData
     this.ObtenerTiposCarteras()
-    
-
   }
+  //==========================================================================================================//
   
-
+  //==========================================================================================================//
   ObtenerTiposCarteras(){
     this.service.getCarterasTipos().subscribe(r=>{
       var respuesta = this.auth.desencriptar(r.data)
@@ -80,7 +82,9 @@ export class CarterasCrearComponent implements OnInit {
       this.ListaCarterasTipos = respuesta
     })
   }
+  //==========================================================================================================//
 
+  //==========================================================================================================//
   CrearCartera(){
     var NombreCartera = this.firstFormGroup.get('NombreCartera')?.value
     var TipoCarteraID = this.firstFormGroup.get('TipoCartera')?.value
@@ -91,17 +95,26 @@ export class CarterasCrearComponent implements OnInit {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
+      
       if(respuesta.status == 1){
         this.StepOneCompleted = true
+        this.CarteraID = respuesta.data
         this.service.notificacion("Cartera registrada con exito")
+
+        this.firstFormGroup.controls['NombreCartera'].disable()
+        this.firstFormGroup.controls['TipoCartera'].disable()        
+
       }else{
-        this.service.notificacion(respuesta.messsage)
+        this.service.notificacion(respuesta.message)
         this.StepOneCompleted = false
         return;
       }
     })    
   }
+  //==========================================================================================================//
 
+
+  //==========================================================================================================//
   convertirExcelToJson(){
     this.LoadingFile = true
     const archivo = this.archivoInput.nativeElement.files[0];
@@ -117,11 +130,14 @@ export class CarterasCrearComponent implements OnInit {
       this.getEncabezados(this.jsonData);
       //console.log(this.Encabezados)
       this.LoadingFile = false
+      console.log(this.jsonData)
     };
     reader.readAsBinaryString(archivo);
     
   };
+  //==========================================================================================================//
 
+  //==========================================================================================================//
   getEncabezados(Obj:any){
     var arrTemp = []    
     for(var obj1 of Obj){
@@ -129,6 +145,15 @@ export class CarterasCrearComponent implements OnInit {
       arrTemp.push(...objKeys)
     }
     this.Encabezados = [...new Set(arrTemp)]
+  }
+
+  getEncTablaDetalles(Obj:any){
+    var arrTemp = []    
+    for(var obj1 of Obj){
+      const objKeys = Object.keys(obj1);
+      arrTemp.push(...objKeys)
+    }
+    this.EncabezadoTablaDetalles = [...new Set(arrTemp)]
   }
 
   RemoveEnc(enc:string){
@@ -139,7 +164,9 @@ export class CarterasCrearComponent implements OnInit {
       this.Encabezados.splice(nombre, 1);
     }
   }
+  //==========================================================================================================//
 
+  //==========================================================================================================//
   async GenerarArreglosCarga(){
 
     this.CargandoCuentas = true
@@ -152,24 +179,47 @@ export class CarterasCrearComponent implements OnInit {
     var paquete:any = []
     this.jsonData.map((cuenta:any)=>{
       paquete.push({
-        CARTERAID:1,
+        CARTERAID:this.CarteraID,
         CUENTA:cuenta[this.EncCuenta], 
         IDENTIDAD:cuenta[this.EncIdentidad], 
         NOMBRE:cuenta[this.EncNombre]
       })
     })
-     this.service.SendDataCuenta(paquete).subscribe((r:any)=>{
+     this.service.SendDataCuenta(paquete).subscribe(async (r:any)=>{
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
       if(respuesta.status == 1){
+        console.log(respuesta)          
         this.service.notificacion("Cuentas registradas con exito")
+        
+        this.CargandoCuentas = false        
+        var cuentas_ids = JSON.parse(respuesta.data)
+        console.log(cuentas_ids)
+        await this.CrearTablaDetalles(cuentas_ids)
+        this.getEncTablaDetalles(this.jsonData)
+        console.log(JSON.stringify(this.EncabezadoTablaDetalles))
+
+        this.SecondStepCompleted = true
       }else{
         this.service.notificacion(respuesta.messsage)
         return;
       }      
     })    
   }   
+  //==========================================================================================================//
+
+
+  //==========================================================================================================//
+  async CrearTablaDetalles(datos:any){        
+    
+    for(var i = 0; i < this.jsonData.length; i++){
+      this.jsonData[i].CUENTAIDDB = datos.filter((cuenta:any)=> cuenta.CUENTA == this.jsonData[i][this.EncCuenta])[0].CUENTAID
+    }
+
+    console.log(this.jsonData)
+  }
+
 
   
 }
