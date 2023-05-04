@@ -85,6 +85,21 @@ export class CarterasService {
     )
   }
 
+  CreateTableDetalles(encabezados:string,CarteraID:number):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'CARTERAS_TABLA_DETALLES',      
+      token:token,
+      data:encabezados,
+      CarteraID:CarteraID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cargar la cartera"))
+    )
+  }
+
   notificacion(msg: string): void {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",

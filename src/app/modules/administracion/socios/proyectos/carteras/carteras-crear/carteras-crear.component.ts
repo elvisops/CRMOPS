@@ -34,6 +34,7 @@ export class CarterasCrearComponent implements OnInit {
   StepOneCompleted:boolean = false
   CarteraID:number = 0
   Bitacora:string = "Proceso de creacion de cartera:"
+  BStep:number = 1
 
   //Step 2
   LoadingFile:boolean = false  
@@ -75,6 +76,12 @@ export class CarterasCrearComponent implements OnInit {
     this.ObtenerTiposCarteras()
   }
   //==========================================================================================================//
+
+  //==========================================================================================================//
+  BtAdd(msg:string):void{
+    this.Bitacora += `\n${this.BStep}. ${msg}`;this.BStep++
+  }
+  //==========================================================================================================//
   
   //==========================================================================================================//
   ObtenerTiposCarteras(){
@@ -88,7 +95,7 @@ export class CarterasCrearComponent implements OnInit {
 
   //==========================================================================================================//
   CrearCartera(){
-    this.Bitacora += `\n1. Se crea la cartera con los siguientes datos: \nNombre: ${this.firstFormGroup.get('NombreCartera')?.value} \nTipo: ${this.firstFormGroup.get('TipoCartera')?.value}`
+    this.BtAdd(`Se crea la cartera con los siguientes datos: \nNombre: ${this.firstFormGroup.get('NombreCartera')?.value} \nTipo: ${this.firstFormGroup.get('TipoCartera')?.value}`)
     var NombreCartera = this.firstFormGroup.get('NombreCartera')?.value
     var TipoCarteraID = this.firstFormGroup.get('TipoCartera')?.value
     var ProyectoID = this.Proyecto       
@@ -97,19 +104,19 @@ export class CarterasCrearComponent implements OnInit {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      this.Bitacora += `\n2. Conectando con la base de datos...`
+      this.BtAdd(`Conectando con la base de datos...`)
       
       if(respuesta.status == 1){
         this.StepOneCompleted = true
         this.CarteraID = respuesta.data
         this.service.notificacion("Cartera registrada con exito")
-        this.Bitacora += `\n3. Cartera registrada con exito`
+        this.BtAdd(`Cartera registrada con exito`)
         this.firstFormGroup.controls['NombreCartera'].disable()
         this.firstFormGroup.controls['TipoCartera'].disable()        
 
       }else{
         this.service.notificacion(respuesta.message)
-        this.Bitacora += `\n3. ${respuesta.message}`
+        this.BtAdd(respuesta.message)
         this.StepOneCompleted = false
         return;
       }
@@ -120,17 +127,18 @@ export class CarterasCrearComponent implements OnInit {
 
   //==========================================================================================================//
   convertirExcelToJson(){
-    this.Bitacora += `\n4. Leyendo archivo de excel...`
+    this.Bitacora += `\n${this.BStep}. Leyendo archivo de excel...`;this.BStep++
     this.LoadingFile = true
     const archivo = this.archivoInput.nativeElement.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
-      this.Bitacora += `\n5. Cargando datos en memoria...`
+      this.BtAdd(`Cargando datos en memoria...`)
       const data = event.target?.result;
       const workbook = XLSX.read(data, { type: 'binary' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       this.jsonData = XLSX.utils.sheet_to_json(worksheet);
+      this.BtAdd(`Registros Totales: ${this.jsonData.length}`)
       //console.log(this.jsonData); 
       
       this.getEncabezados(this.jsonData);
@@ -139,33 +147,33 @@ export class CarterasCrearComponent implements OnInit {
       console.log(this.jsonData)
     };
     reader.readAsBinaryString(archivo);
-    this.Bitacora += `\n6. Datos cargados...`
-    this.Bitacora += `\n7. Registros Totales: ${this.jsonData.length}`
+    this.BtAdd(`Datos cargados...`)
+    
     
   };
   //==========================================================================================================//
 
   //==========================================================================================================//
   getEncabezados(Obj:any){
-    this.Bitacora += `\n7. Obteniendo nombre de columnas...`
+    this.BtAdd(`Obteniendo nombre de columnas...`)
     var arrTemp = []    
     for(var obj1 of Obj){
       const objKeys = Object.keys(obj1);
       arrTemp.push(...objKeys)
     }
     this.Encabezados = [...new Set(arrTemp)]
-    this.Bitacora += `\n8. Columnas obtenidas...`
+    this.BtAdd(`Columnas obtenidas...`)
   }
 
-  getEncTablaDetalles(Obj:any){
-    this.Bitacora += `\n7. Obteniendo nombre de columnas para tabla de detalles...`
+  async getEncTablaDetalles(Obj:any){
+    this.BtAdd(`Obteniendo nombre de columnas para tabla de detalles...`)
     var arrTemp = []    
     for(var obj1 of Obj){
       const objKeys = Object.keys(obj1);
       arrTemp.push(...objKeys)
     }
     this.EncabezadoTablaDetalles = [...new Set(arrTemp)]
-    this.Bitacora += `\n8. Columnas obtenidas...`
+    this.BtAdd(`Columnas obtenidas...`)
   }
 
   RemoveEnc(enc:string){
@@ -182,10 +190,10 @@ export class CarterasCrearComponent implements OnInit {
   async GenerarArreglosCarga(){
 
     this.CargandoCuentas = true
-    this.Bitacora += `\n9. Generando carga de datos para base de datos...`
+    this.BtAdd(`Generando carga de datos para base de datos...`)
     if(this.EncCuenta == "" || this.EncIdentidad == "" || this.EncNombre == ""){
       this.service.notificacion("Los campos obligatorios no pueden estar vacios")
-      this.Bitacora += `\n...Los campos obligatorios no pueden estar vacios, reintente la carga`
+      this.BtAdd(`...Los campos obligatorios no pueden estar vacios, reintente la carga`)
       return
     }
 
@@ -200,23 +208,25 @@ export class CarterasCrearComponent implements OnInit {
       })
     })
      this.service.SendDataCuenta(paquete).subscribe(async (r:any)=>{
-      this.Bitacora += `\n10. Enviando datos a base de datos...`
+      this.BtAdd(`Enviando datos a base de datos...`)
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
       if(respuesta.status == 1){
         console.log(respuesta)          
         this.service.notificacion("Cuentas registradas con exito")
-        this.Bitacora += `\n11. Cuentas registradas con exito`
+        this.BtAdd(`Cuentas registradas con exito`)
         
         this.CargandoCuentas = false        
         var cuentas_ids = JSON.parse(respuesta.data)
         console.log(cuentas_ids)
-        await this.CrearTablaDetalles(cuentas_ids)
-        this.Bitacora += `\n12. Generando carga de datos para tabla de detalles...`
-        this.getEncTablaDetalles(this.jsonData)
+        await this.modJsonDataCuentaID(cuentas_ids)
+        this.BtAdd(`Generando carga de datos para tabla de detalles...`)
+        await this.getEncTablaDetalles(this.jsonData)
         console.log(JSON.stringify(this.EncabezadoTablaDetalles))
-
+        var dataTablaDetalles = JSON.stringify(this.EncabezadoTablaDetalles)
+        await this.CrearTablaDetalles(dataTablaDetalles)
+        
         this.SecondStepCompleted = true
       }else{
         this.service.notificacion(respuesta.messsage)
@@ -228,13 +238,33 @@ export class CarterasCrearComponent implements OnInit {
 
 
   //==========================================================================================================//
-  async CrearTablaDetalles(datos:any){        
+  async modJsonDataCuentaID(datos:any){        
     
     for(var i = 0; i < this.jsonData.length; i++){
       this.jsonData[i].CUENTAIDDB = datos.filter((cuenta:any)=> cuenta.CUENTA == this.jsonData[i][this.EncCuenta])[0].CUENTAID
     }
     console.log(this.jsonData)
   }
+  //==========================================================================================================//
+
+  async CrearTablaDetalles(data:string){
+    this.service.CreateTableDetalles(data,this.CarteraID).subscribe(async (r:any)=>{
+      var respuesta = this.auth.desencriptar(r.response)
+      respuesta = JSON.parse(respuesta)
+      respuesta = respuesta[0]
+      if(respuesta.status == 1){
+        this.BtAdd(`Tabla de detalles creada con exito`)
+        this.service.notificacion("Tabla de detalles creada con exito")        
+      }else{
+        this.BtAdd(respuesta.message)
+        this.service.notificacion(respuesta.message)
+        return;
+      }
+
+    })
+  }  
+  
+  
 
 
   
