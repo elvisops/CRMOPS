@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute,Router } from '@angular/router';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -26,7 +27,7 @@ export class CarterasComponent implements OnInit{
     private ActivatedRoute:ActivatedRoute,
     private dialog:MatDialog,
     private service:CarterasService,
-
+    private location:Location
   ){}
 
   Proyecto:any
@@ -71,6 +72,10 @@ export class CarterasComponent implements OnInit{
   GotoCrearCartera(){
     var id = this.auth.mkurl_enc(JSON.stringify(this.Proyecto.PROYECTOID)).toString()    
     this.router.navigate(['administracion/socios/crear-cartera/'+id])
+  }
+
+  back(){
+    this.location.back()    
   }
 
 

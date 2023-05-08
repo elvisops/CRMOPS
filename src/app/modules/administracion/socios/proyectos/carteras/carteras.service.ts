@@ -60,12 +60,43 @@ export class CarterasService {
       catchError(this.handleError("Error al obtener los tipos de carteras"))
     )
   }
-  SendDataCuenta(data:any):Observable<any>{
+  
+  /*SendDataCuenta(data:any):Observable<any>{
     var payload = this.auth.encriptar(JSON.stringify(data)).toString()
-    return this.http.post(`${this.api}/api/carteras/load/cuentas`,{payload})
+    return this.http.post(`${this.api}/api/carteras/load/cuentas`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al manejar los datos enviados de cuentas"))
+      )
+  }*/
+
+  SendDataCuenta(data:any):Observable<any>{
+    var dataString = JSON.stringify(data)
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'TEMP_CARGA_CARTERA_LOTE',
+      token:token,
+      data:dataString
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
     .pipe(
       tap(),
-      catchError(this.handleError("Error al manejar los datos enviados de cuentas"))
+      catchError(this.handleError("Error al cargar la cartera"))
+    )
+  }
+
+  CreateTableDetalles(encabezados:string,CarteraID:number):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'CARTERAS_TABLA_DETALLES',      
+      token:token,
+      data:encabezados,
+      CarteraID:CarteraID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cargar la cartera"))
     )
   }
 
