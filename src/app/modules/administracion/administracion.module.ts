@@ -35,6 +35,7 @@ import { VistasComponent } from './modulos/vistas/vistas.component';
 import { VistasCrearComponent } from './modulos/vistas/vistas-crear/vistas-crear.component';
 import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-editar.component';
 import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas.component';
+import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas
     VistasCrearComponent,
     VistasEditarComponent,
     RolesVistasComponent,
+    PerfilUsuarioComponent,
   ],
   imports: [
     CommonModule,

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { UsuariosService } from '../usuarios.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-usuarios-editar',
@@ -10,7 +11,11 @@ import { UsuariosService } from '../usuarios.service';
 })
 export class UsuariosEditarComponent implements OnInit {
 
-  
+  passwordControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.])[A-Za-z\d.]{8,}$/)
+  ]);
+
 
   constructor(
     private dialogRef:MatDialogRef<UsuariosEditarComponent>,
@@ -34,6 +39,14 @@ export class UsuariosEditarComponent implements OnInit {
   chPass:boolean = false
   
   ListaRoles:any[] = []
+
+  validarClave(event: KeyboardEvent){
+    const key = event.key;
+
+    if (!/^[A-Za-z0-9.]$/.test(key) && key !== 'Backspace' && key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Tab') {
+      event.preventDefault();
+    }
+  }
 
   ngOnInit(): void {
     this.genListaRoles()
@@ -64,6 +77,10 @@ export class UsuariosEditarComponent implements OnInit {
   }
 
   CambiarClave(){
+
+    if (this.passwordControl.invalid) {
+      return
+    }
     if(this.clave != this.claveConfirm){
       this.service.notificacion("Las contraseñas no coinciden")
       return

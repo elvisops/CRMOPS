@@ -13,7 +13,7 @@
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Contraseña</mat-label>
             <input matInput [(ngModel)]="clave" type="text" [type]="hide ? 'password' : 'text'"
-                [formControl]="passwordControl">
+                [formControl]="passwordControl" (keydown)="validarClave($event)">
             <div *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
                 <div *ngIf="passwordControl.hasError('required')" style="color: red;">La contraseña es requerida</div>
                 <div *ngIf="passwordControl.hasError('pattern')" style="color: red;">La contraseña no es válida</div>

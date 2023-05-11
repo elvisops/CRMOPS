@@ -32,6 +32,14 @@ export class UsuariosCrearComponent implements OnInit {
 
   ){}
 
+  validarClave(event: KeyboardEvent){
+    const key = event.key;
+
+    if (!/^[A-Za-z0-9.]$/.test(key) && key !== 'Backspace' && key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Tab') {
+      event.preventDefault();
+    }
+  }
+
   ngOnInit(): void {
     this.genListaRoles()
   }

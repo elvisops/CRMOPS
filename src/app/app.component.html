@@ -46,7 +46,7 @@
       <span class="barra-tareas-separador"></span>
       <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/perfil">Perfil</button>
+        <button mat-menu-item routerLink="/perfil-usuario">Perfil</button>
         <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>        
       </mat-menu>
       <button *ngIf="isLogged" mat-icon-button class="txtops-chartreuse" (click)="AbrirEstados()"><mat-icon>av_timer</mat-icon></button>

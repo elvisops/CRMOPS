@@ -1,0 +1,134 @@
+<div class="container mt-4">
+    <mat-card>
+        <mat-card-header class="bgops-indigo">
+            <mat-card-title class="txtwhite">
+                <h1>Perfil de Usuario</h1>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="px-4">
+            <mat-card-content class="px-4">
+                <div *ngIf="!chPass">
+                    <div class="my-4" style="font-size: 20px;">
+                        <mat-label>Usuario: <b>{{usuario}}</b> </mat-label>
+                    </div>
+                    <div>
+                        <mat-label>
+                            <h1>Actualizacion de informacion</h1>
+                        </mat-label>
+                        <mat-divider class="pb-2"></mat-divider>
+                    </div>
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>Identidad</mat-label>
+                        <input matInput [(ngModel)]="identidad" type="text" (keydown)="validarIdentidad($event)">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>Nombre de Usuario</mat-label>
+                        <input matInput [(ngModel)]="nombre" type="text">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Telefono</mat-label>
+                        <input matInput [(ngModel)]="telefono" type="tel" (keydown)="validarTelefono($event)">
+                        <div *ngIf="phoneControl.invalid && (phoneControl.dirty || phoneControl.touched)">
+                            <div *ngIf="phoneControl.hasError('required')" style="color: red;">El telefono es requerido
+                            </div>
+                            <div *ngIf="phoneControl.hasError('pattern')" style="color: red;">El telefono no es valido
+                            </div>
+                        </div>
+                        <div class="my-0" *ngIf="phoneControl.invalid && (phoneControl.dirty || phoneControl.touched)">
+                            <div style="color: red;">El telefono no puede ser mayor a 8 numeros</div>
+                        </div>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Tipo de Telefono</mat-label>
+                        <mat-select [(ngModel)]="tipoTelefonoId">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let tipoTelefono of listaTiposTelefono"
+                                [value]="tipoTelefono.TELEFONOTIPOID">
+                                {{tipoTelefono.TIPO}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="email" type="email">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Tipo de Correo</mat-label>
+                        <mat-select [(ngModel)]="tipoCorreoId">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let tipoCorreos of listaTiposCorreos"
+                                [value]="tipoCorreos.TIPOCORREOID">
+                                {{tipoCorreos.TIPOCORREO}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Direccion</mat-label>
+                        <input matInput [(ngModel)]="direccion" type="email">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Tipo de Direccion</mat-label>
+                        <mat-select [(ngModel)]="tipoDireccionId">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let tipoDireccion of listaTiposDirecciones"
+                                [value]="tipoDireccion.TIPODIRECCIONID">
+                                {{tipoDireccion.TIPODIRECCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Municipio</mat-label>
+                        <mat-select [(ngModel)]="municipioId">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let municipio of listaMunicipios" [value]="municipio.MUNICIPIOID">
+                                {{municipio.MUNICIPIO}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 my-2">
+                        <mat-label>Colonia</mat-label>
+                        <input matInput [(ngModel)]="colonia" type="tel">
+                    </mat-form-field>
+                    <button *ngIf="!chPass" mat-raised-button class="bgops-indigo txtwhite mx-2"
+                        (click)="GuardarCambios()">Actualizar</button>
+                </div>
+                <div>
+                    <mat-checkbox [(ngModel)]="chPass"> Cambiar Clave</mat-checkbox>
+                    <div *ngIf="chPass">
+                        <mat-form-field appearance="outline" class="w-100 my-2">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput [(ngModel)]="clave" type="text" [type]="hide ? 'password' : 'text'"
+                                [formControl]="passwordControl" (keydown)="validarClave($event)">
+                            <div *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+                                <div *ngIf="passwordControl.hasError('required')" style="color: red;">La contraseña es
+                                    requerida</div>
+                                <div *ngIf="passwordControl.hasError('pattern')" style="color: red;">La contraseña no es
+                                    válida</div>
+                            </div>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <div class="my-0"
+                            *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+                            <div style="color: red;">La contraseña debe contener caracteres en mayusculas y minusculas,
+                                numeros y signos de puntuacion, con una longitud minima de 8 caracteres
+                            </div>
+                        </div>
+                        <mat-form-field appearance="outline" class="w-100 my-2">
+                            <mat-label>Confirmar Contraseña</mat-label>
+                            <input matInput [(ngModel)]="claveConfirm" type="text" [type]="hide ? 'password' : 'text'" (keydown)="validarClave($event)">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <button *ngIf="chPass" mat-raised-button class="bgops-chartreuse txt-gray"
+                            (click)="CambiarClave()">Cambiar Clave</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card-content>
+    </mat-card>
+</div>
