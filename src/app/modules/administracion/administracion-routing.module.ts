@@ -18,16 +18,16 @@ import { VistasComponent } from './modulos/vistas/vistas.component';
 const routes: Routes = [
   { path: '', component: AdministracionComponent },
   { path: 'panel-inicio', component:PanelInicioComponent, },
-  { path: 'usuarios',component:UsuariosComponent},
-  { path: 'modulos',component:ModulosComponent},
+  { path: 'usuarios',component:UsuariosComponent },
+  { path: 'modulos',component:ModulosComponent },
   { path: 'modulos/vistas/:id', component:VistasComponent },
 
-  { path: 'roles',component:RolesComponent},
-  { path: 'socios',component:SociosComponent},  
-  {path:'socios/proyectos/:id',component:ProyectosComponent},  
-  { path: 'socios/carteras/:proyectoid',component:CarterasComponent},
-  { path: 'socios/crear-cartera/:id',component:CarterasCrearComponent},
-  { path: 'mantenimiento', component:MantenimientoComponent}
+  { path: 'roles',component:RolesComponent },
+  { path: 'socios',component:SociosComponent },  
+  { path:'socios/proyectos/:id',component:ProyectosComponent },  
+  { path: 'socios/carteras/:proyectoid',component:CarterasComponent },
+  { path: 'socios/crear-cartera/:id',component:CarterasCrearComponent },
+  { path: 'mantenimiento', component:MantenimientoComponent }
 
 ];
 

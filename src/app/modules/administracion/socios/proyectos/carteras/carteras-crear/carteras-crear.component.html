@@ -6,8 +6,106 @@
             <mat-icon>keyboard_return</mat-icon>
         </button>
         Nueva Cartera
-
       </mat-card-title>
     </mat-card-header>
+
+    <mat-card-content>     
+      <div *ngIf="Procesando">
+        <h3>Por favor espere..</h3>
+        <mat-spinner></mat-spinner>
+      </div>
+      
+      <div class="row" *ngIf="!Procesando">
+        
+        <div class="col-md-6 px-4">
+
+          <!-- Paso 1 -->
+          <div *ngIf="steps.CreacionCartera">
+            <mat-form-field class="w-100">
+              <mat-label>Nombre Cartera</mat-label>
+              <input matInput [(ngModel)]="NombreCartera" required>
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+              <mat-label>Tipos de Carteras</mat-label>
+              <mat-select [(ngModel)]="TipoCarteraID" required>
+                <mat-option *ngFor="let tipo of CarterasTipos" [value]="tipo.TIPOCARTERAID">
+                  {{tipo.TIPOCARTERA}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="CrearCartera()">Crear</button>            
+            
+          </div>
+          <!-- Paso 1 -->
+
+          <!-- Paso 2 -->
+          <div *ngIf="steps.CargaArchivo">
+            <h2>Cargar Archivo</h2>
+            <h3>Seleccione un archivo de excel con la informacion de la cartera que desea crear</h3>
+            <input type="file" #archivoInput (change)="ExcelFile()" accept=".xlsx" />            
+          </div>
+          <!-- Paso 2 -->
+
+          <!-- Paso 3 -->
+          <div *ngIf="steps.SeleccionEncabezados">
+            <h2>Seleccione los campos para crear las cuentas</h2>
+            
+            <mat-form-field class="w-100">
+              <mat-label>Numero de Cuenta</mat-label>
+              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>              
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+              <mat-label>Numero de Identidad</mat-label>
+              <mat-select [(ngModel)]="EncIdentidad" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+              <mat-select [(ngModel)]="EncNombreCliente" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+          <!-- Paso 3 -->
+
+
+        </div>
+        
+        <div class="col-md-6">
+          <div>
+            <h2>Control de procesos</h2>
+            <mat-divider></mat-divider>
+            <code>
+              <pre>
+                {{Bitacora}}
+              </pre>              
+            </code>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+      
+      
+      
+
+    </mat-card-content>
   </mat-card>
 </div>
+
+<button mat-raised-button color="primary" (click)="showData()">show</button>
