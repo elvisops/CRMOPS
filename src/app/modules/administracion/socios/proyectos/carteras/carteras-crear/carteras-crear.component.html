@@ -71,12 +71,15 @@
             </mat-form-field>
 
             <mat-form-field class="w-100">
+              <mat-label>Nombre de Cliente</mat-label>
               <mat-select [(ngModel)]="EncNombreCliente" class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   {{encabezado}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
+            
 
           </div>
           <!-- Paso 3 -->
@@ -97,15 +100,10 @@
         </div>
       </div>
 
-      
-
-      
-      
-      
-      
-
     </mat-card-content>
   </mat-card>
 </div>
 
-<button mat-raised-button color="primary" (click)="showData()">show</button>
+<div class="container mt-4">
+  <button mat-raised-button color="primary" (click)="showData()">show</button>
+</div>

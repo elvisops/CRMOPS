@@ -45,6 +45,20 @@ export class CarterasService {
     )
   }
 
+  Proc(paquete:string):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'CARTERA_CREATE_CUENTA',
+      paquete:paquete,
+      token:token
+  })
+  return this.http.post<any>(`${this.api}/api/proc`,{payload})
+  .pipe(
+    tap(),
+    catchError(this.handleError("Error al obtener los tipos de carteras"))
+  )
+  }
+
   Create(ProyectoID:number, TipoCarteraID:number, NombreCartera:string){
     var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
