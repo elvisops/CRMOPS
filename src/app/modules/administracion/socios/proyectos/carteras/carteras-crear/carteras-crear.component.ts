@@ -40,6 +40,11 @@ export class CarterasCrearComponent implements OnInit {
   EncNumeroCuenta:string = ""
   EncIdentidad:string = ""
   EncNombreCliente:string = ""
+  EncabezadosCuentas:any = {
+    NumeroCuenta:"",
+    Identidad:"",
+    NombreCliente:""
+  } 
 
 
   //variables de control de archivos
@@ -100,6 +105,7 @@ export class CarterasCrearComponent implements OnInit {
       if(respuesta.status == 1){
         this.CarteraID = respuesta.CarteraID        
         this.steps.CreacionCartera = false
+        this.steps.CargaArchivo = true
         this.service.notificacion("La cartera se creo exitosamente!")
         this.BitaAgregarRegistro("Cartera creada correctamente...")                
         
@@ -107,32 +113,27 @@ export class CarterasCrearComponent implements OnInit {
         this.service.notificacion(respuesta.message)        
       }
     })
-    this.Procesando = false
-        
+    this.Procesando = false       
     
   }
 
   //Obtener Encabezados Archivo de Excel
   ObtenerEncabezados(Obj:any){
-    this.BitaAgregarRegistro("Obteniendo encabezados del archivo...")
-    var arrTemp = []
-    for(var obj1 of Obj){
-      const objKeys = Object.keys(obj1)
-      arrTemp.push(objKeys)
-    }
-    this.Encabezados = [...new Set(arrTemp)]
+    this.BitaAgregarRegistro("Obteniendo encabezados del archivo...")    
+    this.Encabezados = [...new Set(Object.keys(Obj))]
     this.BitaAgregarRegistro("Encabezados obtenidos correctamente...")
+    console.log(this.Encabezados)
   }
 
   //Cargar Archivo
-  ExcelFile(){
+  async ExcelFile(){
     this.Procesando = true
     this.BitaAgregarRegistro("Leyendo Archivo Excel.. ")
     this.CargandoExcel = true
     const archivo = this.archivoInput.nativeElement.files[0];    
     const fileReader = new FileReader();    
 
-    fileReader.onload = (event) => {
+    fileReader.onload = (event:any) => {
       this.BitaAgregarRegistro("Archivo Excel leido correctamente...")
       this.BitaAgregarRegistro("Convirtiendo a JSON...")
       const data = event.target?.result;
@@ -141,16 +142,33 @@ export class CarterasCrearComponent implements OnInit {
       const HojaDeTrabajo = workbook.Sheets[NombreHoja];
       this.DatosCartera = XLSX.utils.sheet_to_json(HojaDeTrabajo)      
       this.BitaAgregarRegistro("Archivo Excel convertido a JSON correctamente...")
-      this.BitaAgregarRegistro("Total Registros: "+this.DatosCartera.length)
-      this.ObtenerEncabezados(this.DatosCartera)
+      this.BitaAgregarRegistro("Total Registros: "+this.DatosCartera.length);
+      (this.DatosCartera.length>0)?this.ObtenerEncabezados(this.DatosCartera[0]):this.service.notificacion("El archivo no contiene datos");
       this.CargandoExcel = false            
     }
-    fileReader.readAsBinaryString(archivo);    
-    this.ObtenerEncabezados(this.DatosCartera)    
+    fileReader.readAsBinaryString(archivo);        
     this.Procesando = false
     this.steps.CargaArchivo = false
     this.steps.SeleccionEncabezados = true
   }
+
+  //Crear seleccion de campos para numeros de cuentas
+  SeleccionEncabezados(){
+    if(this.EncNumeroCuenta == "" || this.EncIdentidad == "" || this.EncNombreCliente == ""){
+      this.service.notificacion("Debe seleccionar todos los campos")
+      return;
+    }
+    this.EncabezadosCuentas.NumeroCuenta = this.EncNumeroCuenta
+    this.EncabezadosCuentas.Identidad = this.EncIdentidad
+    this.EncabezadosCuentas.NombreCliente = this.EncNombreCliente        
+    console.log(this.EncabezadosCuentas)
+  }
+
+  //Envio a base de datos
+  async EnviarPaqueteDB(paquete:any){
+     this.service
+  }
+
 
   //Regresar a la pagina anterior
   back(){
@@ -160,5 +178,7 @@ export class CarterasCrearComponent implements OnInit {
   showData(){
     console.log(this.DatosCartera)
   }
+
+  
   
 }
