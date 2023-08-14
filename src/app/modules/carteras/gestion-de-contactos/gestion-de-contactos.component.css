@@ -1,0 +1,99 @@
+/* .gestion-fixed{
+    position: fixed;
+    top: 62px; 
+    right: 20px;
+    width: 33%;
+
+    z-index: 1000; 
+    padding: 10px; 
+} */
+
+.containerr {
+    /* margin-left: 15px; */
+    position: relative;
+    display: flex;
+}
+
+.col-lg-4 {
+    flex: 1;
+    /* Estilos para el primer div */
+}
+
+.fixed-container {
+    position: fixed;
+    top: 72px;
+    right: 30px;
+    width: 30%;
+}
+
+
+/* .fixed-container {
+    position: fixed;
+    top: 72px;
+    right: 15px;
+    width: 355px;
+} */
+
+
+/* Ajusta el estilo del mat-select */
+/* .custom-mat-select {
+    max-height: 20px !important; 
+    font-size: 12px !important; 
+  }
+  
+
+.mat-mdc-text-field-wrapper{
+    color: red !important;
+} */
+
+/* Ajusta el estilo del mat-select */
+/* .custom-mat-select {
+    max-height: 20px !important; 
+    font-size: 12px !important; 
+    background-color: red !important;
+    margin: -10px;
+    height: 10px;
+  }
+   */
+
+
+   .mat-form-field-appearance-outline {
+    /* padding-top: 6px !important; */
+    /* padding-top: 0px;
+    padding-bottom: -10px; */
+    /* max-height: 60px; */
+    /* padding: -100px; */
+
+    /* background-color: red; */
+  }
+
+  .input-gestion{
+    /* background-color: red !important; */
+    /* max-height: 10px; */
+    /* padding-top: -10px;
+    padding-bottom: -10px; */
+    margin-top: -1px;
+    margin-bottom: -1px;
+  }
+
+  /* contenido a la derecha */
+  /* .mat-card-header-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: right;
+  }
+   */
+
+   .header-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .flex-grow {
+    flex-grow: 1;
+  }
+  
+  .text-end {
+    text-align: end;
+  }
+  

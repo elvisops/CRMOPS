@@ -144,12 +144,17 @@ export class CarterasCrearComponent implements OnInit {
       this.BitaAgregarRegistro("Archivo Excel convertido a JSON correctamente...")
       this.BitaAgregarRegistro("Total Registros: "+this.DatosCartera.length);
       (this.DatosCartera.length>0)?this.ObtenerEncabezados(this.DatosCartera[0]):this.service.notificacion("El archivo no contiene datos");
-      this.CargandoExcel = false            
+      this.CargandoExcel = false 
+      // ver todos los datos
+      console.log(this.DatosCartera)  
+      this.EnviarPaqueteDB(this.DatosCartera)         
     }
     fileReader.readAsBinaryString(archivo);        
     this.Procesando = false
     this.steps.CargaArchivo = false
     this.steps.SeleccionEncabezados = true
+
+    
   }
 
   //Crear seleccion de campos para numeros de cuentas
@@ -166,7 +171,14 @@ export class CarterasCrearComponent implements OnInit {
 
   //Envio a base de datos
   async EnviarPaqueteDB(paquete:any){
-     this.service
+    //  this.service
+    this.service.PaqueteDB(paquete).subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.response)
+      respuesta = JSON.parse(respuesta)
+      respuesta = respuesta[0]
+      console.log(respuesta)
+    })
+   
   }
 
 

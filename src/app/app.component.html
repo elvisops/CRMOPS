@@ -21,9 +21,12 @@
               mat-button 
               color="primary" 
               *ngIf="permiso.MODULO == modulo"
-              routerLink="{{modulo | lowercase}}/{{permiso.VISTA | lowercase}}"
+              routerLink="{{modulo | lowercase}}/{{permiso.V_URL | lowercase}}"
             >
-              {{permiso.VISTA}}
+            <!-- routerLink="{{modulo | lowercase}}/{{permiso.VISTA | lowercase}}" -->
+            <!-- {{modulo}}/{{permiso.VISTA}} -->
+              <!-- {{permiso.V_URL }} -->
+              {{permiso.VISTA }}
             </a>
           </div>
 

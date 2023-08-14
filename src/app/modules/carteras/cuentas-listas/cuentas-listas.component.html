@@ -1,0 +1,110 @@
+<div class="mx-3 mt-2">
+  <mat-card>
+    <mat-card-header>
+      <button style="margin-top: -5px;" mat-icon-button color="accent" routerLink="/carteras/carteras_listas">
+        <mat-icon>keyboard_return</mat-icon>
+      </button>
+      <h2>Lista de Cuentas de la Cartera <b>{{ cartera }}</b></h2>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="w-25 px-1" >
+        <mat-label>Filtro</mat-label>
+        <mat-select [(ngModel)]="filtroID" >
+          <mat-option></mat-option>
+          <mat-option *ngFor="let accion of ListaFiltros" [value]="accion.ID">
+            {{ accion.FILTRO }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button style="height: 56px;" class="btn btn-success mx-3" (click)="genData()">Filtrar</button>
+
+
+      <div class="table-responsive" [ngClass]="{'hidden': !tablaCuentas}">
+        <table mat-table [dataSource]="DataSource" matSort class="w-100 table-responsive">
+          <ng-container matColumnDef="CUENTA">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuenta</th>
+            <td mat-cell *matCellDef="let element">{{ element.CUENTA }}</td>
+          </ng-container>
+          <ng-container matColumnDef="NOMBRE">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>NOMBRE</th>
+            <td mat-cell *matCellDef="let element">{{ element.NOMBRE }}</td>
+          </ng-container>
+          <ng-container matColumnDef="IDENTIFICACION">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>IDENTIFICACION</th>
+            <td mat-cell *matCellDef="let element">{{ element.IDENTIFICACION }}</td>
+          </ng-container>
+          <ng-container matColumnDef="TIPIFICACION">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>TIPIFICACION</th>
+            <td mat-cell *matCellDef="let element">{{ element.TIPIFICACION }}</td>
+          </ng-container>
+          <ng-container matColumnDef="SUBTIPIFICACION">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>SUBTIPIFICACION</th>
+            <td mat-cell *matCellDef="let element">{{ element.SUBTIPIFICACION }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ACCION">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCION</th>
+            <td mat-cell *matCellDef="let element">{{ element.ACCION }}</td>
+          </ng-container>
+          <ng-container matColumnDef="RESULTADO">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>RESULTADO</th>
+            <td mat-cell *matCellDef="let element">{{ element.RESULTADO }}</td>
+          </ng-container>
+          <ng-container matColumnDef="RAZON">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>RAZON</th>
+            <td mat-cell *matCellDef="let element">{{ element.RAZON }}</td>
+          </ng-container>
+          <ng-container matColumnDef="USUARIO">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>USUARIO</th>
+            <td mat-cell *matCellDef="let element">{{ element.USUARIO }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ESTADO">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ESTADO</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="element.ESTADO == 1; else inactivo">
+                Activo
+              </ng-container>
+              <ng-template #inactivo>
+                inactivo
+              </ng-template>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="SALDOLEMPIRAS">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>LEMPIRAS</th>
+            <td mat-cell *matCellDef="let element">{{ element.SALDOLEMPIRAS }}</td>
+          </ng-container>
+          <ng-container matColumnDef="SALDODOLARES">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>DOLARES</th>
+            <td mat-cell *matCellDef="let element">{{ element.SALDODOLARES }}</td>
+          </ng-container>
+          <ng-container matColumnDef="CREACION">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ult Ges</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.CREACION | date:"dd/MM/YYYY" }}
+              {{ element.CREACION | date:"hh:mm:ss":"GMT / UTC" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="OPCIONES">
+            <th mat-header-cell *matHeaderCellDef>OPCIONES</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-button-toggle-group>
+                <mat-button-toggle (click)="GestionCuenta(element.CUENTAID,element.CUENTA,element.NOMBRE)"
+                  style="margin: -10px;">
+                  <mat-icon class="text-primary">remove_red_eye</mat-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="Columnas"></tr>
+          <tr mat-row *matRowDef="let row; columns: Columnas"></tr>
+          <tr class="mat-row" *matNoDataRow="">
+            <td class="mat-cell" colspan="6">
+              No se encontraron datos para la tabla
+            </td>
+          </tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

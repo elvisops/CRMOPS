@@ -1,0 +1,26 @@
+<div class="row">
+    <div class=" mt-4 pb-4 d-flex justify-content-center">
+        <mat-card class="col-lg-7">
+            <mat-card-header class="bgops-indigo">
+                <mat-card-title class="txtwhite">
+                    <h1>Carga de Colas de Trabajo</h1>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div>
+                        <!-- <h2>Cargar Archivo</h2> -->
+                        <h3>Seleccione un archivo de excel con la informacion.</h3>
+                        <input type="file" #archivoInput (change)="ExcelFile($event)" accept=".xlsx" />
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions class="pt-3">
+                <button [disabled]="readonly" mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="GenColaTrabajo()">Guardar</button>
+                <button mat-raised-button color="link" style="background-color: #00b42d;" (click)="GetFormato()">
+                    Formato
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

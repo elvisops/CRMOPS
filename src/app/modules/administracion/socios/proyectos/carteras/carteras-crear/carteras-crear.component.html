@@ -41,7 +41,7 @@
           <!-- Paso 1 -->
 
           <!-- Paso 2 -->
-          <div *ngIf="steps.CargaArchivo">
+          <div *ngIf="!steps.CargaArchivo">
             <h2>Cargar Archivo</h2>
             <h3>Seleccione un archivo de excel con la informacion de la cartera que desea crear</h3>
             <input type="file" #archivoInput (change)="ExcelFile()" accept=".xlsx" />            
@@ -79,7 +79,9 @@
               </mat-select>
             </mat-form-field>
 
-            
+            <mat-card-actions>
+              <button mat-button>Generar</button>
+            </mat-card-actions>
 
           </div>
           <!-- Paso 3 -->

@@ -114,6 +114,21 @@ export class CarterasService {
     )
   }
 
+  // k
+  PaqueteDB(paquete: any):Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc:'CARTERAS_TABLA_DETALLES',      
+      token:token,
+      paquete:paquete,
+    })
+    return this.http.post<any>(`${this.api}/api/carteras/load/cuentas`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al cargar la cartera"))
+    )
+  }
+
   notificacion(msg: string): void {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",

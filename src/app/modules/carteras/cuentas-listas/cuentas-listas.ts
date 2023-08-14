@@ -1,0 +1,22 @@
+export interface CuentasListas {
+  CUENTAID: number,
+  CUENTA: string,
+  ESTADO: string,
+  CARTERAID: number,
+  PERSONAID: number,
+  CREACION: string,
+  ACTUALIZACION: string,
+  CARTERA: string,
+  NOMBRE: string,
+  IDENTIFICACION: string,
+  TIPIFICACION: string,
+  SUBTIPIFICACION: string,
+  ACCION: string,
+  RESULTADO: string,
+  USUARIO: string,
+  RAZON: string,
+  SALDOLEMPIRAS:string,
+  SALDODOLARES: string,
+  ULTIMA_FECHA_GESTION: string,
+}
+
