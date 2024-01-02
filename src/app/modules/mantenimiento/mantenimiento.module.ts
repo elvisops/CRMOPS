@@ -21,6 +21,7 @@ import { TiposDireccionesEditarComponent } from './tipos-direcciones/tipos-direc
 import { EstadosOperativosComponent } from './estados-operativos/estados-operativos.component';
 import { EstadosOperativosCrearComponent } from './estados-operativos/estados-operativos-crear/estados-operativos-crear.component';
 import { EstadosOperativosEditarComponent } from './estados-operativos/estados-operativos-editar/estados-operativos-editar.component';
+import { TiempoPantallaComponent } from './tiempo-pantalla/tiempo-pantalla.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { EstadosOperativosEditarComponent } from './estados-operativos/estados-o
     TiposDireccionesEditarComponent,
     EstadosOperativosComponent,
     EstadosOperativosCrearComponent,
-    EstadosOperativosEditarComponent
+    EstadosOperativosEditarComponent,
+    TiempoPantallaComponent
   ],
   imports: [
     CommonModule,

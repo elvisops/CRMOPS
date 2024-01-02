@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,Input } from '@angular/core';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { EstadosOperativosService } from './estados-operativos.service';
 import { LoginService } from 'src/app/modules/administracion/login/login.service';
@@ -12,6 +12,7 @@ import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet'
   styleUrls: ['./estados-operativos.component.css']
 })
 export class EstadosOperativosComponent implements  OnInit{
+  // @Input() variableCompartida: string = "Texto compartido";
 
   constructor(
     private auth:AuthService,

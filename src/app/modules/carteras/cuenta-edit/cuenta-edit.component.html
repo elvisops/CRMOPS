@@ -1,0 +1,212 @@
+<!-- <div class="container pt-2"> -->
+<div style="max-height: 600px; overflow: auto; margin-bottom: 5px;">
+    <mat-card>
+        <mat-card-header class="bgops-indigo">
+            <button style="margin-top: -5px;" mat-icon-button color="accent" (click)="CloseDiaglog()">
+                <mat-icon>close</mat-icon>
+              </button>
+            <!-- <mat-card-title class="txtwhite"> -->
+                <h1>Actualizar datos del Cliente</h1>
+            <!-- </mat-card-title> -->
+        </mat-card-header>
+        <!-- <mat-divider class="my-4"></mat-divider> -->
+        <mat-card-content>
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>NOMBRE DE CLIENTE</mat-label>
+                        <input matInput [(ngModel)]="nombre" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>IDENTIDAD(con guiones)</mat-label>
+                        <input matInput [(ngModel)]="identidad" [(ngModel)]="identidad" type="text" required="">
+                        <!-- (keydown)="validarIdentidad($event)" -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>NIVEL BURO</mat-label>
+                        <mat-select [(ngModel)]="nivelBuro" required="">
+                            <!-- <mat-option></mat-option> -->
+                            <mat-option *ngFor="let buro of listaNivelBuro" [value]="buro.BUROID">
+                                {{buro.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>DISTRIBUIDOR</mat-label>
+                        <input matInput placeholder="Buscar" [(ngModel)]="searchTerm">
+                        <mat-select [(ngModel)]="distribuidor" required="">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let distribuidor of applyFilter(listaDistribuidor,searchTerm,'DESCRIPCION')"
+                                [value]="distribuidor.DISTRIBUIDORID">
+                                {{distribuidor.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>NUMERO DEL CLIENTE </mat-label>
+                        <input matInput [(ngModel)]="numeroCliente" type="text"  required="">
+                        <!-- (keydown)="validarTelefono($event)" -->
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>CONFIRMACION CLENTE</mat-label>
+                        <mat-select [(ngModel)]="confirmacion">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let confirmacion of listaConfirmacion"
+                                [value]="confirmacion.CONFIRMACIONID">
+                                {{confirmacion.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <mat-divider class="my-4"></mat-divider>
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>REF LABORAL</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="refLaboral" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>TEL REF LABORAL</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="telRefLaboral" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>RESULTADO REF LABORAL</mat-label>
+                        <mat-select [(ngModel)]="resultadoRefLaboral">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let confirmacion of listaConfirmacion"
+                                [value]="confirmacion.CONFIRMACIONID">
+                                {{confirmacion.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>REF PERSONAL</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="refPersonal" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>TEL REF PERSONAL</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="telRefPersonal" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>RESULTADO REF PERSONAL</mat-label>
+                        <mat-select [(ngModel)]="resultadoRefPersonal">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let confirmacion of listaConfirmacion"
+                                [value]="confirmacion.CONFIRMACIONID">
+                                {{confirmacion.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <!-- ref familiar -->
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>REF FAMILIAR</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="refFamiliar" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>TEL REF FAMILIAR</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="telRefFamiliar" type="text" required="">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>RESULTADO REF FAMILIAR</mat-label>
+                        <mat-select [(ngModel)]="resultadoRefFamiliar">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let confirmacion of listaConfirmacion"
+                                [value]="confirmacion.CONFIRMACIONID">
+                                {{confirmacion.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <!-- <div class="col-lg-4">
+                    <label id="example-radio-group-label">CAMBIO DE REFERENCIAS</label>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                        [(ngModel)]="cambioReferenciaNumber">
+                        <mat-radio-button value="1">Si</mat-radio-button>
+                        <mat-radio-button value="0">No</mat-radio-button>
+                    </mat-radio-group>
+                </div> -->
+
+                <div class="col-lg-4">
+                    <label id="example-radio-group-label">CAMBIO DE REFERENCIAS</label>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                        [(ngModel)]="cambioReferenciaNumber">
+                        <mat-radio-button [value]="1">Si</mat-radio-button>
+                        <mat-radio-button [value]="0">No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>ESTADO DE VALIDACION</mat-label>
+                        <mat-select [(ngModel)]="estadoValidacion">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let confirmacion of listaEstadoValidacion"
+                                [value]="confirmacion.ESTADOVALIDACIONID">
+                                {{confirmacion.DESCRIPCION}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline" class="w-100 my-2">
+                        <mat-label>NUMERO DE ORDEN</mat-label>
+                        <!-- <input matInput [(ngModel)]="identidad" [(ngModel)]="usuario" type="text"> -->
+                        <input matInput [(ngModel)]="numeroOrden" type="text" required="">
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <mat-divider class="my-4"></mat-divider>
+            <div class="row">
+                <div class="col-lg-12">
+                    <mat-form-field appearance="outline" class="w-100 px-1">
+                        <mat-label>Comentario</mat-label>
+                        <textarea [(ngModel)]="comentario" matInput rows="2"></textarea>
+                    </mat-form-field>
+                </div>
+            </div> -->
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="ActualizarData()">Actualizar</button>
+            <button mat-raised-button color="Basic" class="mx-2" (click)="Gestiones()">Gestiones</button>
+            <button mat-raised-button color="warn" class="mx-2" (click)="CloseDiaglog()">Cancelar</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<!-- </div> -->

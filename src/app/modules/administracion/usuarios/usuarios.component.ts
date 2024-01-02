@@ -19,6 +19,8 @@ import { UsuariosEditarComponent } from './usuarios-editar/usuarios-editar.compo
 })
 export class UsuariosComponent implements OnInit {
 
+  rolID: any
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -33,6 +35,9 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaUsuarios()
+
+    this.rolID = sessionStorage.getItem('rolID')
+    console.log(this.rolID)
   }
 
   Filtrar(evt: Event){
@@ -73,6 +78,7 @@ export class UsuariosComponent implements OnInit {
   OpenDialogEditar(Usuario:any){
     const dialogRef = this.dialog.open(UsuariosEditarComponent,{
       width:'40%',
+      height: '90%',
       data:Usuario,
       disableClose:true
     });

@@ -1,0 +1,22 @@
+<mat-dialog-content>
+    <mat-form-field appearance="outline" class="w-50 px-1">
+        <mat-label>Fecha Inicio</mat-label>
+        <input matInput readonly [matDatepicker]="picker" [(ngModel)]="fechaInicio" 
+          (click)="picker.open()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>    
+      <mat-form-field appearance="outline" class="w-50 px-1">
+        <mat-label>Fecha Fin</mat-label>
+        <input matInput readonly [matDatepicker]="picker2" [(ngModel)]="fechaFin" 
+          (click)="picker.open()">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>    
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="pull-to-end">
+        <button mat-raised-button class="bgops-indigo txtwhite mx-2" [mat-dialog-close]="{ fechaInicio,fechaFin }">Descargar</button>
+        <button mat-raised-button color="warn" class="mx-2" [mat-dialog-close]="false">Cancelar</button>
+    </div>
+</mat-dialog-actions>

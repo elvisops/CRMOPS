@@ -48,11 +48,12 @@
             <th mat-header-cell *matHeaderCellDef>Opciones</th>
             <td mat-cell *matCellDef="let element">
               <mat-button-toggle-group>
-                <!-- <mat-button-toggle (click)="OpenDialogEditar(element)">
-                        <mat-icon class="text-primary">edit</mat-icon>
-                    </mat-button-toggle> -->
-                <mat-button-toggle (click)="ShowCuentas(element.CARTERAID,element.CARTERA)">
+                <mat-button-toggle (click)="ShowCuentas(element.CARTERAID,element.CARTERA,element.TIPOCARTERAID)">
                   <mat-icon class="text-primary">remove_red_eye</mat-icon>
+                </mat-button-toggle>
+
+                <mat-button-toggle *ngIf="element.TIPOCARTERAID === 3" (click)="CreateCuenta(element.CARTERAID,element.TIPOCARTERAID)">
+                  <mat-icon class="text-success">add</mat-icon>
                 </mat-button-toggle>
               </mat-button-toggle-group>
             </td>
@@ -60,7 +61,7 @@
           <tr mat-header-row *matHeaderRowDef="Columnas"></tr>
           <tr mat-row *matRowDef="let row; columns: Columnas"></tr>
           <tr class="mat-row" *matNoDataRow="">
-            <td class="mat-cell" colspan="5">
+            <td class="mat-cell" colspan="6">
               No se encontraron datos para la tabla
             </td>
           </tr>

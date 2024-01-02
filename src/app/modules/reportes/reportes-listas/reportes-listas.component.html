@@ -1,0 +1,97 @@
+<div class="container mt-4">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Lista de Carteras</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="table-responsive">
+                <!-- "PROYECTO","CARTERA","TIPOCARTERA","OPCIONES" -->
+                <table mat-table [dataSource]="DataSource" matSort class="w-100 table">
+                    <ng-container matColumnDef="PROYECTO">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Proyecto</th>
+                        <td mat-cell *matCellDef="let element">{{ element.PROYECTO }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="CARTERA">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Cartera
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.CARTERA }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TIPOCARTERA">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Tipo de Cartera
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.TIPOCARTERA }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="OPCIONES">
+                        <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-button-toggle-group>
+                                <mat-button-toggle (click)="genListaReportes(element.CARTERAID)">
+                                    <mat-icon class="text-primary">assessment</mat-icon>
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="Columnas"></tr>
+                    <tr mat-row *matRowDef="let row; columns: Columnas"></tr>
+                    <tr class="mat-row" *matNoDataRow="">
+                        <td class="mat-cell" colspan="5">
+                            No se encontraron datos para la tabla
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <div class="mt-2" [ngClass]="{'hidden': !tablaReportes}">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Lista de Reportes</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="table-responsive">
+                    <!-- "PROYECTO","CARTERA","TIPOCARTERA","OPCIONES" -->
+                    <table mat-table [dataSource]="DataSourceReportes" matSort class="w-100 table">
+                        <ng-container matColumnDef="REPORTE">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>REPORTE</th>
+                            <td mat-cell *matCellDef="let element">{{ element.REPORTE }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="CREACION">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                CREACION
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.CREACION | date:"dd/MM/YYYY"}}
+                                {{ element.CREACION | date:"hh:mm:ss":"GMT / UTC"}}
+                            </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="OPCIONES">
+                            <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-button-toggle-group>
+                                    <mat-button-toggle (click)="descargarReporte(element)">
+                                        <mat-icon class="text-success">cloud_download</mat-icon>
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="ColumnasReportes"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ColumnasReportes"></tr>
+                        <tr class="mat-row" *matNoDataRow="">
+                            <td class="mat-cell" colspan="3">
+                                No se encontraron datos para la tabla
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

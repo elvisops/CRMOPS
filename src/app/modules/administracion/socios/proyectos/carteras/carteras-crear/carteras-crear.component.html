@@ -3,20 +3,20 @@
     <mat-card-header>
       <mat-card-title>
         <button mat-icon-button color="accent" (click)="back()">
-            <mat-icon>keyboard_return</mat-icon>
+          <mat-icon>keyboard_return</mat-icon>
         </button>
         Nueva Cartera
       </mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>     
+    <mat-card-content>
       <div *ngIf="Procesando">
         <h3>Por favor espere..</h3>
         <mat-spinner></mat-spinner>
       </div>
-      
+
       <div class="row" *ngIf="!Procesando">
-        
+
         <div class="col-md-6 px-4">
 
           <!-- Paso 1 -->
@@ -34,31 +34,31 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            
-            <button mat-raised-button color="primary" (click)="CrearCartera()">Crear</button>            
-            
+
+            <button mat-raised-button color="primary" (click)="CrearCartera()">Crear</button>
+
           </div>
           <!-- Paso 1 -->
 
           <!-- Paso 2 -->
-          <div *ngIf="!steps.CargaArchivo">
+          <div *ngIf="steps.CargaArchivo">
             <h2>Cargar Archivo</h2>
             <h3>Seleccione un archivo de excel con la informacion de la cartera que desea crear</h3>
-            <input type="file" #archivoInput (change)="ExcelFile()" accept=".xlsx" />            
+            <input type="file" #archivoInput (change)="ExcelFile()" accept=".xlsx" />
           </div>
           <!-- Paso 2 -->
 
           <!-- Paso 3 -->
           <div *ngIf="steps.SeleccionEncabezados">
             <h2>Seleccione los campos para crear las cuentas</h2>
-            
+
             <mat-form-field class="w-100">
               <mat-label>Numero de Cuenta</mat-label>
               <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   {{encabezado}}
                 </mat-option>
-              </mat-select>              
+              </mat-select>
             </mat-form-field>
 
             <mat-form-field class="w-100">
@@ -79,8 +79,19 @@
               </mat-select>
             </mat-form-field>
 
+            <mat-form-field class="w-100">
+              <mat-label>Telefono</mat-label>
+              <mat-select [(ngModel)]="EncTelefono" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
             <mat-card-actions>
-              <button mat-button>Generar</button>
+              <!-- <button mat-raised-button color="primary" (click)="CrearCartera()">Crear</button>             -->
+
+              <button mat-raised-button color="primary" (click)="crearTablaCarteras()">Generar</button>
             </mat-card-actions>
 
           </div>
@@ -88,7 +99,7 @@
 
 
         </div>
-        
+
         <div class="col-md-6">
           <div>
             <h2>Control de procesos</h2>
@@ -109,3 +120,235 @@
 <div class="container mt-4">
   <button mat-raised-button color="primary" (click)="showData()">show</button>
 </div>
+
+<!-- const cors = require('cors');
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+const CryptoJS = require('crypto-js');
+const app = express();
+const port = 3002; // Puerto de tu servicio Express
+
+// Configura un límite de tamaño más grande para body-parser (por ejemplo, 50 MB)
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+// Middleware para parsear el cuerpo de la solicitud como JSON
+app.use(bodyParser.json());
+app.use(cors())
+
+// Endpoint para recibir y procesar el JSON
+app.post('/procesar-json', async (req, res) => {
+  try {
+    const jsonData = req.body; // Suponiendo que el JSON se envía en el cuerpo de la solicitud POST
+
+    const nombreTabla = req.query.nombreTabla
+
+    const identidad = req.query.identidad
+    const nombre = req.query.nombre
+    const cuenta = req.query.cuenta
+    const telefono = req.query.telefono
+
+    // console.log(jsonData)
+    // console.log(" ")
+    // console.log(nombreTabla)
+    // console.log(" ")
+    // console.log(identidad)
+    // return
+    // return 
+    // Divide los datos en grupos de 2 y crea un objeto JSON
+    const gruposDeDos = [];
+    for (let i = 0; i < jsonData.length; i += 100) {//999
+      const grupo = jsonData.slice(i, i + 100);//999
+      gruposDeDos.push(grupo);
+    }
+
+    // Enviar cada grupo de 2 personas como un bloque tipo objeto JSON
+    for (const grupo of gruposDeDos) {
+      const jsonParaEnviar = {
+        proc: 'CARGA_CLIENTES',
+        data: grupo,
+        nombreTabla: nombreTabla,
+        identidad: identidad,
+        nombre: nombre,
+        cuenta: cuenta,
+        telefono:telefono
+      };
+
+      // quito las comillas simples
+      var jsonFinal = (JSON.parse(JSON.stringify(jsonParaEnviar).replace(/'/g," '' ")));
+
+      console.log(jsonFinal)
+      const respuesta = await enviarABackend(jsonFinal);
+      
+      // var res = (respuesta)
+      // console.log(res)
+      
+      // var res = desencriptar(respuesta)
+      var resp = respuesta.data
+      resp = resp.response
+      resp = JSON.parse(resp)
+      // res = JSON.parse(res)
+      // var res = desencriptar(respuesta.status)
+      // res = JSON.parse(res)
+      // res = res[0]
+      
+      console.log('Respuesta del API:', (resp[0].status)); // Puedes manejar la respuesta como desees
+    }
+
+    
+    res.status(200).json({ message: 'Datos procesados exitosamente' });
+  } catch (error) {
+    console.error('Error al procesar los datos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+
+// Función para enviar el objeto JSON a Node-RED
+async function enviarABackend(data) {
+  try {
+    const payload = mkpayload(data);
+
+    // console.log(desencriptar(payload));
+    const response = await axios.post('http://10.8.8.81:1900/api/Cola', { payload });
+
+    return response;
+  } catch (error) {
+    console.error('Error al enviar datos a Node-RED:', error);
+    throw error;
+  }
+}
+
+// Modifica la función mkpayload para procesar el objeto JSON completo
+function mkpayload(data) {
+  // Encripta el objeto data completo
+  const payload = encriptar(JSON.stringify(data)).toString();
+  return payload;
+}
+
+function encriptar(text) {
+  return CryptoJS.AES.encrypt(text, 'crm@&0ps)#');
+}
+
+function desencriptar(textEncripted) {
+  var info = CryptoJS.AES.decrypt(textEncripted, 'crm@&0ps)#');
+  var respuesta = info.toString(CryptoJS.enc.Utf8)
+  return respuesta;
+}
+
+app.listen(port, () => {
+  console.log(`Servidor escuchando en el puerto ${port}`);
+});
+
+
+// const cors = require('cors');
+// const express = require('express');
+// const axios = require('axios');
+// const bodyParser = require('body-parser');
+// const CryptoJS = require('crypto-js');
+// const app = express();
+// const port = 3002; // Puerto de tu servicio Express
+
+// // Configura un límite de tamaño más grande para body-parser (por ejemplo, 50 MB)
+// app.use(bodyParser.json({ limit: '50mb' }));
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+// // Middleware para parsear el cuerpo de la solicitud como JSON
+// app.use(bodyParser.json());
+// app.use(cors())
+
+// // Endpoint para recibir y procesar el JSON
+// app.post('/procesar-json', async (req, res) => {
+//   try {
+//     const jsonData = req.body; // Suponiendo que el JSON se envía en el cuerpo de la solicitud POST
+
+//     const miParametro = req.query.miParametro
+    
+//     // return 
+//     // Divide los datos en grupos de 2 y crea un objeto JSON
+//     // const gruposDeDos = [];
+//     // for (let i = 0; i < jsonData.length; i += 100) {
+//     //   const grupo = jsonData.slice(i, i + 100);
+//     //   gruposDeDos.push(grupo);
+//     // }
+//     const arregloIndividual  = segmentarPorNombre(jsonData);
+
+
+//     // Enviar cada grupo de 2 personas como un bloque tipo objeto JSON
+//     for (const grupo of arregloIndividual) {
+//       const jsonParaEnviar = {
+//         proc: 'CARGA_CLIENTES',
+//         data: grupo,
+//         miParametro: miParametro.replace(/'/g,"comillas")
+//       };
+
+//       // console.log(JSON.parse(JSON.stringify(jsonParaEnviar).replace(/'/g,'')));
+//       var jsonFinal = (JSON.parse(JSON.stringify(jsonParaEnviar).replace(/'/g,'')));
+//       // return;
+//       // // console.log(jsonParaEnviar)
+//       const response = await enviarABackend(jsonFinal);
+//       console.log('Respuesta del API:', response.data); // Puedes manejar la respuesta como desees
+//     }
+
+//     res.status(200).json({ message: 'Datos procesados exitosamente' });
+//   } catch (error) {
+//     console.error('Error al procesar los datos:', error);
+//     res.status(500).json({ error: 'Error en el servidor' });
+//   }
+// });
+
+// function segmentarPorNombre(arr) {
+//   const segmentos = {};
+//   const arregloIndividual = [];
+  
+//   for (const objeto of arr) {
+//     // const nombre = objeto.nombre;
+    
+//     // if (!segmentos[nombre]) {
+//     //   segmentos[nombre] = [];
+//     // }
+    
+//     // segmentos[nombre].push(objeto);
+//     arregloIndividual.push(objeto);
+//   }
+  
+//   return  arregloIndividual;
+// }
+// // Función para enviar el objeto JSON a Node-RED
+// async function enviarABackend(data) {
+//   try {
+//     const payload = mkpayload(data);
+
+//     // console.log(desencriptar(payload));
+//     const response = await axios.post('http://10.8.8.81:1900/api/Cola', { payload });
+
+//     return response;
+//   } catch (error) {
+//     console.error('Error al enviar datos a Node-RED:', error);
+//     throw error;
+//   }
+// }
+
+// // Modifica la función mkpayload para procesar el objeto JSON completo
+// function mkpayload(data) {
+//   // Encripta el objeto data completo
+//   const payload = encriptar(JSON.stringify(data)).toString();
+//   return payload;
+// }
+
+// function encriptar(text) {
+//   return CryptoJS.AES.encrypt(text, 'crm@&0ps)#');
+// }
+
+// function desencriptar(textEncripted) {
+//   var info = CryptoJS.AES.decrypt(textEncripted, 'crm@&0ps)#');
+//   var respuesta = info.toString(CryptoJS.enc.Utf8)
+//   return respuesta;
+// }
+
+// app.listen(port, () => {
+//   console.log(`Servidor escuchando en el puerto ${port}`);
+// });
+ -->
+

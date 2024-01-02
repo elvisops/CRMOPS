@@ -20,14 +20,32 @@ export class GestionDeContactosService {
   ) { }
 
   api = environment.api
+  private apiUrl = 'http://10.8.8.115:3003/api';
 
-  getDatosCliente(cuentaID:number):Observable<any>{
+  getTiempoPantalla(carteraID:number,pantalla:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "traer_tiempo_pantalla",
+      token: token,
+      pantalla: pantalla,
+      carteraID: carteraID
+    })
+    return this.http.post(`${this.api}/api/get`,{ payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener el tiempo de pantalla"))
+    )
+  }
+
+  getDatosCliente(cuentaID:number,carteraID:number):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
       proc: "DATOS_CLIENTE",
       token: token,
-      cuentaID: cuentaID
+      cuentaID: cuentaID,
+      carteraID: carteraID,
     })
     return this.http.post(`${this.api}/api/get`,{ payload })
     .pipe(
@@ -36,13 +54,30 @@ export class GestionDeContactosService {
     )
   }
 
-  getDetalles(cuentaID:number):Observable<any>{
+  getDetalles(cuentaID:number,carteraID:number):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
       proc: "DETALLES_LISTA",
       token: token,
-      cuentaID: cuentaID
+      cuentaID: cuentaID,
+      carteraID:carteraID,
+    })
+    return this.http.post(`${this.api}/api/get`,{ payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener la lista de Detalles"))
+    )
+  }
+
+  getDetallesATC(cuentaID:number,carteraID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "DETALLES_LISTA_ATC",
+      token: token,
+      cuentaID: cuentaID,
+      carteraID:carteraID,
     })
     return this.http.post(`${this.api}/api/get`,{ payload })
     .pipe(
@@ -160,6 +195,21 @@ export class GestionDeContactosService {
     )
   }
 
+  getListaCambios(personaID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "CONTROL_CAMBIOS_LISTA",
+      token: token,
+      personaID:personaID
+    })
+    return this.http.post(`${this.api}/api/get`,{ payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener la lista de correos"))
+    )
+  }
+
   getListaPromesas(cuentaId:number):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
@@ -182,6 +232,21 @@ export class GestionDeContactosService {
       proc: "CONFIRMACIONES_LISTA",
       token: token,
       cuentaId: cuentaId
+    })
+    return this.http.post(`${this.api}/api/get`,{ payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener la lista de gestiones"))
+    )
+  }
+
+  getListaPlantillasSMS(carteraID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "PLANTILLAS_SMS_LISTA",
+      token: token,
+      carteraID: carteraID
     })
     return this.http.post(`${this.api}/api/get`,{ payload })
     .pipe(
@@ -300,6 +365,43 @@ export class GestionDeContactosService {
     )
   }
 
+  GuadarGestionATCTimeOut(carteraID:number,cuentaID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "GESTIONES_CREATE_ATC_TIMEOUT",
+      token:token,
+      carteraID: carteraID,
+      cuentaID: cuentaID,
+      // razonMoraID:razonMoraID,
+    })
+    return this.http.post(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al guardar la gestion timeout"))
+    )
+  }
+
+  GuadarGestionATC(telefonoID:number,cuentaID:number,resultadoID:number, subtipificacionID:number, observacion:string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "GESTIONES_CREATE_ATC",
+      token:token,
+      telefonoID: telefonoID,
+      cuentaID:cuentaID,
+      resultadoID: resultadoID,
+      subtipificacionID:subtipificacionID,
+      observacion:observacion,
+      // razonMoraID:razonMoraID,
+    })
+    return this.http.post(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al guardar la gestion"))
+    )
+  }
+
   GuadarPromesa(gestionID: number,valorPromesa:string,fechaPromesa:Date|null):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
@@ -346,6 +448,23 @@ export class GestionDeContactosService {
       catchError(this.handleError("Error al traer el siguiente contacto"))
     )
   }
+
+  traerChatWhat(telefono: any):Observable<any>{
+    // return this.http.get(`https://panel.rapiwha.com/get_messages.php?apikey=Z0BY2NGRRVUH5S69PMUC&number=504${telefono}`)
+    // .pipe(
+    //   tap(),
+    //   catchError(this.handleError("Error al traer el siguiente contacto"))
+    // )
+    return this.http.get(`${this.apiUrl}/get_messages.php?apikey=Z0BY2NGRRVUH5S69PMUC&number=504${telefono}`);
+
+  }
+
+  enviarMensajeWhat(telefono:any,texto:string):Observable<any>{
+    // https://panel.rapiwha.com/send_message.php?apikey=Z0BY2NGRRVUH5S69PMUC&number=50499287403&text=MyText
+
+    return this.http.get(`https://panel.rapiwha.com/send_message.php?apikey=Z0BY2NGRRVUH5S69PMUC&number=504${telefono}&text=${texto}`)
+  }
+
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{
       horizontalPosition:"center",

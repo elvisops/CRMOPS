@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
+// Component, AfterViewChecked, ElementRef, ViewChild
 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { GestionDeContactosService } from './gestion-de-contactos.service';
@@ -20,6 +21,7 @@ import { ContactoConfirmacionesComponent } from './contacto-confirmaciones/conta
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { empty } from 'rxjs';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-gestion-de-contactos',
@@ -92,10 +94,17 @@ export class GestionDeContactosComponent implements OnInit {
   subtipificacionID: number = 0
   ListaSubtipificacion: any[] = []
 
+  ListaPlantillas: any[] = []
+
   observacion: string = ""
 
   // telefono: number = 0
   telefonoID: number = 0
+
+  telefonoIDSocial: number = 0
+  correoIDSocial: number = 0
+
+  plantillaID: number = 0
 
   fechaPromesa!: Date | null
   valorPromesa: string = ""
@@ -139,7 +148,7 @@ export class GestionDeContactosComponent implements OnInit {
 
   // const datasourceTel = new MatTableDataSource<GestionDeContactosTelefonos>();
   ColumnasHistorial: string[] = ['ACCION', 'RESULTADO', 'TIPIFICACION', 'SUBTIPIFICACION', 'TELEFONO', 'COMENTARIO', 'CREACION', 'USUARIO', 'TIPO']
-  ColumnasTelefonos: string[] = ['TELEFONO', 'TIPO', 'SMS', 'IVR', 'CREACION', 'ACTUALIZACION', 'OPCIONES','ENVIARSMS']
+  ColumnasTelefonos: string[] = ['TELEFONO', 'TIPO', 'SMS', 'IVR', 'CREACION', 'ACTUALIZACION', 'OPCIONES', 'ENVIARSMS']
   ColumnasDirecciones: string[] = ['COLONIA', 'DEPARTAMENTO', 'DIRECCION', 'MUNICIPIO', 'TIPODIRECCION', 'CREACION', 'ACTUALIZACION', 'OPCIONES']
 
   ColumnasCorreos: string[] = ['CORREO', 'TIPOCORREO', 'CREACION', 'ACTUALIZACION', 'OPCIONES', 'ENVIARCORREO']
@@ -150,6 +159,11 @@ export class GestionDeContactosComponent implements OnInit {
   ColumnasPagos: string[] = ['MONTO', 'FECHA']
 
   ColumnasConfirmaciones: string[] = ['MONTO', 'FECHA', 'USUARIO', 'CREACION']
+
+  ColumnasTelefonosSocial: string[] = ['TELEFONO', 'ENVIARSMS']
+  ColumnasCorreosSocial: string[] = ['CORREO', 'ENVIARCORREO']
+
+
 
   filtro: string = '';
 
@@ -162,12 +176,31 @@ export class GestionDeContactosComponent implements OnInit {
   tablaRazonMora: boolean = false
   tablaConfirmaciones: boolean = false
   tablaPagos: boolean = false
+  tablaSocial: boolean = false
+  tablaWhatsapp: boolean = false
+
 
   divPromesa: boolean = false
   // boton de agregar telefono
   dialogOpen = false;
   selectVisible = false;
   selectDisabled = false;
+
+  chatWhatsapp: any[] = []
+  nuevoMensaje: any = ""
+  telefono: string[] = []
+
+  //tabla whatsapp
+  // chats: any[] = []; // Aquí almacenaremos los chats agrupados por número
+  // chatData: { number: string, chats: any[] }[] = []; // Almacenará el número y sus chats
+  // uniqueNumbers: string[] = []; // Almacena los números sin repetir
+  // chatData: { number: string, chats: any[] }[] = [];
+  // selectedNumber: string | null = null;
+  uniqueNumbers: string[] = [];
+  chatData: { number: string, chats: any[] }[] = [];
+  selectedNumber: string | null = null;
+  selectedChats: any[] = []; // Variable para almacenar los chats seleccionados
+  expandedImage: string | null = null; // Variable para almacenar la URL de la imagen ampliada
 
 
 
@@ -196,6 +229,7 @@ export class GestionDeContactosComponent implements OnInit {
   @ViewChild('paginatorConfirmaciones') paginatorConfirmaciones!: MatPaginator;
   @ViewChild(MatSort) sortConfirmaciones!: MatSort;
 
+  @ViewChild('scrollContainer', { read: ElementRef }) scrollContainerRef!: ElementRef; //para desplazar el scroll hasta abajo en el chat
   constructor(
     private service: GestionDeContactosService,
     private auth: AuthService,
@@ -203,7 +237,8 @@ export class GestionDeContactosComponent implements OnInit {
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private route: Router,
-    
+    private datePipe: DatePipe,
+
   ) { }
 
   // element = {
@@ -213,6 +248,7 @@ export class GestionDeContactosComponent implements OnInit {
   private timer: any;
   private ventanaCorreo: Window | null = null;
   private ventanaMensaje: Window | null = null;
+  private intervalId: any;
 
   ngOnInit(): void {
     this.startTimer();
@@ -226,6 +262,21 @@ export class GestionDeContactosComponent implements OnInit {
 
     this.genDatosCliente();
 
+    // this.intervalId = 
+    setInterval(() => {
+      if (this.telefonoIDSocial !== 0) {
+        if (this.telefonoIDSocial !== undefined) {
+          this.TraerChatWhatsapp(this.telefonoIDSocial);
+          // alert(this.telefonoIDSocial)
+        }
+
+      }
+
+    }, 30000);
+  }
+
+  ngAfterViewChecked() {
+    // this.scrollToBottom();
   }
 
   startTimer() {
@@ -246,7 +297,7 @@ export class GestionDeContactosComponent implements OnInit {
   }
 
   genDatosCliente() {
-    this.service.getDatosCliente(this.cuentaID).subscribe(r => {
+    this.service.getDatosCliente(this.cuentaID,this.carteraID).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.data)
       respuesta = JSON.parse(respuesta)
       this.personaID = respuesta[0].PERSONAID
@@ -276,7 +327,7 @@ export class GestionDeContactosComponent implements OnInit {
     })
   }
   genDetalles() {
-    this.service.getDetalles(this.cuentaID).subscribe(r => {
+    this.service.getDetalles(this.cuentaID,this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaDetalles = JSON.parse(data)
       console.log(this.ListaDetalles)
@@ -427,6 +478,175 @@ export class GestionDeContactosComponent implements OnInit {
       this.FillTable<GestionDeContactosConfirmaciones>(this.ListaConfirmaciones, this.DataSourceConfirmaciones, this.sortConfirmaciones, this.paginatorConfirmaciones)
       this.tablaConfirmaciones = true
 
+    })
+  }
+
+  genListaSocial() {
+    this.deshabilitarTablas()
+
+    this.service.getListaTelefonos(this.cuentaID).subscribe(r => {
+      var data = this.auth.desencriptar(r.data)
+      this.ListaTelefonos = JSON.parse(data)
+      console.log(this.ListaTelefonos)
+      // this.deshabilitarTablas()
+      this.FillTable<GestionDeContactosTelefonos>(this.ListaTelefonos, this.DataSourceTelefonos, this.sortTelefonos, this.paginatorTelefonos);
+      this.tablaSocial = true
+    })
+
+    this.service.getListaCorreos(this.cuentaID).subscribe(r => {
+      var data = this.auth.desencriptar(r.data)
+      this.ListaCorreos = JSON.parse(data)
+      console.log(this.ListaCorreos)
+      // this.deshabilitarTablas()
+      this.FillTable<GestionDeContactosCorreos>(this.ListaCorreos, this.DataSourceCorreos, this.sortCorreos, this.paginatorCorreos)
+      this.tablaSocial = true
+    })
+
+    this.genListaPlantillasSMS()
+  }
+
+  genListaWhatsapp() {
+    this.deshabilitarTablas()
+    this.tablaWhatsapp = true
+
+    //tabla whatsapp
+    const jsonData = [
+      {
+        "id": "204250549",
+        "number": "50494464871",
+        "from": "50495076341",
+        "to": "50494464874",
+        "type": "IN",
+        "text": "Hoy no pude pagar porq no me pagaron pero en cuanto me paguen lo hago",
+        "creation_date": "2023-06-01 00:58:59",
+        "process_date": "2023-06-01 00:58:59",
+        "failed_date": null,
+        "custom_data": null
+      },
+      {
+        "id": "204254095",
+        "number": "50494464871",
+        "from": "50493683443",
+        "to": "50494464874",
+        "type": "IN",
+        "text": "https://fs.magicrepository.com/incoming/e303da3b42dc6c74b9bb4c57801a5a63.jpg",
+        "creation_date": "2023-06-01 02:27:22",
+        "process_date": "2023-06-01 02:27:22",
+        "failed_date": null,
+        "custom_data": null
+      },
+      {
+        "id": "204283911",
+        "number": "50494464872",
+        "from": "50493406925",
+        "to": "50494464874",
+        "type": "IN",
+        "text": "Ok está bien",
+        "creation_date": "2023-06-01 10:57:46",
+        "process_date": "2023-06-01 10:57:46",
+        "failed_date": null,
+        "custom_data": null
+      },
+      {
+        "id": "204283923",
+        "number": "50494464872",
+        "from": "50493406925",
+        "to": "50494464874",
+        "type": "IN",
+        "text": "Ayer fui pero no avía sistema",
+        "creation_date": "2023-06-01 10:57:53",
+        "process_date": "2023-06-01 10:57:53",
+        "failed_date": null,
+        "custom_data": null
+      },
+      {
+        "id": "204284138",
+        "number": "50494464873",
+        "from": "50488206236",
+        "to": "50494464874",
+        "type": "IN",
+        "text": "Buenos días estimado Nelson, \nNo aún no nos han depositado, mi jefe está fuera del país y tuvo problemas ayer nos dijo que hasta hoy",
+        "creation_date": "2023-06-01 10:59:48",
+        "process_date": "2023-06-01 10:59:48",
+        "failed_date": null,
+        "custom_data": null
+      }
+    ];
+    //
+
+    // // Crear una estructura de datos para almacenar números únicos y chats
+    // const uniqueNumbersSet = new Set<string>();
+
+    // jsonData.forEach(chat => {
+    //   const number = chat.number;
+    //   uniqueNumbersSet.add(number);
+
+    //   // Agrupar chats por número
+    //   let chatGroup = this.chatData.find(group => group.number === number);
+
+    //   if (!chatGroup) {
+    //     chatGroup = { number: number, chats: [] };
+    //     this.chatData.push(chatGroup);
+    //   }
+
+    //   chatGroup.chats.push(chat);
+    // });
+
+    // // Convertir el conjunto en una lista de números únicos
+    // this.uniqueNumbers = Array.from(uniqueNumbersSet);
+
+     // Crear una estructura de datos para almacenar números únicos y chats
+     const uniqueNumbersSet = new Set<string>();
+
+     jsonData.forEach(chat => {
+       const number = chat.number;
+       uniqueNumbersSet.add(number);
+ 
+       // Agrupar chats por número
+       let chatGroup = this.chatData.find(group => group.number === number);
+ 
+       if (!chatGroup) {
+         chatGroup = { number: number, chats: [] };
+         this.chatData.push(chatGroup);
+       }
+ 
+       chatGroup.chats.push(chat);
+     });
+ 
+     // Llenar la lista de números únicos
+     this.uniqueNumbers = Array.from(uniqueNumbersSet);
+  }
+
+  // selectNumber(number: string) {
+  //   this.selectedNumber = number;
+  // }
+
+  selectNumber(number: string) {
+    this.selectedNumber = number;
+    this.selectedChats = this.chatData.find(group => group.number === number)?.chats || [];
+  }
+
+  isImageURL(text: string): boolean {
+    // Verificar si el texto contiene una URL de imagen
+    return text.startsWith('https://fs.magicrepository.com');
+  }
+
+  expandImage(imageURL: string) {
+    this.expandedImage = imageURL;
+  }
+
+  closeExpandedImage() {
+    this.expandedImage = null;
+  }
+  
+  genListaPlantillasSMS() {
+    this.service.getListaPlantillasSMS(this.carteraID).subscribe(r => {
+      var data = this.auth.desencriptar(r.data)
+      this.ListaPlantillas = JSON.parse(data)
+      console.log(this.ListaPlantillas)
+      // this.deshabilitarTablas()
+      // this.FillTable<GestionDeContactosRazonMora>(this.ListaRazonMora, this.DataSourceRazonMora, this.sortRazonMora, this.paginatorRazonMora)
+      // this.tablaRazonMora = true
     })
   }
 
@@ -642,6 +862,8 @@ export class GestionDeContactosComponent implements OnInit {
     this.fechaPromesa = null
     this.telefonoID = 0
     this.observacion = ""
+    this.telefonoIDSocial = 0
+    this.correoIDSocial = 0
     // this.razonMoraID = 0
   }
 
@@ -662,6 +884,10 @@ export class GestionDeContactosComponent implements OnInit {
     this.tablaRazonMora = false
     this.tablaConfirmaciones = false
     this.tablaPagos = false
+
+    this.tablaSocial = false
+    this.tablaWhatsapp = false
+
     // this.filtro = ''
   }
 
@@ -734,8 +960,23 @@ export class GestionDeContactosComponent implements OnInit {
     })
   }
 
-  EnviarCorreo(Cliente: any) {
-    const url = `http://10.8.8.115/medios-alternos/enviar/1/14/1998/100/${Cliente.CORREO}`;
+  EnviarCorreo(Correo: any) {
+    if (Correo == 0) {
+      this.service.notificacion("Debe seleccionar un correo electronico")
+      return
+    }
+
+    console.log(this.ListaTelefonos)
+
+    let mail = ""
+
+    for (let jsonData of this.ListaCorreos) {
+      if (jsonData.CORREOID === Correo) {
+        mail = jsonData.CORREO
+        break;
+      }
+    }
+    const url = `http://10.8.8.115/medios-alternos/enviar/1/14/1998/100/${mail}`;
 
     if (this.ventanaCorreo === null || this.ventanaCorreo.closed) {
       this.ventanaCorreo = window.open(url, '_blank');
@@ -745,8 +986,33 @@ export class GestionDeContactosComponent implements OnInit {
     }
   }
 
-  EnviarSMS(Cliente: any){
-    const url = `https://ec.tigobusiness.hn/api/http/send_to_contact?msisdn=504${Cliente.TELEFONO}&message=Mensaje de prueba&id=100&api_key=RJEb1GMh9djAG8scTVZ38jUkbOwqVcGs&detail=1`;
+  EnviarSMS(Cliente: any) {
+    if (Cliente == 0 || this.plantillaID == 0) {
+      this.service.notificacion("Debe seleccionar un telefono y la plantilla para enviar el sms")
+      return
+    }
+
+    // console.log(this.ListaTelefonos)
+
+    let telefono = ""
+    for (let jsonData of this.ListaTelefonos) {
+      if (jsonData.TELEFONOID === Cliente) {
+        telefono = jsonData.TELEFONO
+        break;
+      }
+    }
+
+    let mensaje = ""
+    for (let jsonData of this.ListaPlantillas) {
+      if (jsonData.PLANTILLAID === this.plantillaID) {
+        mensaje = jsonData.MENSAJE
+        break;
+      }
+    }
+
+    // alert(plantilla)
+
+    const url = `https://ec.tigobusiness.hn/api/http/send_to_contact?msisdn=504${telefono}&message=${mensaje}&id=100&api_key=RJEb1GMh9djAG8scTVZ38jUkbOwqVcGs&detail=1`;
     if (this.ventanaMensaje === null || this.ventanaMensaje.closed) {
       this.ventanaMensaje = window.open(url, '_blank');
     } else {
@@ -764,6 +1030,40 @@ export class GestionDeContactosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(datos => {
       this.genListaConfirmaciones()
     })
+  }
+
+  TraerChatWhatsapp(telefonoID: number) {
+    // alert(telefonoID)
+    // const resultados = this.ListaTelefonos.filter(registro.TELEFONO => registro.TELEFONOID === 8);
+    this.telefonoID = telefonoID
+    this.telefono = this.ListaTelefonos
+      .filter(registro => registro.TELEFONOID === telefonoID)
+      .map(registro => registro.TELEFONO);
+    // alert(telefono)
+
+    this.service.traerChatWhat(this.telefono).subscribe(r => {
+      this.chatWhatsapp = r
+      console.log(r)
+    })
+  }
+
+  enviarMensaje() {
+    this.service.enviarMensajeWhat(this.telefono, this.nuevoMensaje).subscribe(r => {
+      // alert(this.telefonoID)
+      this.TraerChatWhatsapp(this.telefonoID);
+      this.nuevoMensaje = ""
+    })
+    // if (this.nuevoMensaje.trim() !== '') {
+    //   this.chatWhatsapp.push({ text: this.nuevoMensaje, process_date: new Date(), type: 'OUT' });
+    //   this.nuevoMensaje = ''; // Limpiar el campo de entrada
+    // }
+  }
+
+  scrollToBottom(): void {
+    if (this.scrollContainerRef && this.scrollContainerRef.nativeElement) {
+      const scrollContainer = this.scrollContainerRef.nativeElement;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
   }
 }
 

@@ -7,9 +7,9 @@
       <h2>Lista de Cuentas de la Cartera <b>{{ cartera }}</b></h2>
     </mat-card-header>
     <mat-card-content>
-      <mat-form-field appearance="outline" class="w-25 px-1" >
+      <mat-form-field appearance="outline" class="w-25 px-1">
         <mat-label>Filtro</mat-label>
-        <mat-select [(ngModel)]="filtroID" >
+        <mat-select [(ngModel)]="filtroID" (ngModelChange)="onChangeFiltro()">
           <mat-option></mat-option>
           <mat-option *ngFor="let accion of ListaFiltros" [value]="accion.ID">
             {{ accion.FILTRO }}
@@ -17,10 +17,25 @@
         </mat-select>
       </mat-form-field>
 
-      <button style="height: 56px;" class="btn btn-success mx-3" (click)="genData()">Filtrar</button>
+      <button *ngIf="botonFiltrar" style="height: 56px;" class="btn btn-success mx-3"
+        (click)="genData()">Filtrar</button>
+
+        <mat-form-field *ngIf="divSearch || inputNumeroOrden" appearance="outline" class="w-25 px-1">
+          <mat-label *ngIf="inputNumeroOrden">Numero Orden</mat-label>
+          <mat-label *ngIf="divSearch">Identidad</mat-label>
+          <input matInput [(ngModel)]="searchIdentidad">
+        </mat-form-field>
+
+        <button *ngIf="divSearch || inputNumeroOrden" style="height: 56px;" class="btn btn-primary mx-3" (click)="BuscarPorIdentidad()">Buscar</button>
+
+
 
 
       <div class="table-responsive" [ngClass]="{'hidden': !tablaCuentas}">
+        <mat-form-field class="w-100 mat-form-field-underline-none">
+          <mat-label>Filtro</mat-label>
+          <input matInput (keyup)="Filtrar($event)" #input />
+        </mat-form-field>
         <table mat-table [dataSource]="DataSource" matSort class="w-100 table-responsive">
           <ng-container matColumnDef="CUENTA">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Cuenta</th>
@@ -50,10 +65,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>RESULTADO</th>
             <td mat-cell *matCellDef="let element">{{ element.RESULTADO }}</td>
           </ng-container>
-          <ng-container matColumnDef="RAZON">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>RAZON</th>
-            <td mat-cell *matCellDef="let element">{{ element.RAZON }}</td>
-          </ng-container>
+
           <ng-container matColumnDef="USUARIO">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>USUARIO</th>
             <td mat-cell *matCellDef="let element">{{ element.USUARIO }}</td>
@@ -69,14 +81,7 @@
               </ng-template>
             </td>
           </ng-container>
-          <ng-container matColumnDef="SALDOLEMPIRAS">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>LEMPIRAS</th>
-            <td mat-cell *matCellDef="let element">{{ element.SALDOLEMPIRAS }}</td>
-          </ng-container>
-          <ng-container matColumnDef="SALDODOLARES">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>DOLARES</th>
-            <td mat-cell *matCellDef="let element">{{ element.SALDODOLARES }}</td>
-          </ng-container>
+
           <ng-container matColumnDef="CREACION">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ult Ges</th>
             <td mat-cell *matCellDef="let element">
@@ -89,9 +94,11 @@
             <th mat-header-cell *matHeaderCellDef>OPCIONES</th>
             <td mat-cell *matCellDef="let element">
               <mat-button-toggle-group>
-                <mat-button-toggle (click)="GestionCuenta(element.CUENTAID,element.CUENTA,element.NOMBRE)"
-                  style="margin: -10px;">
+                <mat-button-toggle (click)="GestionCuenta(element.CUENTAID,element.CARTERAID)">
                   <mat-icon class="text-primary">remove_red_eye</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle *ngIf="element.CARTERAID === 4037" (click)="OpenDialogEditar(element)">
+                  <mat-icon class="text-success">edit</mat-icon>
                 </mat-button-toggle>
               </mat-button-toggle-group>
             </td>
@@ -104,6 +111,8 @@
             </td>
           </tr>
         </table>
+        <mat-paginator #paginatorHistorial="matPaginator" [pageSizeOptions]="[10, 20, 50, 100]" [pageSize]="10">
+        </mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>

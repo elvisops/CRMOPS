@@ -11,6 +11,8 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class UsuariosEditarComponent implements OnInit {
 
+  rolID: any
+  
   passwordControl = new FormControl('', [
     Validators.required,
     Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.])[A-Za-z\d.]{8,}$/)
@@ -50,6 +52,8 @@ export class UsuariosEditarComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaRoles()
+
+    this.rolID = sessionStorage.getItem('rolID')
   }
 
   genListaRoles(){

@@ -110,6 +110,7 @@ export interface GestionDeContactosDirecciones {
 }
 
 export interface GestionDeContactosCorreos extends TipoDeContacto {
+  CORREOID: number,
   CORREO: string,
   TIPOCORREO: string,
   CREACION: string,
@@ -131,5 +132,15 @@ export interface GestionDeContactosPromesas {
   GESTIONID: number,
   MONTO: number,
   PROMESAESTADOID: number,
+}
+
+export interface ControlCambios {
+  CONTROLCAMBIOSID: number
+  PERSONAID: number
+  USUARIO: string
+  CAMPOMODIFICADO: string
+  FECHACAMBIO: string
+  VALORANTERIOR: string
+  VALORNUEVO: string
 }
 

@@ -44,6 +44,12 @@ const routes: Routes = [
     // import('./modules/carteras/carteras.module').then(m => m.CarterasModule),
     canActivate:[AuthGuard]
   },
+  {
+    path: 'reportes',
+    loadChildren:() =>
+    import('./modules/reportes/reportes.module').then(m => m.ReportesModule),
+    canActivate:[AuthGuard]
+  },
   { path: 'perfil-usuario', component:PerfilUsuarioComponent},
   {
     path:'**',

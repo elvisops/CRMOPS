@@ -81,10 +81,14 @@ export class LoginComponent implements OnInit {
         var estadoLogin = '3'       
         estadoLogin = this.auth.encriptar(estadoLogin).toString()
 
+        var rolID = (obj.rolID)
+
+
         console.log(respuesta.data[0])
         sessionStorage.setItem("token", token)
         sessionStorage.setItem('usuario', username)
         sessionStorage.setItem('EstadoOperativo',estadoLogin)
+        sessionStorage.setItem('rolID',rolID)
         this.service.setSessionStorage()        
         this.timerService.startTimer();        
         window.location.href = "./"

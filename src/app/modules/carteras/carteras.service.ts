@@ -14,7 +14,7 @@ export class CarterasService {
     private http: HttpClient,
     private auth: AuthService,
     private snack: MatSnackBar
-  ) {}
+  ) { }
 
   api = environment.api;
 
@@ -33,7 +33,41 @@ export class CarterasService {
       );
   }
 
-  getListaCuentas(id:number,condicion:string,carteraID: number): Observable<any> {
+  searchIdentidad(carteraID:number,identidad: string): Observable<any> {
+    var token = sessionStorage.getItem('token');
+    token = this.auth.desencriptar(token);
+    var payload = this.auth.mkpayload({
+      proc: 'buscar_por_identidad',
+      token: token,
+      carteraID: carteraID,
+      identidad: identidad
+    });
+    return this.http
+      .post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError('Error al obtener los datos'))
+      );
+  }
+
+  searchNumeroOrden(carteraID:number,numeroOrden: string): Observable<any> {
+    var token = sessionStorage.getItem('token');
+    token = this.auth.desencriptar(token);
+    var payload = this.auth.mkpayload({
+      proc: 'buscar_por_numero_orden',
+      token: token,
+      carteraID: carteraID,
+      numeroOrden: numeroOrden
+    });
+    return this.http
+      .post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError('Error al obtener los datos'))
+      );
+  }
+
+  getListaCuentas(id: number, condicion: string, carteraID: number): Observable<any> {
     var token = sessionStorage.getItem('token');
     token = this.auth.desencriptar(token);
     var payload = this.auth.mkpayload({

@@ -9,7 +9,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //Angular Material modules
 import { MaterialsModule } from './modules/public/materials/materials.module';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
-
+// import { ReportesRoutingModule } from './modules/reportes/reportes-routing.module';
+//  traducir los datePipe
+import {LOCALE_ID } from '@angular/core';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeEs, 'es'); //Esto no es un import, pero va justo despues de ellos!
 
 @NgModule({
   declarations: [
@@ -22,8 +27,11 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
     NgbModule,             
     MaterialsModule,
     MatBottomSheetModule,
+    // ReportesRoutingModule,
   ],
-  providers: [],
+  providers: [
+    {provide: LOCALE_ID, useValue: 'es'} // Añades esta línea en los providers
+  ],
   bootstrap: [AppComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })

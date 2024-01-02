@@ -9,6 +9,7 @@ import { PaisesComponent } from '../administracion/paises/paises.component';
 import { TiposProductosComponent } from '../administracion/tipos-productos/tipos-productos.component';
 import { TiposDireccionesComponent } from './tipos-direcciones/tipos-direcciones.component';
 import { EstadosOperativosComponent } from './estados-operativos/estados-operativos.component';
+import { TiempoPantallaComponent } from './tiempo-pantalla/tiempo-pantalla.component';
 
 const routes: Routes = [
     { path: '', component:MantenimientoComponent},
@@ -19,7 +20,8 @@ const routes: Routes = [
     { path:'tipos_productos',component:TiposProductosComponent},
     { path: 'tipos_telefonos', component:TiposTelefonosComponent},
     { path: 'tipos_direcciones', component:TiposDireccionesComponent},
-    { path: 'estados_operativos', component:EstadosOperativosComponent}
+    { path: 'estados_operativos', component:EstadosOperativosComponent},
+    { path: 'tiempo_pantalla', component: TiempoPantallaComponent}
 ];
 
 @NgModule({

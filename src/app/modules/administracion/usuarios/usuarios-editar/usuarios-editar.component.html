@@ -9,12 +9,12 @@
         <div *ngIf="!chPass">
             <mat-form-field appearance="outline" class="w-100 my-2">
                 <mat-label>Nombre Usuario</mat-label>
-                <input matInput [(ngModel)]="usuario" type="text" >
+                <input matInput [(ngModel)]="usuario" type="text" [disabled]="rolID != 1">
             </mat-form-field>        
     
             <mat-form-field appearance="outline" class="w-100 my-2">
                 <mat-label>Rol de usuario</mat-label>
-                <mat-select [(ngModel)]="rolid">
+                <mat-select [(ngModel)]="rolid" [disabled]="rolID != 1">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let rol of ListaRoles" [value]="rol.ROLID">
                         {{rol.ROL}}
@@ -29,7 +29,7 @@
                         <mat-label>Estado de Usuario:</mat-label>
                     </div>
                     <div class="col-md-6">
-                        <mat-slide-toggle [(ngModel)]="estado">
+                        <mat-slide-toggle [(ngModel)]="estado" [disabled]="rolID != 1">
                             {{txtEstado}}
                         </mat-slide-toggle>
                     </div>

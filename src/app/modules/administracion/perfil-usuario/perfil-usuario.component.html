@@ -13,21 +13,23 @@
                     </div>
                     <div>
                         <mat-label>
-                            <h1>Actualizacion de informacion</h1>
+                            <h1>Actualización de Información</h1>
                         </mat-label>
                         <mat-divider class="pb-2"></mat-divider>
                     </div>
-                    <mat-form-field appearance="outline" class="w-100 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Identidad</mat-label>
-                        <input matInput [(ngModel)]="identidad" type="text" (keydown)="validarIdentidad($event)">
+                        <input [readonly]="existeIdentiad" matInput [(ngModel)]="identidad" type="text"
+                            (keydown)="validarIdentidad($event)" required="">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-100 my-2">
-                        <mat-label>Nombre de Usuario</mat-label>
-                        <input matInput [(ngModel)]="nombre" type="text">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
+                        <mat-label>Nombre Completo</mat-label>
+                        <input matInput [(ngModel)]="nombre" type="text" required="">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Telefono</mat-label>
-                        <input matInput [(ngModel)]="telefono" type="tel" (keydown)="validarTelefono($event)">
+                        <input matInput [(ngModel)]="telefono" type="tel" (keydown)="validarTelefono($event)"
+                            required="">
                         <div *ngIf="phoneControl.invalid && (phoneControl.dirty || phoneControl.touched)">
                             <div *ngIf="phoneControl.hasError('required')" style="color: red;">El telefono es requerido
                             </div>
@@ -38,9 +40,9 @@
                             <div style="color: red;">El telefono no puede ser mayor a 8 numeros</div>
                         </div>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Tipo de Telefono</mat-label>
-                        <mat-select [(ngModel)]="tipoTelefonoId">
+                        <mat-select [(ngModel)]="tipoTelefonoId" required="">
                             <mat-option></mat-option>
                             <mat-option *ngFor="let tipoTelefono of listaTiposTelefono"
                                 [value]="tipoTelefono.TELEFONOTIPOID">
@@ -48,13 +50,13 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Email</mat-label>
-                        <input matInput [(ngModel)]="email" type="email">
+                        <input matInput [(ngModel)]="email" type="email" required="">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Tipo de Correo</mat-label>
-                        <mat-select [(ngModel)]="tipoCorreoId">
+                        <mat-select [(ngModel)]="tipoCorreoId" required="">
                             <mat-option></mat-option>
                             <mat-option *ngFor="let tipoCorreos of listaTiposCorreos"
                                 [value]="tipoCorreos.TIPOCORREOID">
@@ -62,13 +64,13 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Direccion</mat-label>
-                        <input matInput [(ngModel)]="direccion" type="email">
+                        <input matInput [(ngModel)]="direccion" type="email" required="">
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Tipo de Direccion</mat-label>
-                        <mat-select [(ngModel)]="tipoDireccionId">
+                        <mat-select [(ngModel)]="tipoDireccionId" required="">
                             <mat-option></mat-option>
                             <mat-option *ngFor="let tipoDireccion of listaTiposDirecciones"
                                 [value]="tipoDireccion.TIPODIRECCIONID">
@@ -76,21 +78,75 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+                    <!-- <mat-form-field appearance="outline" class="w-50 my-2 px-2">
                         <mat-label>Municipio</mat-label>
-                        <mat-select [(ngModel)]="municipioId">
+                        <mat-select [(ngModel)]="municipioId" required="">
                             <mat-option></mat-option>
                             <mat-option *ngFor="let municipio of listaMunicipios" [value]="municipio.MUNICIPIOID">
                                 {{municipio.MUNICIPIO}}
                             </mat-option>
                         </mat-select>
+                    </mat-form-field> -->
+
+                    <!-- <mat-form-field class="example-full-width">
+                        <mat-label>Number</mat-label>
+                        <input #input type="text" placeholder="Pick one" matInput [formControl]="myControl"
+                            [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
+                        <mat-autocomplete requireSelection #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredOptions" [value]="option">
+                                {{option}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field> -->
+
+                    <!-- <mat-form-field appearance="outline" class="w-50 my-2 px-2">
+                        <mat-label>Municipio</mat-label>
+                        <mat-select [(ngModel)]="municipioId" required="">
+                            <input matInput placeholder="Filtrar municipios" [(ngModel)]="filtroMunicipios">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let municipio of listaMunicipios" [value]="municipio.MUNICIPIOID"
+                                [ngClass]="{'hidden': !municipioFilter(municipio)}">
+                                {{ municipio.MUNICIPIO }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                    <!-- <mat-form-field appearance="outline" class="w-50 my-2 px-2">
+                        <mat-label>Municipio</mat-label>
+                        <input #input type="text" placeholder="Buscar" matInput [formControl]="myControl"
+                            [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredOptions" [value]="option.MUNICIPIO">
+                                {{ option.MUNICIPIO }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field> -->
+
+
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2">
+                        <mat-label>Municipio</mat-label>
+                        <input matInput placeholder="Buscar" [(ngModel)]="searchTerm">
+                        <mat-select [(ngModel)]="municipioId" required="">
+                            <!-- <mat-option></mat-option> -->
+                            <mat-option *ngFor="let municipio of applyFilter(listaMunicipios,searchTerm,'MUNICIPIO')" 
+                                [value]="municipio.MUNICIPIOID">
+                                {{municipio.MUNICIPIO}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 my-2">
+
+
+
+
+
+
+
+                    <mat-form-field appearance="outline" class="w-50 my-2 px-2" >
                         <mat-label>Colonia</mat-label>
-                        <input matInput [(ngModel)]="colonia" type="tel">
+                        <input matInput [(ngModel)]="colonia" type="tel" required="" >
                     </mat-form-field>
                     <button *ngIf="!chPass" mat-raised-button class="bgops-indigo txtwhite mx-2"
-                        (click)="GuardarCambios()">Actualizar</button>
+                        (click)="GuardarCambios()">{{ existeIdentiad? 'Actualizar' : 'Agregar' }}</button>
                 </div>
                 <div>
                     <mat-checkbox [(ngModel)]="chPass"> Cambiar Clave</mat-checkbox>
@@ -118,7 +174,8 @@
                         </div>
                         <mat-form-field appearance="outline" class="w-100 my-2">
                             <mat-label>Confirmar Contraseña</mat-label>
-                            <input matInput [(ngModel)]="claveConfirm" type="text" [type]="hide ? 'password' : 'text'" (keydown)="validarClave($event)">
+                            <input matInput [(ngModel)]="claveConfirm" type="text" [type]="hide ? 'password' : 'text'"
+                                (keydown)="validarClave($event)">
                             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                                 [attr.aria-pressed]="hide">
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>

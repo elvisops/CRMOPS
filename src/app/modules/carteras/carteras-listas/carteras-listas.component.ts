@@ -45,13 +45,28 @@ export class CarterasListasComponent implements OnInit{
       this.ListaCarteras = JSON.parse(data)
       this.FillTable(this.ListaCarteras)
       console.log("LISTACARTERAS",this.ListaCarteras);
+      console.log("tipo Cartera",this.ListaCarteras[0])
     })
   }
 
-  ShowCuentas(CarteraID: number,Cartera: string){
+  ShowCuentas(CarteraID: number,Cartera: string, TipoCarteraID: number){
     // alert(Cartera)
     // console.log(CarteraID)
-    this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID, cartera:Cartera}})
+    // if (TipoCarteraID == 1) {
+    //   console.log("ventas")
+    // }else if (TipoCarteraID == 2) {
+    //   console.log("Cobros")
+    // }else{
+    //   console.log("Atencio al cliente")
+    // }
+    // console.log(TipoCarteraID)
+    // this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID, cartera:Cartera,TipoCarteraID:TipoCarteraID}})
+    this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID,TipoCarteraID:TipoCarteraID}})
+
+  }
+
+  CreateCuenta(CarteraID: number, TipoCarteraID: number){
+    this.router.navigate(['carteras/cuenta_create'],{ queryParams: {carteraID: CarteraID,TipoCarteraID:TipoCarteraID}})
   }
   
   FillTable(Datos: CarterasListas[]) {

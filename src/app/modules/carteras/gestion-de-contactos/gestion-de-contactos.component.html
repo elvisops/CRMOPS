@@ -224,24 +224,29 @@
                 <mat-button-toggle value="bold" (click)="genListaConfirmaciones()">Confirmaciones</mat-button-toggle>
               </mat-button-toggle-group> -->
             <!-- <div > -->
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genDetalles()">Detalles</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaHistorial()">Historial</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaTelefonos()">Telefonos</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaDirecciones()">Direcciones</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaCorreos()">Correos</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaPromesas()">Promesas</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaRazonMora()">Razon Mora</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaPagos()">Pagos</button>
-            <button style="font-size: 12px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
               (click)="genListaConfirmaciones()">Confirmaciones</button>
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+              (click)="genListaSocial()">Social</button>
+
+            <button style="font-size: 10px; padding-left: 5px; padding-right: 5px;" mat-stroked-button
+              (click)="genListaWhatsapp()">Whatsapp</button>
             <!-- </div> -->
             <!-- </div>
               </div> -->
@@ -687,7 +692,7 @@
                   <td mat-cell *matCellDef="let element">
                     <mat-button-toggle-group>
                       <mat-button-toggle (click)="OpenDialogEditarCorreo(element)" style="margin: -10px;">
-                        <mat-icon class="text-primary" >edit</mat-icon>
+                        <mat-icon class="text-primary">edit</mat-icon>
                       </mat-button-toggle>
                     </mat-button-toggle-group>
                   </td>
@@ -898,6 +903,175 @@
                 [pageSize]="10">
               </mat-paginator>
             </div>
+
+            <!-- tabla social -->
+            <div class="row mt-3" [ngClass]="{'hidden': !tablaSocial}">
+              <div class="col-lg-12">
+                <mat-form-field appearance="outline" class="w-50 px-1">
+                  <mat-label>Correo</mat-label>
+                  <!-- [formControl]="telefonoControl" -->
+                  <mat-select [(ngModel)]="correoIDSocial">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let accion of ListaCorreos" [value]="accion.CORREOID">
+                      {{ accion.CORREO }}
+                    </mat-option>
+                  </mat-select>
+                  <!-- <mat-error *ngIf="telefonoControl.hasError('required')">El telefono es obligatorio</mat-error>
+                  <mat-error *ngIf="telefonoControl.hasError('min')">El telefono es obligatorio</mat-error> -->
+                </mat-form-field>
+                <button class="btn btn-primary" (click)="EnviarCorreo(correoIDSocial)">Enviar Correo</button>
+              </div>
+              <div class="col-lg-12">
+                <mat-form-field appearance="outline" class="w-25 px-1">
+                  <mat-label>Telefono</mat-label>
+                  <mat-select [(ngModel)]="telefonoIDSocial">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let accion of ListaTelefonos" [value]="accion.TELEFONOID"
+                      (click)="TraerChatWhatsapp(accion.TELEFONOID)">
+                      {{ accion.TELEFONO }}
+                    </mat-option>
+                  </mat-select>
+                  <!-- <mat-error *ngIf="telefonoControl.hasError('required')">El telefono es obligatorio</mat-error>
+                  <mat-error *ngIf="telefonoControl.hasError('min')">El telefono es obligatorio</mat-error> -->
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-25 px-1">
+                  <mat-label>Plantilla</mat-label>
+                  <mat-select [(ngModel)]="plantillaID">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let accion of ListaPlantillas" [value]="accion.PLANTILLAID">
+                      {{ accion.PLANTILLA }}
+                    </mat-option>
+                  </mat-select>
+                  <!-- <mat-error *ngIf="telefonoControl.hasError('required')">El telefono es obligatorio</mat-error>
+                  <mat-error *ngIf="telefonoControl.hasError('min')">El telefono es obligatorio</mat-error> -->
+                </mat-form-field>
+                <button class="btn btn-primary" (click)="EnviarSMS(telefonoIDSocial)">Enviar SMS</button>
+              </div>
+              <div class="col-lg-12" [ngClass]="{'hidden': telefonoIDSocial == 0 || telefonoIDSocial == undefined}">
+                <!-- <mat-card>
+                  <mat-card-content>
+                    <div *ngFor="let chat of chatWhatsapp"
+                      [ngClass]="{'message-in': chat.type === 'IN', 'message-out': chat.type === 'OUT'}">
+                      <div class="message-content">
+                        {{ chat.text }}
+                      </div>
+                      <div class="message-date">
+                        {{ chat.process_date | date: 'shortTime' }}
+                      </div>
+                    </div>
+                  </mat-card-content>
+
+
+                  <div class="message-input">
+                    <input [(ngModel)]="nuevoMensaje" placeholder="Escribe un mensaje...">
+                    <button (click)="enviarMensaje()">Enviar</button>
+                  </div>
+                </mat-card> -->
+                <mat-card>
+                  <!-- style="max-height: 400px; overflow: auto;"   -->
+                  <!-- <mat-card-content style="max-height: 400px;overflow: scroll; " #scrollMe [scrollTop]="scrollMe.scrollHeight"> -->
+                  <!-- <mat-card-content style="max-height: 400px; overflow: scroll;" #scrollContainer> -->
+                  <mat-card-content style="max-height: 400px; overflow-y:scroll;" #scrollMe
+                    [scrollTop]="scrollMe.scrollHeight">
+                    <ng-container *ngFor="let chat of chatWhatsapp; let i = index">
+                      <ng-container *ngIf="i === 0 || chat.creation_date !== chatWhatsapp[i - 1].creation_date">
+                        <div class="message-date-header"
+                          [ngClass]="{'message-in': chat.type === 'IN', 'message-out': chat.type === 'OUT'}">
+                          <!-- {{ chat.creation_date | date: 'EEEE, MMMM d, y' }} -->
+                          {{ chat.creation_date | date:'fullDate':'':'es' }}
+                        </div>
+                      </ng-container>
+
+                      <div [ngClass]="{'message-in': chat.type === 'IN', 'message-out': chat.type === 'OUT'}">
+                        <div class="message-content">
+                          {{ chat.text }}
+                        </div>
+                        <div class="message-date">
+                          {{ chat.creation_date | date: 'shortTime' }}
+                          <!-- {{ chat.creation_date | date:"hh:mm":"GMT / UTC"}} -->
+                          <!-- {{ chat.creation_date }} -->
+                        </div>
+                      </div>
+                    </ng-container>
+                  </mat-card-content>
+
+                  <div class="message-input">
+                    <input [(ngModel)]="nuevoMensaje" placeholder="Escribe un mensaje...">
+                    <button (click)="enviarMensaje()">Enviar</button>
+                  </div>
+                </mat-card>
+
+
+              </div>
+            </div>
+
+            <!-- tabla social -->
+            <div class="row mt-3" [ngClass]="{'hidden': !tablaWhatsapp}">
+              <h1>whatsapp</h1>
+
+
+              <!-- <div class="number-list">
+                <ul>
+                  <li *ngFor="let number of uniqueNumbers">
+                    <button (click)="selectNumber(number)">{{ number }}</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="chat-window">
+                <div *ngIf="selectedNumber">
+                  <h2>Conversación con el número: {{ selectedNumber }}</h2>
+                  <div class="chat">
+                    <div *ngFor="let chat of selectedChats" class="message">
+                      <div *ngIf="chat.type === 'IN'" class="incoming" [ngClass]="{ 'image-message': isImageURL(chat.text) }">
+                        <img *ngIf="isImageURL(chat.text)" [src]="chat.text" width="100px" alt="Imagen">
+                        <span *ngIf="!isImageURL(chat.text)">{{ chat.text }}</span>
+                      </div>
+                      <div *ngIf="chat.type === 'OUT'" class="outgoing">{{ chat.text }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
+              <div class="number-list">
+                <ul>
+                  <li *ngFor="let number of uniqueNumbers">
+                    <button (click)="selectNumber(number)">{{ number }}</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="chat-window">
+                <div *ngIf="selectedNumber">
+                  <h2>Conversación con el número: {{ selectedNumber }}</h2>
+                  <div class="chat">
+                    <div *ngFor="let chat of selectedChats" class="message">
+                      <div *ngIf="chat.type === 'IN'" class="incoming" [ngClass]="{ 'image-message': isImageURL(chat.text) }">
+                        <img
+                          *ngIf="isImageURL(chat.text)"
+                          [src]="chat.text"
+                          alt="Imagen"
+                          width="100px"
+                          (click)="expandImage(chat.text)"
+                        >
+                        <span *ngIf="!isImageURL(chat.text)">{{ chat.text }}</span>
+                      </div>
+                      <div *ngIf="chat.type === 'OUT'" class="outgoing">{{ chat.text }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Div para mostrar la imagen ampliada -->
+              <div class="expanded-image" *ngIf="expandedImage">
+                <img [src]="expandedImage" alt="Imagen Ampliada" (click)="closeExpandedImage()">
+              </div>
+              
+              
+
+
+
+
+
+            </div>
           </div>
         </div>
       </mat-card-content>
@@ -933,20 +1107,6 @@
             <mat-error *ngIf="telefonoControl.hasError('min')">El telefono es obligatorio</mat-error>
           </mat-form-field>
 
-          <!-- <mat-form-field appearance="outline" class="w-50 px-1">
-            <mat-label>Telefono</mat-label>
-            <mat-icon color="primary" [ngClass]="{ 'disabled': dialogOpen }" (click)="OpenDialogTelefonos()">add</mat-icon>
-            <mat-select [(ngModel)]="telefonoID" [formControl]="telefonoControl" [style.display]="selectVisible ? 'block' : 'none'">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let accion of ListaTelefonos" [value]="accion.TELEFONOID">
-                {{ accion.TELEFONO }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="telefonoControl.hasError('required')">El telefono es obligatorio</mat-error>
-            <mat-error *ngIf="telefonoControl.hasError('min')">El telefono es obligatorio</mat-error>
-          </mat-form-field>
-           -->
-          
 
           <!-- appearance="outline" -->
           <mat-form-field appearance="outline" class="w-50 px-1 ">

@@ -81,7 +81,9 @@ export class LoginService {
     if(sessionStorage.getItem('permisos')!=undefined){
       var permisos:any = sessionStorage.getItem('permisos')
       permisos = this.auth.desencriptar(permisos)
-      permisos = JSON.parse(permisos)    
+      permisos = JSON.parse(permisos)  
+      console.log(permisos)
+  
       return permisos;
     }
     
