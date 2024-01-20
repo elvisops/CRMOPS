@@ -250,7 +250,7 @@
             <!-- </div> -->
             <!-- </div>
               </div> -->
-            <table class="table" [ngClass]="{'hidden': !tablaDetalle}">
+            <!-- <table class="table" [ngClass]="{'hidden': !tablaDetalle}">
               <thead>
                 <tr>
                   <th>Campo</th>
@@ -292,7 +292,6 @@
                     <td>TIPOCARTERA</td>
                     <td>{{ dato.TIPOCARTERA }}</td>
                   </tr>
-                  <!--  -->
                   <tr>
                     <td>ACCION</td>
                     <td>{{ dato.ACCION }}</td>
@@ -329,16 +328,31 @@
                     <td>{{ dato.USUARIO }}</td>
                   </tr>
                 </ng-container>
-                <!-- <tr mat-header-row *matHeaderRowDef="ColumnasHistorial"></tr>
-                <tr mat-row *matRowDef="let row; columns: ColumnasHistorial"></tr> -->
                 <tr class="mt-row" *matNoDataRow="">
                   <td class="mat-cell" colspan="9">
                     No se encontraron datos para la tabla
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
 
+            <table class="table" [ngClass]="{'hidden': !tablaDetalle}">
+              <tbody>
+                <ng-container *ngFor="let dato of ListaDetalles">
+                  <tr *ngFor="let propiedad of getPropiedades(dato)">
+                    <td>{{ propiedad }}</td>
+                    <td>{{ dato[propiedad] }}</td>
+                  </tr>
+                </ng-container>
+                <tr class="mt-row" *matNoDataRow="">
+                  <td class="mat-cell" colspan="2">
+                    No se encontraron datos para la tabla
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            
 
 
             <!-- Tabla con paginación -->

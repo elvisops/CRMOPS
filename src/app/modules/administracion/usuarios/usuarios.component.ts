@@ -87,5 +87,6 @@ export class UsuariosComponent implements OnInit {
       this.genListaUsuarios()
     })
   }
+  // liena de comentario
 
-}
+} 

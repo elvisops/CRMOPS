@@ -182,7 +182,7 @@ export class CarterasService {
     return this.http.post<any>(url, datos)
       .pipe(
         tap(),
-        catchError(this.handleError("Error las cuentas"))
+        catchError(this.handleError("Error al cargar las cuentas"))
       );
   }
   
@@ -206,3 +206,8 @@ export class CarterasService {
   }
 
 }
+//borrar
+
+
+
+// fin borrar

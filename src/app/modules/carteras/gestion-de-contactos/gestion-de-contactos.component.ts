@@ -70,6 +70,7 @@ export class GestionDeContactosComponent implements OnInit {
   personaID: number = 0
   nombre: string = ''
   cuentaID: number = 0
+  TipoCarteraID: number = 0
   cuenta: string = ''
   cartera: string = ''
   carteraID: number = 0
@@ -163,7 +164,7 @@ export class GestionDeContactosComponent implements OnInit {
   ColumnasTelefonosSocial: string[] = ['TELEFONO', 'ENVIARSMS']
   ColumnasCorreosSocial: string[] = ['CORREO', 'ENVIARCORREO']
 
-
+  columnas: string[] = [];
 
   filtro: string = '';
 
@@ -254,6 +255,7 @@ export class GestionDeContactosComponent implements OnInit {
     this.startTimer();
     this.router.queryParams.subscribe(params => {
       this.cuentaID = params['cuentaID']
+      this.TipoCarteraID = params['TipoCarteraID']
       // this.cuenta = params['cuenta'];
       // this.nombre = params['nombre'];
       // this.cartera = params['cartera'];
@@ -326,14 +328,29 @@ export class GestionDeContactosComponent implements OnInit {
       this.genOpcionesRazonMora()
     })
   }
+  // genDetalles() {
+  //   this.service.getDetalles(this.cuentaID,this.carteraID).subscribe(r => {
+  //     var data = this.auth.desencriptar(r.data)
+  //     this.ListaDetalles = JSON.parse(data)
+  //     console.log(this.ListaDetalles)
+  //     this.deshabilitarTablas()
+  //     this.tablaDetalle = true
+  //   })
+  // }
   genDetalles() {
-    this.service.getDetalles(this.cuentaID,this.carteraID).subscribe(r => {
-      var data = this.auth.desencriptar(r.data)
-      this.ListaDetalles = JSON.parse(data)
-      console.log(this.ListaDetalles)
-      this.deshabilitarTablas()
-      this.tablaDetalle = true
-    })
+    this.service.getDetalles(this.cuentaID, this.carteraID).subscribe(r => {
+      var data = this.auth.desencriptar(r.data);
+      this.ListaDetalles = JSON.parse(data);
+      console.log(this.ListaDetalles);
+
+      // Genera dinámicamente las columnas
+      if (this.ListaDetalles.length > 0) {
+        this.columnas = Object.keys(this.ListaDetalles[0]);
+      }
+
+      this.deshabilitarTablas();
+      this.tablaDetalle = true;
+    });
   }
 
   genListaHistorial() {
@@ -739,7 +756,7 @@ export class GestionDeContactosComponent implements OnInit {
   }
 
   goBack() {
-    this.route.navigate(['carteras/cuentas_listas'], { queryParams: { carteraID: this.carteraID, cartera: this.cartera } })
+    this.route.navigate(['carteras/cuentas_listas'], { queryParams: { carteraID: this.carteraID, TipoCarteraID: this.TipoCarteraID } })
     // window.history.back();
   }
 
@@ -1064,6 +1081,11 @@ export class GestionDeContactosComponent implements OnInit {
       const scrollContainer = this.scrollContainerRef.nativeElement;
       scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
+  }
+
+  getPropiedades(objeto: any): string[] {
+    // Devuelve las propiedades del objeto como un array de strings
+    return Object.keys(objeto);
   }
 }
 

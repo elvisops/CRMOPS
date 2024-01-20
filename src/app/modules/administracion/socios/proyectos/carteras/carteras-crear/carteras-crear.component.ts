@@ -188,6 +188,7 @@ ObtenerEncabezados(Obj: any) {
 
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
+        window.history.back();
       }else{
         this.service.notificacion(respuesta.message)
       }

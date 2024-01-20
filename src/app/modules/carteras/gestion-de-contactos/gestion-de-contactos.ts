@@ -38,6 +38,7 @@ export interface GestionDeContactosHistorial {
 }
 
 export interface Detalles {
+  [key: string]: any,
   CARTERA: string,
   CARTERAID: number,
   CUENTA: string,
