@@ -176,8 +176,8 @@ export class CarterasService {
   // }
 
   insertarDatosTabla(datos: any, miParametro: string,identidad: string,nombre: string,
-    cuenta: string,telefono: string): Observable<any> {
-    const url = `http://10.8.8.115:3002/procesar-json?nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}`;
+    cuenta: string,telefono: string,telefonoTrabajo: string): Observable<any> {
+    const url = `http://10.8.8.115:3002/procesar-json?nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}&telefonoTrabajo=${telefonoTrabajo}`;
     
     return this.http.post<any>(url, datos)
       .pipe(

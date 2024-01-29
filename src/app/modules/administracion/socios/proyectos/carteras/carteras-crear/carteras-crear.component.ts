@@ -38,9 +38,11 @@ export class CarterasCrearComponent implements OnInit {
 
   //variables para encabezados
   EncNumeroCuenta: string = ""
+  EncNumerosCuenta: string = ""
   EncIdentidad: string = ""
   EncNombreCliente: string = ""
   EncTelefono: string = ""
+  EncTelefonoTrabajo: string = ""
   EncabezadosCuentas: any = {
     NumeroCuenta: "",
     Identidad: "",
@@ -51,12 +53,14 @@ export class CarterasCrearComponent implements OnInit {
   Reader = new FileReader()
   @ViewChild('archivoInput') archivoInput: any;
   Encabezados: any
+  EncabezadosOriginales: any
 
   //HTML Elements
   steps = {
     CreacionCartera: true,
     CargaArchivo: false,
     SeleccionEncabezados: false,
+    SeleccionPestanias: false,
     CreacionDB: false,
   }
 
@@ -139,10 +143,13 @@ ObtenerEncabezados(Obj: any) {
   this.BitaAgregarRegistro("Obteniendo encabezados del archivo...");
 
   // Obtener los encabezados en mayúsculas y sin espacios
-  this.Encabezados = Object.keys(Obj).map((cadena: string) => cadena.replace(/\s+/g, '').toUpperCase());
+  // this.Encabezados = Object.keys(Obj).map((cadena: string) => cadena.replace(/\s+/g, '').toUpperCase());
+  this.Encabezados = Object.keys(Obj).map((cadena: string) => cadena.replace(/[.,'"-\s]/g, '').toUpperCase());
+  // this.Encabezados = Object.keys(Obj).map((cadena: string) => cadena.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase());
+
 
   this.BitaAgregarRegistro("Encabezados obtenidos correctamente...");
-  console.log(this.Encabezados);
+  // console.log(this.Encabezados);
 
   // Crear un objeto JSON a partir del arreglo de strings
   const objetoJSON: { [key: string]: any } = {};
@@ -150,13 +157,71 @@ ObtenerEncabezados(Obj: any) {
   this.Encabezados.forEach((cadena: string) => {
     objetoJSON[cadena] = cadena; // Puedes inicializar los valores como desees
   });
+  this.EncabezadosOriginales = this.Encabezados
+  console.log('encabezados:',this.Encabezados);
+  console.log('encabezados originales:',this.EncabezadosOriginales)
+
 }
 
-  
+// agregarPalabraPrimer() {
+//   // Agregar la palabra "primer" al encabezado seleccionado
+//   this.EncNumerosCuenta = this.Encabezados.map((encabezado:any) => encabezado + 'primer');
+//   console.log("Encabezados:", this.EncNumerosCuenta)
 
-  
+//   // Llamar a la función crearTablaCarteras con los encabezados actualizados
+//   // this.crearTablaCarteras();
+// }
+
+
+// agregarPalabraPrimer() {
+//   const encabezadosSeleccionados = this.Encabezados.filter((encabezado:any) =>
+//     this.EncNumerosCuenta.includes(encabezado)
+//   );
+
+//   this.EncNumerosCuenta = this.Encabezados.map((encabezado:any) => {
+//     const estaSeleccionado = encabezadosSeleccionados.includes(encabezado);
+//     return estaSeleccionado ? encabezado + 'primer' : encabezado.replace('primer', '');
+//   });
+
+//   console.log("Encabezados:", this.EncNumerosCuenta);
+
+//   // Llamar a la función crearTablaCarteras con los encabezados actualizados
+//   // this.crearTablaCarteras();
+// }
+
+
+aplicarPalabraPrimer() {
+  this.Encabezados = this.Encabezados.map((encabezado:any) => {
+    const estaSeleccionado = this.EncNumerosCuenta.includes(encabezado);
+    return estaSeleccionado ? encabezado + '_PESTANIAUNO' : encabezado;
+  });
+
+  // console.log("Encabezados:", this.Encabezados);
+  // console.log("Encabezado telefono:",this.EncTelefonoTrabajo)
+
+  // Llamar a la función crearTablaCarteras con los encabezados actualizados
+  // this.crearTablaCarteras();
+  this.steps.SeleccionPestanias = false;
+  this.steps.SeleccionEncabezados = true;
+
+}
+
+
+
+
+
+
   // crearTablaCarteras(objetoJSON:any) {
   crearTablaCarteras() {
+    this.steps.SeleccionEncabezados = false
+    this.steps.SeleccionPestanias = false;
+
+    // console.log("Encabezado telefono:",this.EncTelefonoTrabajo)
+
+    // this.insertarDatos('nombreTabla')
+    console.log("Encabezados:",this.Encabezados)
+    console.log("id cartera:",this.CarteraID)
+    return
     this.service.crearTabla(this.Encabezados, this.CarteraID).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.data)
       respuesta = JSON.parse(respuesta)
@@ -165,6 +230,7 @@ ObtenerEncabezados(Obj: any) {
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
         const nombreTabla = respuesta.data
+        console.log('primera parte:',respuesta.data)
         this.insertarDatos(nombreTabla)
       }else{
         this.service.notificacion(respuesta.message)
@@ -176,15 +242,46 @@ ObtenerEncabezados(Obj: any) {
 
   }
 
+  // cambiarEncabezados(datos: any[], encabezados: string[]): any[] {
+  //   return datos.map((registro: any) => {
+  //     const nuevoRegistro: { [key: string]: any } = {};
+  //     encabezados.forEach((nuevaClave, index) => {
+  //       nuevoRegistro[nuevaClave] = registro[this.Encabezados[index]];
+  //     });
+  //     return nuevoRegistro;
+  //   });
+  // }
+
+  cambiarEncabezados(datos: any[], encabezadosOriginales: string[], encabezadosNuevos: string[]): any[] {
+    return datos.map((registro: any) => {
+      const nuevoRegistro: { [key: string]: any } = {};
+      encabezadosNuevos.forEach((nuevaClave, index) => {
+        const claveOriginal = encabezadosOriginales[index];
+        // console.log(`Mapeando ${nuevaClave} a ${claveOriginal}`);
+        nuevoRegistro[nuevaClave] = registro.hasOwnProperty(claveOriginal) ? registro[claveOriginal] : undefined;
+      });
+      // console.log('Nuevo Registro:', nuevoRegistro);
+      return nuevoRegistro;
+    });
+  }
+
+  
   insertarDatos(nombreTabla:string){
-    
-    console.log(this.DatosCartera,nombreTabla)
-    this.service.insertarDatosTabla(this.DatosCartera,nombreTabla,this.EncIdentidad,this.EncNombreCliente,this.EncNumeroCuenta,this.EncTelefono).subscribe(r => {
+    // console.log("Encabezados: ",this.Encabezados)  
+    //   console.log("Encabezado telefono:",this.EncTelefonoTrabajo)
+
+      this.DatosCartera = this.cambiarEncabezados(this.DatosCartera,this.EncabezadosOriginales, this.Encabezados);
+      // console.log("Datos Cartera:", this.DatosCartera)
+
+    // return
+    this.service.insertarDatosTabla(this.DatosCartera,nombreTabla,this.EncIdentidad,this.EncNombreCliente,this.EncNumeroCuenta,this.EncTelefono,this.EncTelefonoTrabajo).subscribe(r => {
       // var respuesta = this.auth.desencriptar(r)
       var respuesta = (r.respuesta.response)
       respuesta = this.auth.desencriptar(respuesta)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
+      console.log('segunda parte', respuesta.data)
+      console.log('telefono trabajo:', this.EncTelefonoTrabajo)
 
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
@@ -252,6 +349,8 @@ async ExcelFile() {
           nuevoRegistro[nuevaClave] = registro[clave];
         }
       }
+
+
       return nuevoRegistro;
     });
 
@@ -260,13 +359,16 @@ async ExcelFile() {
     (this.DatosCartera.length > 0) ? this.ObtenerEncabezados(this.DatosCartera[0]) : this.service.notificacion("El archivo no contiene datos");
     this.CargandoExcel = false;
 
+    
+
     // console.log(this.DatosCartera);
   };
 
   fileReader.readAsBinaryString(archivo);
   this.Procesando = false;
   this.steps.CargaArchivo = false;
-  this.steps.SeleccionEncabezados = true;
+  this.steps.SeleccionPestanias = true;
+  this.steps.SeleccionEncabezados = false;
 }
 
 

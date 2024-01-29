@@ -136,7 +136,7 @@ export class CuentasListasComponent implements OnInit {
       console.log("ventas")
     } else if (this.TipoCarteraID == 2) {
       console.log("Cobros")
-      this.route.navigate(['carteras/carteras_cuentas'], { queryParams: { cuentaID: cuentaID,TipoCarteraID: this.TipoCarteraID } })
+      this.route.navigate(['carteras/carteras_cuentas'], { queryParams: { cuentaID: cuentaID,TipoCarteraID: this.TipoCarteraID, carteraID: carteraID } })
     } else {
       console.log("Atencio al cliente")
       this.route.navigate(['carteras/atencion_cliente'], { queryParams: { cuentaID: cuentaID, carteraID: carteraID } })

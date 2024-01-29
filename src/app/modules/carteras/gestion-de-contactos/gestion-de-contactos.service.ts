@@ -70,6 +70,22 @@ export class GestionDeContactosService {
     )
   }
 
+  getPestaniaUno(cuentaID:number,carteraID:number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "PESTAÑA_UNO_LISTA",
+      token: token,
+      cuentaID: cuentaID,
+      carteraID:carteraID,
+    })
+    return this.http.post(`${this.api}/api/get`,{ payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al obtener la lista de Detalles"))
+    )
+  }
+
   getDetallesATC(cuentaID:number,carteraID:number):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)

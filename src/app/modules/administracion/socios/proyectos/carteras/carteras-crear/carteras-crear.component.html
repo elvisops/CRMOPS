@@ -41,31 +41,80 @@
           <!-- Paso 1 -->
 
           <!-- Paso 2 -->
-          <div *ngIf="steps.CargaArchivo">
+          <div >
+            <!-- *ngIf="steps.CargaArchivo" -->
             <h2>Cargar Archivo</h2>
             <h3>Seleccione un archivo de excel con la informacion de la cartera que desea crear</h3>
             <input type="file" #archivoInput (change)="ExcelFile()" accept=".xlsx" />
           </div>
           <!-- Paso 2 -->
-
-          <!-- Paso 3 -->
-          <div *ngIf="steps.SeleccionEncabezados">
-            <h2>Seleccione los campos para crear las cuentas</h2>
-
-            <mat-form-field class="w-100">
+          <div *ngIf="steps.SeleccionPestanias">
+            <h2>Seleccione los campos que formaran parte de la pestaña 1</h2>
+            <!-- <mat-form-field class="w-100">
               <mat-label>Numero de Cuenta</mat-label>
-              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100">
+              <mat-select [(ngModel)]="EncNumeroCuenta" multiple class="w-100"
+                (ngModelChange)="agregarPalabraPrimer()">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <mat-form-field class="w-100">
+              <mat-label>Pestaña 1</mat-label>
+              <mat-select [(ngModel)]="EncNumerosCuenta" multiple class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   {{encabezado}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="aplicarPalabraPrimer()">Siguiente</button>
+            
+            
+            
+            
+          </div>
+         
+          <!-- Paso 3 -->
+          <div *ngIf="steps.SeleccionEncabezados">
+            <!-- *ngIf="steps.SeleccionEncabezados" -->
+            <h2>Seleccione los campos para crear las cuentas</h2>
+
+            <!-- <mat-form-field class="w-100">
+              <mat-label>Pestaña uno</mat-label>
+              <mat-select [(ngModel)]="EncNumerosCuenta" multiple class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="aplicarPalabraPrimer()">Aplicar Palabra 'primer'</button>
+             -->
+            <!-- <mat-form-field class="w-100">
+              <mat-label>Numero de Cuenta</mat-label>
+              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100" >
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <mat-form-field class="w-100">
+              <mat-label>Numero de Cuenta</mat-label>
+              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  <!-- {{encabezado.replace('primer', '') }} -->
+                  {{ encabezado.replace('_PESTANIAUNO', '').replace('segundo', '').replace('tercero', '') }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
 
             <mat-form-field class="w-100">
               <mat-label>Numero de Identidad</mat-label>
               <mat-select [(ngModel)]="EncIdentidad" class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
-                  {{encabezado}}
+                  {{encabezado.replace('_PESTANIAUNO', '')}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -74,7 +123,7 @@
               <mat-label>Nombre de Cliente</mat-label>
               <mat-select [(ngModel)]="EncNombreCliente" class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
-                  {{encabezado}}
+                  {{encabezado.replace('_PESTANIAUNO', '')}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -83,7 +132,15 @@
               <mat-label>Telefono</mat-label>
               <mat-select [(ngModel)]="EncTelefono" class="w-100">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
-                  {{encabezado}}
+                  {{encabezado.replace('_PESTANIAUNO', '')}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <mat-label>Telefono Trabajo</mat-label>
+              <mat-select [(ngModel)]="EncTelefonoTrabajo" class="w-100">
+                <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
+                  {{encabezado.replace('_PESTANIAUNO', '')}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -351,4 +408,3 @@ app.listen(port, () => {
 //   console.log(`Servidor escuchando en el puerto ${port}`);
 // });
  -->
-

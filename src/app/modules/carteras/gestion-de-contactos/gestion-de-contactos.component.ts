@@ -124,6 +124,7 @@ export class GestionDeContactosComponent implements OnInit {
 
 
   ListaDetalles: Detalles[] = []
+  ListaPestaniaUno: any[] = []
   ListaGestiones: GestionDeContactos[] = []
   ListaTelefonos: GestionDeContactosTelefonos[] = []
   ListaDirecciones: GestionDeContactosDirecciones[] = []
@@ -169,6 +170,7 @@ export class GestionDeContactosComponent implements OnInit {
   filtro: string = '';
 
   tablaDetalle: boolean = true
+  tablaPestaniaUno: boolean = false
   tablaHistorial: boolean = false
   tablaTelefonos: boolean = false
   tablaDirecciones: boolean = false
@@ -190,6 +192,9 @@ export class GestionDeContactosComponent implements OnInit {
   chatWhatsapp: any[] = []
   nuevoMensaje: any = ""
   telefono: string[] = []
+
+  infoCliente: any[] = [];
+
 
   //tabla whatsapp
   // chats: any[] = []; // Aquí almacenaremos los chats agrupados por número
@@ -259,7 +264,7 @@ export class GestionDeContactosComponent implements OnInit {
       // this.cuenta = params['cuenta'];
       // this.nombre = params['nombre'];
       // this.cartera = params['cartera'];
-      // this.carteraID = params['carteraID'];
+      this.carteraID = params['carteraID'];
     })
 
     this.genDatosCliente();
@@ -297,46 +302,58 @@ export class GestionDeContactosComponent implements OnInit {
   formatTime(value: number) {
     return value < 10 ? `0${value}` : value.toString();
   }
+  // // original
+  // genDatosCliente() {
+  //   this.service.getDatosCliente(this.cuentaID,this.carteraID).subscribe(r => {
+  //     var respuesta = this.auth.desencriptar(r.data)
+  //     respuesta = JSON.parse(respuesta)
+  //     this.personaID = respuesta[0].PERSONAID
+  //     this.cuenta = respuesta[0].CUENTA
+  //     this.nombre = respuesta[0].NOMBRE
+  //     this.cartera = respuesta[0].CARTERA
+  //     this.carteraID = respuesta[0].CARTERAID
+  //     // console.log(this.personaID)
 
-  genDatosCliente() {
-    this.service.getDatosCliente(this.cuentaID,this.carteraID).subscribe(r => {
-      var respuesta = this.auth.desencriptar(r.data)
-      respuesta = JSON.parse(respuesta)
-      this.personaID = respuesta[0].PERSONAID
-      this.cuenta = respuesta[0].CUENTA
-      this.nombre = respuesta[0].NOMBRE
-      this.cartera = respuesta[0].CARTERA
-      this.carteraID = respuesta[0].CARTERAID
-      // console.log(this.personaID)
+  //     this.ultimaGestion = respuesta[0].CREACION
+  //     this.Agente = respuesta[0].USUARIO
+  //     this.ultimoResultado = respuesta[0].RESULTADO
+  //     this.ultimaAccion = respuesta[0].ACCION
+  //     this.ultimaTipificacion = respuesta[0].TIPIFICACION
+  //     this.ultimaSubtipificacion = respuesta[0].SUBTIPIFICACION
+  //     this.identificacion = respuesta[0].IDENTIFICACION
+  //     this.saldoLempiras = respuesta[0].SALDOLEMPIRAS
+  //     this.saldoDolares = respuesta[0].SALDODOLARES
 
-      this.ultimaGestion = respuesta[0].CREACION
-      this.Agente = respuesta[0].USUARIO
-      this.ultimoResultado = respuesta[0].RESULTADO
-      this.ultimaAccion = respuesta[0].ACCION
-      this.ultimaTipificacion = respuesta[0].TIPIFICACION
-      this.ultimaSubtipificacion = respuesta[0].SUBTIPIFICACION
-      this.identificacion = respuesta[0].IDENTIFICACION
-      this.saldoLempiras = respuesta[0].SALDOLEMPIRAS
-      this.saldoDolares = respuesta[0].SALDODOLARES
+  //     this.genListaAcciones();
+  //     this.genListaTipificacion()
 
-      this.genListaAcciones();
-      this.genListaTipificacion()
+  //     this.genDetalles()
+  //     this.genListaTelefonosSelect()
 
-      this.genDetalles()
-      this.genListaTelefonosSelect()
-
-      this.genOpcionesRazonMora()
-    })
-  }
-  // genDetalles() {
-  //   this.service.getDetalles(this.cuentaID,this.carteraID).subscribe(r => {
-  //     var data = this.auth.desencriptar(r.data)
-  //     this.ListaDetalles = JSON.parse(data)
-  //     console.log(this.ListaDetalles)
-  //     this.deshabilitarTablas()
-  //     this.tablaDetalle = true
+  //     this.genOpcionesRazonMora()
   //   })
   // }
+  // // fin original
+  genDatosCliente() {
+    this.service.getDatosCliente(this.cuentaID, this.carteraID).subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.data);
+      respuesta = JSON.parse(respuesta);
+
+      // Transformar el objeto en un arreglo de clave-valor
+      this.infoCliente = Object.entries(respuesta[0]).map(([label, value]) => ({ label, value }));
+
+    });
+  }
+
+  // Organiza los datos en filas de tres
+  organizarDatos(infoCliente: any[]): any[][] {
+    const filas: any[][] = [];
+    for (let i = 0; i < infoCliente.length; i += 3) {
+      filas.push(infoCliente.slice(i, i + 3));
+    }
+    return filas;
+  }
+
   genDetalles() {
     this.service.getDetalles(this.cuentaID, this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data);
@@ -350,6 +367,25 @@ export class GestionDeContactosComponent implements OnInit {
 
       this.deshabilitarTablas();
       this.tablaDetalle = true;
+    });
+  }
+
+  genPestaniaUno(){
+    // console.log(this.cuentaID);
+    // console.log(this.carteraID);
+    // return
+    this.service.getPestaniaUno(this.cuentaID, this.carteraID).subscribe(r => {
+      var data = this.auth.desencriptar(r.data);
+      this.ListaPestaniaUno = JSON.parse(data);
+      console.log(this.ListaPestaniaUno);
+
+      // Genera dinámicamente las columnas
+      if (this.ListaPestaniaUno.length > 0) {
+        this.columnas = Object.keys(this.ListaPestaniaUno[0]);
+      }
+
+      this.deshabilitarTablas();
+      this.tablaPestaniaUno = true;
     });
   }
 
@@ -612,26 +648,26 @@ export class GestionDeContactosComponent implements OnInit {
     // // Convertir el conjunto en una lista de números únicos
     // this.uniqueNumbers = Array.from(uniqueNumbersSet);
 
-     // Crear una estructura de datos para almacenar números únicos y chats
-     const uniqueNumbersSet = new Set<string>();
+    // Crear una estructura de datos para almacenar números únicos y chats
+    const uniqueNumbersSet = new Set<string>();
 
-     jsonData.forEach(chat => {
-       const number = chat.number;
-       uniqueNumbersSet.add(number);
- 
-       // Agrupar chats por número
-       let chatGroup = this.chatData.find(group => group.number === number);
- 
-       if (!chatGroup) {
-         chatGroup = { number: number, chats: [] };
-         this.chatData.push(chatGroup);
-       }
- 
-       chatGroup.chats.push(chat);
-     });
- 
-     // Llenar la lista de números únicos
-     this.uniqueNumbers = Array.from(uniqueNumbersSet);
+    jsonData.forEach(chat => {
+      const number = chat.number;
+      uniqueNumbersSet.add(number);
+
+      // Agrupar chats por número
+      let chatGroup = this.chatData.find(group => group.number === number);
+
+      if (!chatGroup) {
+        chatGroup = { number: number, chats: [] };
+        this.chatData.push(chatGroup);
+      }
+
+      chatGroup.chats.push(chat);
+    });
+
+    // Llenar la lista de números únicos
+    this.uniqueNumbers = Array.from(uniqueNumbersSet);
   }
 
   // selectNumber(number: string) {
@@ -655,7 +691,7 @@ export class GestionDeContactosComponent implements OnInit {
   closeExpandedImage() {
     this.expandedImage = null;
   }
-  
+
   genListaPlantillasSMS() {
     this.service.getListaPlantillasSMS(this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
@@ -893,6 +929,7 @@ export class GestionDeContactosComponent implements OnInit {
 
   deshabilitarTablas() {
     this.tablaDetalle = false
+    this.tablaPestaniaUno = false
     this.tablaHistorial = false
     this.tablaPromesas = false
     this.tablaTelefonos = false
