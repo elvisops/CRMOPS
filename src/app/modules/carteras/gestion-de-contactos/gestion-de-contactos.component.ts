@@ -150,7 +150,7 @@ export class GestionDeContactosComponent implements OnInit {
 
   // const datasourceTel = new MatTableDataSource<GestionDeContactosTelefonos>();
   ColumnasHistorial: string[] = ['ACCION', 'RESULTADO', 'TIPIFICACION', 'SUBTIPIFICACION', 'TELEFONO', 'COMENTARIO', 'CREACION', 'USUARIO', 'TIPO']
-  ColumnasTelefonos: string[] = ['TELEFONO', 'TIPO', 'SMS', 'IVR', 'CREACION', 'ACTUALIZACION', 'OPCIONES', 'ENVIARSMS']
+  ColumnasTelefonos: string[] = ['ACCION','TELEFONO', 'TIPO', 'SMS', 'IVR', 'CREACION', 'ACTUALIZACION', 'OPCIONES']
   ColumnasDirecciones: string[] = ['COLONIA', 'DEPARTAMENTO', 'DIRECCION', 'MUNICIPIO', 'TIPODIRECCION', 'CREACION', 'ACTUALIZACION', 'OPCIONES']
 
   ColumnasCorreos: string[] = ['CORREO', 'TIPOCORREO', 'CREACION', 'ACTUALIZACION', 'OPCIONES', 'ENVIARCORREO']
@@ -303,47 +303,47 @@ export class GestionDeContactosComponent implements OnInit {
     return value < 10 ? `0${value}` : value.toString();
   }
   // // original
-  // genDatosCliente() {
-  //   this.service.getDatosCliente(this.cuentaID,this.carteraID).subscribe(r => {
-  //     var respuesta = this.auth.desencriptar(r.data)
-  //     respuesta = JSON.parse(respuesta)
-  //     this.personaID = respuesta[0].PERSONAID
-  //     this.cuenta = respuesta[0].CUENTA
-  //     this.nombre = respuesta[0].NOMBRE
-  //     this.cartera = respuesta[0].CARTERA
-  //     this.carteraID = respuesta[0].CARTERAID
-  //     // console.log(this.personaID)
-
-  //     this.ultimaGestion = respuesta[0].CREACION
-  //     this.Agente = respuesta[0].USUARIO
-  //     this.ultimoResultado = respuesta[0].RESULTADO
-  //     this.ultimaAccion = respuesta[0].ACCION
-  //     this.ultimaTipificacion = respuesta[0].TIPIFICACION
-  //     this.ultimaSubtipificacion = respuesta[0].SUBTIPIFICACION
-  //     this.identificacion = respuesta[0].IDENTIFICACION
-  //     this.saldoLempiras = respuesta[0].SALDOLEMPIRAS
-  //     this.saldoDolares = respuesta[0].SALDODOLARES
-
-  //     this.genListaAcciones();
-  //     this.genListaTipificacion()
-
-  //     this.genDetalles()
-  //     this.genListaTelefonosSelect()
-
-  //     this.genOpcionesRazonMora()
-  //   })
-  // }
-  // // fin original
   genDatosCliente() {
-    this.service.getDatosCliente(this.cuentaID, this.carteraID).subscribe(r => {
-      var respuesta = this.auth.desencriptar(r.data);
-      respuesta = JSON.parse(respuesta);
+    this.service.getDatosCliente(this.cuentaID,this.carteraID).subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.data)
+      respuesta = JSON.parse(respuesta)
+      this.personaID = respuesta[0].PERSONAID
+      this.cuenta = respuesta[0].CUENTA
+      this.nombre = respuesta[0].NOMBRE
+      this.cartera = respuesta[0].CARTERA
+      this.carteraID = respuesta[0].CARTERAID
+      // console.log(this.personaID)
 
-      // Transformar el objeto en un arreglo de clave-valor
-      this.infoCliente = Object.entries(respuesta[0]).map(([label, value]) => ({ label, value }));
+      this.ultimaGestion = respuesta[0].CREACION
+      this.Agente = respuesta[0].USUARIO
+      this.ultimoResultado = respuesta[0].RESULTADO
+      this.ultimaAccion = respuesta[0].ACCION
+      this.ultimaTipificacion = respuesta[0].TIPIFICACION
+      this.ultimaSubtipificacion = respuesta[0].SUBTIPIFICACION
+      this.identificacion = respuesta[0].IDENTIFICACION
+      this.saldoLempiras = respuesta[0].SALDOLEMPIRAS
+      this.saldoDolares = respuesta[0].SALDODOLARES
 
-    });
+      this.genListaAcciones();
+      this.genListaTipificacion()
+
+      this.genDetalles()
+      this.genListaTelefonosSelect()
+
+      this.genOpcionesRazonMora()
+    })
   }
+  // traer todos los datos como un json par mostrarlos todos en pantalla
+  // genDatosCliente() {
+  //   this.service.getDatosCliente(this.cuentaID, this.carteraID).subscribe(r => {
+  //     var respuesta = this.auth.desencriptar(r.data);
+  //     respuesta = JSON.parse(respuesta);
+
+  //     // Transformar el objeto en un arreglo de clave-valor
+  //     this.infoCliente = Object.entries(respuesta[0]).map(([label, value]) => ({ label, value }));
+
+  //   });
+  // }
 
   // Organiza los datos en filas de tres
   organizarDatos(infoCliente: any[]): any[][] {
@@ -967,6 +967,10 @@ export class GestionDeContactosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(datos => {
       this.genListaTelefonos()
     })
+  }
+
+  llamar(Cliente: any){
+    alert("Llamar....")
   }
 
   OpenDialogDirecciones() {

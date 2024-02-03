@@ -75,14 +75,6 @@ export class CarterasService {
       )
   }
 
-  /*SendDataCuenta(data:any):Observable<any>{
-    var payload = this.auth.encriptar(JSON.stringify(data)).toString()
-    return this.http.post(`${this.api}/api/carteras/load/cuentas`, { payload })
-      .pipe(
-        tap(),
-        catchError(this.handleError("Error al manejar los datos enviados de cuentas"))
-      )
-  }*/
 
   SendDataCuenta(data: any): Observable<any> {
     var dataString = JSON.stringify(data)
@@ -138,20 +130,7 @@ export class CarterasService {
       )
   }
 
-  // crearTabla(datos:any,carteraID:number):Observable<any>{
-  //   var token = this.auth.ParseToken()
-  //   var payload = this.auth.mkpayload({
-  //     proc:'CrearTablaDesdeJSON',      
-  //     token:token,
-  //     datos:datos,
-  //     carteraID:carteraID,
-  //   })
-  //   return this.http.post<any>(`${this.api}/api/proc`,{payload})
-  //   .pipe(
-  //     tap(),
-  //     catchError(this.handleError("Error al cargar la cartera"))
-  //   )
-  // }
+
   crearTabla(datos: any, carteraID: number): Observable<any> {
     var token = this.auth.ParseToken()
     var payload = this.auth.mkpayload({
@@ -167,17 +146,11 @@ export class CarterasService {
       )
   }
 
-  // insertarDatosTabla(datos: any, nombreTabla:string): Observable<any> {
-  //   return this.http.post<any>(`http://10.8.8.115:3002/procesar-json`, datos)
-  //   .pipe(
-  //     tap(),
-  //     catchError(this.handleError("Error las cuentas"))
-  //   )
-  // }
 
   insertarDatosTabla(datos: any, miParametro: string,identidad: string,nombre: string,
     cuenta: string,telefono: string,telefonoTrabajo: string): Observable<any> {
-    const url = `http://10.8.8.115:3002/procesar-json?nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}&telefonoTrabajo=${telefonoTrabajo}`;
+    var token = this.auth.ParseToken()
+    const url = `http://10.8.8.115:3002/procesar-json?token=${token}&nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}&telefonoTrabajo=${telefonoTrabajo}`;
     
     return this.http.post<any>(url, datos)
       .pipe(
@@ -206,8 +179,3 @@ export class CarterasService {
   }
 
 }
-//borrar
-
-
-
-// fin borrar
