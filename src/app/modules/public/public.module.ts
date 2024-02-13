@@ -8,12 +8,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialsModule } from './materials/materials.module';
 import { EstadosOperativosComponent } from './estados-operativos/estados-operativos.component';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     PublicComponent,
     PageNotFoundComponent,
-    EstadosOperativosComponent
+    EstadosOperativosComponent,
+    ChatComponent
   ],
   imports: [
     CommonModule,
