@@ -70,7 +70,7 @@ export class GestionDeContactosService {
     )
   }
 
-  getPestaniaUno(cuentaID:number,carteraID:number):Observable<any>{
+  getPestaniaUno(cuentaID:number,carteraID:number,cuenta:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
@@ -78,6 +78,7 @@ export class GestionDeContactosService {
       token: token,
       cuentaID: cuentaID,
       carteraID:carteraID,
+      cuenta: cuenta
     })
     return this.http.post(`${this.api}/api/get`,{ payload })
     .pipe(
@@ -398,7 +399,7 @@ export class GestionDeContactosService {
     )
   }
 
-  GuadarGestionATC(telefonoID:number,cuentaID:number,resultadoID:number, subtipificacionID:number, observacion:string):Observable<any>{
+  GuadarGestionATC(telefonoID:number,cuentaID:number,resultadoID:number, subtipificacionID:number,llamadaEfectiva:number, observacion:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
@@ -408,7 +409,9 @@ export class GestionDeContactosService {
       cuentaID:cuentaID,
       resultadoID: resultadoID,
       subtipificacionID:subtipificacionID,
+      
       observacion:observacion,
+      llamadaEfectiva:llamadaEfectiva,
       // razonMoraID:razonMoraID,
     })
     return this.http.post(`${this.api}/api/proc`, { payload })

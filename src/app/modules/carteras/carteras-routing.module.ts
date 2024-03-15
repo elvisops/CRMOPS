@@ -9,10 +9,13 @@ import { GestionDeContactosComponent } from './gestion-de-contactos/gestion-de-c
 import { CuentasListasComponent } from './cuentas-listas/cuentas-listas.component';
 import { GestionAtencionClienteComponent } from './gestion-atencion-cliente/gestion-atencion-cliente.component';
 import { CuentaCreateComponent } from './cuenta-create/cuenta-create.component';
+import { ProyectosUsuarioComponent } from './proyectos-usuario/proyectos-usuario.component';
 
 const routes:Routes = [
   { path:'', component :CarterasComponent},
+  // { path:'', component :ProyectosUsuarioComponent},
   { path:'carteras_listas', component: CarterasListasComponent},
+  // { path:'carteras_listas', component: ProyectosUsuarioComponent},
   { path:'gestion_de_contactos', component: GestionDeContactosComponent},
   { path:'cuentas_listas', component: CuentasListasComponent},
   { path:'carteras_cuentas', component:GestionDeContactosComponent},

@@ -141,6 +141,8 @@ export class GestionAtencionClienteComponent implements OnInit {
   oldEstadoOperativo: number = 0
   estadoOp: number = 0
 
+  llamadaEfectiva: number = 0
+
 
   ListaDetalles: Detalles[] = []
   ListaGestiones: GestionDeContactos[] = []
@@ -434,6 +436,7 @@ export class GestionAtencionClienteComponent implements OnInit {
   genTiempoPantalla() {
     const tiempoAlmacenado = localStorage.getItem('tiempoPantallaG');
 
+    // console.log('tiempo almacenado: ',tiempoAlmacenado)
     if (tiempoAlmacenado !== null) {
       this.contador = parseInt(tiempoAlmacenado, 10); //de cadena a numero entero
       this.flagTimer = false
@@ -442,7 +445,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       this.service.getTiempoPantalla(this.carteraID, 'GESTION').subscribe(r => {
         var respuesta = this.auth.desencriptar(r.data);
         respuesta = JSON.parse(respuesta);
-        console.log(respuesta);
+        // console.log('tiempo en pantalla: ',respuesta);
 
         if (respuesta.length > 0 && respuesta[0].TIEMPOSEGUNDOS) {
           this.contador = respuesta[0].TIEMPOSEGUNDOS;
@@ -459,11 +462,11 @@ export class GestionAtencionClienteComponent implements OnInit {
       if (this.contador > 0) {
         this.contador--;
         localStorage.setItem('contadorG', this.contador.toString());
-        console.log('Tiempo transcurrido:', this.contador);
+        // console.log('Tiempo transcurrido:', this.contador);
       } else {
         this.timerSubscription.unsubscribe();
         localStorage.removeItem('contadorG'); // Elimina el contador del almacenamiento local al finalizar
-        console.log('Temporizador finalizado');
+        // console.log('Temporizador finalizado');
         window.location.reload()
         // this.service.GuadarGestionATCTimeOut(this.carteraID,this.cuentaID).subscribe(r => {
         //   var respuesta = this.auth.desencriptar(r.response)
@@ -479,7 +482,7 @@ export class GestionAtencionClienteComponent implements OnInit {
           this.service.GuadarGestionATCTimeOut(this.carteraID, this.cuentaID).subscribe(r => {
             var respuesta = this.auth.desencriptar(r.response)
             respuesta = JSON.parse(respuesta)
-            console.log(respuesta)
+            // console.log(respuesta)
           })
         // }
         
@@ -493,6 +496,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     }
     localStorage.removeItem('tiempoPantalla');
     localStorage.removeItem('contadorG');
+    localStorage.removeItem('tiempoPantallaG');
   }
   ngAfterViewChecked() {
     // this.scrollToBottom();
@@ -551,7 +555,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getDetallesATC(this.cuentaID, this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaDetalles = JSON.parse(data)
-      console.log(this.ListaDetalles)
+      // console.log(this.ListaDetalles)
       this.deshabilitarTablas()
       this.tablaDetalle = true
     })
@@ -574,7 +578,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaTelefonos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTelefonos = JSON.parse(data)
-      console.log(this.ListaTelefonos)
+      // console.log(this.ListaTelefonos)
       // this.deshabilitarTablas()
       // this.FillTable<GestionDeContactosTelefonos>(this.ListaTelefonos, this.DataSourceTelefonos, this.sortTelefonos, this.paginatorTelefonos);
       // this.tablaTelefonos = true
@@ -592,7 +596,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaTelefonos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTelefonos = JSON.parse(data)
-      console.log(this.ListaTelefonos)
+      // console.log(this.ListaTelefonos)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosTelefonos>(this.ListaTelefonos, this.DataSourceTelefonos, this.sortTelefonos, this.paginatorTelefonos);
       this.tablaTelefonos = true
@@ -645,7 +649,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getOpcionesRazonMora(this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.OpcionesRazonMora = JSON.parse(data)
-      console.log(this.OpcionesRazonMora)
+      // console.log(this.OpcionesRazonMora)
       // this.deshabilitarTablas()
       // this.FillTable<GestionDeContactosDirecciones>(this.ListaDirecciones, this.DataSourceDirecciones, this.sortDirecciones, this.paginatorDirecciones)
       // this.tablaDirecciones = true
@@ -669,7 +673,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaCorreos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaCorreos = JSON.parse(data)
-      console.log(this.ListaCorreos)
+      // console.log(this.ListaCorreos)
       this.deshabilitarTablas()
 
       this.FillTable<GestionDeContactosCorreos>(this.ListaCorreos, this.DataSourceCorreos, this.sortCorreos, this.paginatorCorreos)
@@ -682,7 +686,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaPromesas(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListasPromesas = JSON.parse(data)
-      console.log(this.ListasPromesas)
+      // console.log(this.ListasPromesas)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosPromesas>(this.ListasPromesas, this.DataSourcePromesas, this.sortPromesas, this.paginatorPromesas)
       this.tablaPromesas = true
@@ -694,7 +698,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaConfirmaciones(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaConfirmaciones = JSON.parse(data)
-      console.log(this.ListaConfirmaciones)
+      // console.log(this.ListaConfirmaciones)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosConfirmaciones>(this.ListaConfirmaciones, this.DataSourceConfirmaciones, this.sortConfirmaciones, this.paginatorConfirmaciones)
       this.tablaConfirmaciones = true
@@ -708,7 +712,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaTelefonos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTelefonos = JSON.parse(data)
-      console.log(this.ListaTelefonos)
+      // console.log(this.ListaTelefonos)
       // this.deshabilitarTablas()
       this.FillTable<GestionDeContactosTelefonos>(this.ListaTelefonos, this.DataSourceTelefonos, this.sortTelefonos, this.paginatorTelefonos);
       this.tablaSocial = true
@@ -717,7 +721,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaCorreos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaCorreos = JSON.parse(data)
-      console.log(this.ListaCorreos)
+      // console.log(this.ListaCorreos)
       // this.deshabilitarTablas()
       this.FillTable<GestionDeContactosCorreos>(this.ListaCorreos, this.DataSourceCorreos, this.sortCorreos, this.paginatorCorreos)
       this.tablaSocial = true
@@ -747,7 +751,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       this.ListaControlCambios = JSON.parse(data)
       this.FillTable<ControlCambios>(this.ListaControlCambios, this.DataSoruceControlCambios, this.sortControlCambios, this.paginatorControlCambios)
       this.tablaControlCambios = true
-      console.log(data)
+      // console.log(data)
     })
   }
 
@@ -889,7 +893,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaPlantillasSMS(this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaPlantillas = JSON.parse(data)
-      console.log(this.ListaPlantillas)
+      // console.log(this.ListaPlantillas)
       // this.deshabilitarTablas()
       // this.FillTable<GestionDeContactosRazonMora>(this.ListaRazonMora, this.DataSourceRazonMora, this.sortRazonMora, this.paginatorRazonMora)
       // this.tablaRazonMora = true
@@ -900,7 +904,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaRazonMora(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaRazonMora = JSON.parse(data)
-      console.log(this.ListaRazonMora)
+      // console.log(this.ListaRazonMora)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosRazonMora>(this.ListaRazonMora, this.DataSourceRazonMora, this.sortRazonMora, this.paginatorRazonMora)
       this.tablaRazonMora = true
@@ -911,7 +915,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaPagos(this.cuentaID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaPagos = JSON.parse(data)
-      console.log(data)
+      // console.log(data)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosPagos>(this.ListaPagos, this.DataSourcePagos, this.sortPagos, this.paginatorPagos)
       this.tablaPagos = true
@@ -931,7 +935,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.service.getListaTipificaciones(this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaTipificacion = JSON.parse(data)
-      console.log(this.ListaTipificacion)
+      // console.log(this.ListaTipificacion)
     })
   }
 
@@ -999,11 +1003,18 @@ export class GestionAtencionClienteComponent implements OnInit {
   }
 
   SaveGestion() {
+    // alert(this.llamadaEfectiva)
+    if (this.llamadaEfectiva == 0) {
+      // this.service.notificacion("Debe seleccionar si la llamada es efectiva o no")
+      this.llamadaEfectiva = 3
+      // return
+    }
+    // this.service.notificacion("Bien")
     // alert(this.telefonoID)
     // return
     this.markFormGroupTouched(this.correoForm);
     if (this.telefonoControl.hasError('min') || this.accionControl.hasError('min') || this.resultadoControl.hasError('min') ||
-      this.tipificacionControl.hasError('min') || this.subtipificacionControl.hasError('min') || this.razonMoraControl.hasError('min')) {
+      this.tipificacionControl.hasError('min') || this.subtipificacionControl.hasError('min') || this.razonMoraControl.hasError('min') || this.llamadaEfectiva == 3) {
       this.service.notificacion("Debe llenar los datos solicitados")
       return
     }
@@ -1015,7 +1026,10 @@ export class GestionAtencionClienteComponent implements OnInit {
       }
     }
 
-    this.service.GuadarGestionATC(this.telefonoID, this.cuentaID, this.resultadoID, this.subtipificacionID, this.observacion).subscribe(r => {
+    // alert("bien");
+    // return
+    // console.log("Llamada efectiva: ",this.llamadaEfectiva)
+    this.service.GuadarGestionATC(this.telefonoID, this.cuentaID, this.resultadoID, this.subtipificacionID,this.llamadaEfectiva, this.observacion).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
@@ -1083,7 +1097,7 @@ export class GestionAtencionClienteComponent implements OnInit {
         this.route.navigate(['carteras/cuenta_create'], { queryParams: { carteraID: this.carteraID, TipoCarteraID: this.tipoCarteraID } })
 
       }
-      console.log(respuesta)
+      // console.log(respuesta)
 
     })
   }
@@ -1216,7 +1230,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       return
     }
 
-    console.log(this.ListaTelefonos)
+    // console.log(this.ListaTelefonos)
 
     let mail = ""
 
@@ -1293,7 +1307,7 @@ export class GestionAtencionClienteComponent implements OnInit {
 
     this.service.traerChatWhat(this.telefono).subscribe(r => {
       this.chatWhatsapp = r
-      console.log(r)
+      // console.log(r)
     })
   }
 

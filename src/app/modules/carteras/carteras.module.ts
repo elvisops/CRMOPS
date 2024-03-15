@@ -25,6 +25,7 @@ import { ConfirmationDialogComponent } from './gestion-de-contactos/confirmation
 import { GestionAtencionClienteComponent } from './gestion-atencion-cliente/gestion-atencion-cliente.component';
 import { CuentaCreateComponent } from './cuenta-create/cuenta-create.component';
 import { CuentaEditComponent } from './cuenta-edit/cuenta-edit.component';
+import { ProyectosUsuarioComponent } from './proyectos-usuario/proyectos-usuario.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { CuentaEditComponent } from './cuenta-edit/cuenta-edit.component';
     GestionAtencionClienteComponent,
     CuentaCreateComponent,
     CuentaEditComponent,
+    ProyectosUsuarioComponent,
   ],
   imports: [
     CommonModule,

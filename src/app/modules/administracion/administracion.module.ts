@@ -36,6 +36,7 @@ import { VistasCrearComponent } from './modulos/vistas/vistas-crear/vistas-crear
 import { VistasEditarComponent } from './modulos/vistas/vistas-editar/vistas-editar.component';
 import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas.component';
 import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
+import { ModalConfirmacionComponent } from './modal-confirmacion/modal-confirmacion.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.componen
     VistasEditarComponent,
     RolesVistasComponent,
     PerfilUsuarioComponent,
+    ModalConfirmacionComponent,
   ],
   imports: [
     CommonModule,

@@ -16,3 +16,43 @@
     flex: 1;
     text-align: center;
 }
+
+/* estilos para el icono de notificaciones */
+
+.icon-container {
+    position: relative;
+  }
+  
+  .notification-icon {
+    position: absolute;
+    top: -6px; /* Ajusta la posición vertical según sea necesario */
+    right: -12px; /* Ajusta la posición horizontal según sea necesario */
+    font-size: 18px; /* Ajusta el tamaño del icono de notificación según sea necesario */
+    /* color: #0aff02; */
+    /* rotate: -30deg; */
+    /* animation: swing 3s forwards;  */
+    animation: swing 3s forwards; /* Duración de la animación ajustada a 3 segundos y estado final mantenido */}
+  
+  .chat-icon {
+    font-size: 24px; /* Ajusta el tamaño del icono de chat según sea necesario */
+  }
+  
+
+  @keyframes swing {
+    /* 0% { transform: rotate(0deg); }
+    50% { transform: rotate(15deg); }
+    100% { transform: rotate(0deg); } */
+
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(5deg); } /* Ligero movimiento hacia la derecha */
+    20% { transform: rotate(-5deg); } /* Ligero movimiento hacia la izquierda */
+    30% { transform: rotate(10deg); } /* Movimiento hacia la derecha */
+    40% { transform: rotate(-10deg); } /* Movimiento hacia la izquierda */
+    50% { transform: rotate(15deg); } /* Movimiento máximo hacia la derecha */
+    60% { transform: rotate(-15deg); } /* Movimiento máximo hacia la izquierda */
+    70% { transform: rotate(10deg); } /* Movimiento de retorno hacia la derecha */
+    80% { transform: rotate(-5deg); } /* Movimiento de retorno hacia la izquierda */
+    90% { transform: rotate(2deg); } /* Ligero movimiento hacia la derecha */
+    100% { transform: rotate(0deg); } /* Vuelta al estado inicial */
+  }
+  

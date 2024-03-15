@@ -61,7 +61,7 @@ export class CarterasListasComponent implements OnInit{
     // }
     // console.log(TipoCarteraID)
     // this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID, cartera:Cartera,TipoCarteraID:TipoCarteraID}})
-    this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID,TipoCarteraID:TipoCarteraID}})
+    this.router.navigate(['carteras/cuentas_listas'],{ queryParams: {carteraID: CarteraID,TipoCarteraID:TipoCarteraID, Cartera:Cartera}})
 
   }
 

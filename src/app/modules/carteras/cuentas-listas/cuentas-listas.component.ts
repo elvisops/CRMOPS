@@ -22,6 +22,7 @@ export class CuentasListasComponent implements OnInit {
   condicion!: string
   TipoCarteraID!: number
   searchIdentidad: string = ""
+  isLoading: boolean = false
 
   filtroID: number = 0
   ListaFiltros: any[] = [
@@ -63,10 +64,12 @@ export class CuentasListasComponent implements OnInit {
       this.carteraID = +params['carteraID'];
       // this.cartera = params['cartera'];
       this.TipoCarteraID = +params['TipoCarteraID']
+      this.cartera = params['Cartera']
     })
   }
 
   genData() {
+    this.isLoading = true
     // alert(this.filtroID)
     var token = sessionStorage.getItem('token');
     token = this.auth.desencriptar(token);
@@ -85,10 +88,11 @@ export class CuentasListasComponent implements OnInit {
       // this.condicion = `WHERE CC.CARTERAID = ${this.carteraID} AND U.TOKEN = ''${token}''`
       this.condicion = `WHERE CC.CARTERAID = ${this.carteraID} AND U.TOKEN = ''${token}''`
     }
-    this.genListaCuentas()
+    this.genListaCuentas()   
   }
 
   BuscarPorIdentidad() {
+    this.isLoading = true
     // this.divSearch = true
     // this.inputNumeroOrden = true
 
@@ -99,18 +103,20 @@ export class CuentasListasComponent implements OnInit {
       this.service.searchIdentidad(this.carteraID, this.searchIdentidad).subscribe(r => {
         var data = this.auth.desencriptar(r.data)
         this.ListaCuentas = JSON.parse(data)
-        console.log(data)
+        // console.log(data)
         this.FillTable(this.ListaCuentas)
         this.tablaCuentas = true
+        this.isLoading = false
       })
     }else if(this.inputNumeroOrden){
       // console.log("Buscar por numero orden")
       this.service.searchNumeroOrden(this.carteraID, this.searchIdentidad).subscribe(r => {
         var data = this.auth.desencriptar(r.data)
         this.ListaCuentas = JSON.parse(data)
-        console.log(data)
+        // console.log(data)
         this.FillTable(this.ListaCuentas)
         this.tablaCuentas = true
+        this.isLoading = false
       })
     }
 
@@ -123,9 +129,10 @@ export class CuentasListasComponent implements OnInit {
     this.service.getListaCuentas(this.id, this.condicion, this.carteraID).subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.ListaCuentas = JSON.parse(data)
-      console.log(this.ListaCuentas)
+      // console.log(this.ListaCuentas)
       this.FillTable(this.ListaCuentas)
       this.tablaCuentas = true
+      this.isLoading = false
     })
   }
 
@@ -133,12 +140,12 @@ export class CuentasListasComponent implements OnInit {
     // alert(cuentaID)
     // this.TipoCarteraID
     if (this.TipoCarteraID == 1) {
-      console.log("ventas")
+      // console.log("ventas")
     } else if (this.TipoCarteraID == 2) {
-      console.log("Cobros")
+      // console.log("Cobros")
       this.route.navigate(['carteras/carteras_cuentas'], { queryParams: { cuentaID: cuentaID,TipoCarteraID: this.TipoCarteraID, carteraID: carteraID } })
     } else {
-      console.log("Atencio al cliente")
+      // console.log("Atencio al cliente")
       this.route.navigate(['carteras/atencion_cliente'], { queryParams: { cuentaID: cuentaID, carteraID: carteraID } })
 
     }

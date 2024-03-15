@@ -1006,6 +1006,37 @@
             <mat-error *ngIf="subtipificacionControl.hasError('required')">La subtipificacion es obligatoria</mat-error>
             <mat-error *ngIf="subtipificacionControl.hasError('min')">La subtipificacion es obligatoria</mat-error>
           </mat-form-field>
+          
+          <!-- <div style="display: flex; flex-direction: column;" class="w-50 px-1 mb-4">
+            <mat-label>Llamada Efectiva</mat-label>
+            <mat-radio-group name="opciones" [(ngModel)]="llamadaEfectiva">
+              <mat-radio-button name="opciones" [value]="1" style="margin: 10px">
+                SI
+              </mat-radio-button>
+              <mat-radio-button name="opciones" [value]="2" style="margin: 10px">
+                NO
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error style="position: absolute; padding-top: 7%;" *ngIf="llamadaEfectiva === 3">Selecciona una opción</mat-error>
+          </div>
+           -->
+
+           <div style="display: flex; flex-direction: column; position: relative;" class="w-100 px-1 mb-4">
+            <mat-label>Llamada Efectiva</mat-label>
+            <mat-radio-group name="opciones" [(ngModel)]="llamadaEfectiva">
+              <mat-radio-button name="opciones" [value]="1" color="primary" style="margin: 10px">
+                SI
+              </mat-radio-button>
+              <mat-radio-button name="opciones" [value]="2" color="primary" style="margin: 10px;">
+                NO
+              </mat-radio-button>
+            </mat-radio-group>
+            <div style="position: absolute; margin-top: 50px;">
+              <mat-error *ngIf="llamadaEfectiva === 3">Selecciona una opción</mat-error>
+            </div>
+          </div>
+          
+          
 
           <!-- <div [ngClass]="{'hidden': !divPromesa}">
 

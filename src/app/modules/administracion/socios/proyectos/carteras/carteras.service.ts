@@ -146,19 +146,76 @@ export class CarterasService {
       )
   }
 
-
+// original
+  // insertarDatosTabla(datos: any, miParametro: string,identidad: string,nombre: string,
+  //   cuenta: string,telefono: string,telefonoTrabajo: string): Observable<any> {
+  //   var token = this.auth.ParseToken()
+  //   const url = `http://10.8.8.115:3002/procesar-json?token=${token}&nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}&telefonoTrabajo=${telefonoTrabajo}`;
+    
+  //   return this.http.post<any>(url, datos)
+  //     .pipe(
+  //       tap(),
+  //       catchError(this.handleError("Error al cargar las cuentas"))
+  //     );
+  // }
+  // fin original
   insertarDatosTabla(datos: any, miParametro: string,identidad: string,nombre: string,
-    cuenta: string,telefono: string,telefonoTrabajo: string): Observable<any> {
+    cuenta: string,telefono: string,telefonoTrabajo: string, arregloTelefonos: any[], arregloDirecciones: any[], arregloCorreos: any[]): Observable<any> {
     var token = this.auth.ParseToken()
     const url = `http://10.8.8.115:3002/procesar-json?token=${token}&nombreTabla=${miParametro}&identidad=${identidad}&nombre=${nombre}&cuenta=${cuenta}&telefono=${telefono}&telefonoTrabajo=${telefonoTrabajo}`;
     
-    return this.http.post<any>(url, datos)
+    const body = {
+      datos: datos,
+      arregloTelefonos: arregloTelefonos,
+      arregloDirecciones: arregloDirecciones,
+      arregloCorreos: arregloCorreos
+    }
+    return this.http.post<any>(url, body)
       .pipe(
         tap(),
         catchError(this.handleError("Error al cargar las cuentas"))
       );
   }
+
+  GetTiposTelefonos():Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({proc:"tipos_telefonos_lista", token:token})
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("No se logra obtener la lista de tipos de telefonos"))
+    )
+  }
+
+  GetTiposDirecciones():Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({proc:"tipos_direcciones_lista", token:token})
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("No se logra obtener la lista de tipos de telefonos"))
+    )
+  }
   
+  GetTiposCorreos():Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({proc:"tipos_correos_lista", token:token})
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("No se logra obtener la lista de tipos de correos"))
+    )
+  }
+  
+  getSociosProyectos(): Observable<any> {
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: 'proyectos_usuario', token: token })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de proyectos"))
+      )
+  }
   
   //
   notificacion(msg: string): void {

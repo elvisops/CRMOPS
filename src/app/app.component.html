@@ -5,8 +5,8 @@
         <img src="./assets/img/logo1.png" style="width: 150px; height: auto;">
       </div>
 
-      <mat-divider class="mt-4"></mat-divider>  
-      
+      <mat-divider class="mt-4"></mat-divider>
+
 
       <mat-accordion>
         <mat-expansion-panel *ngFor="let modulo of modulos">
@@ -17,14 +17,10 @@
           </mat-expansion-panel-header>
 
           <div *ngFor="let permiso of permisos">
-            <a 
-              mat-button 
-              color="primary" 
-              *ngIf="permiso.MODULO == modulo"
-              routerLink="{{modulo | lowercase}}/{{permiso.V_URL | lowercase}}"
-            >
-            <!-- routerLink="{{modulo | lowercase}}/{{permiso.VISTA | lowercase}}" -->
-            <!-- {{modulo}}/{{permiso.VISTA}} -->
+            <a mat-button color="primary" *ngIf="permiso.MODULO == modulo"
+              routerLink="{{modulo | lowercase}}/{{permiso.V_URL | lowercase}}">
+              <!-- routerLink="{{modulo | lowercase}}/{{permiso.VISTA | lowercase}}" -->
+              <!-- {{modulo}}/{{permiso.VISTA}} -->
               <!-- {{permiso.V_URL }} -->
               {{permiso.VISTA }}
             </a>
@@ -37,7 +33,7 @@
 
   <div class="sidenav-content">
     <mat-toolbar class="bgops-indigo txtwhite barra-tareas">
-  
+
       <button mat-icon-button *ngIf="isLogged" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -47,19 +43,24 @@
       </div>-->
       <div class="timer"></div>
       <span class="barra-tareas-separador"></span>
+      <button *ngIf="isLogged" mat-icon-button style="color: #4596FF;" (click)="AbrirChat()">
+        <!-- <mat-icon *ngIf="notificacion == 1">notifications</mat-icon><mat-icon>chat</mat-icon> -->
+        <div class="icon-container">
+          <mat-icon *ngIf="notificacion == '1'" class="notification-icon txtwhite">notifications</mat-icon>
+          <mat-icon class="chat-icon">chat</mat-icon>
+        </div>
+
+      </button>
       <button mat-button [matMenuTriggerFor]="menu" *ngIf="isLogged">{{username}}</button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/perfil-usuario">Perfil</button>
-        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>        
+        <button mat-menu-item (click)="cerrarSesion()">Cerrar Sesion</button>
       </mat-menu>
-      <button *ngIf="isLogged" mat-icon-button class="txtops-chartreuse" (click)="AbrirEstados()"><mat-icon>av_timer</mat-icon></button>
-    
-  </mat-toolbar>
-  <router-outlet></router-outlet>
+      <button *ngIf="isLogged" mat-icon-button class="txtops-chartreuse"
+        (click)="AbrirEstados()"><mat-icon>av_timer</mat-icon></button>
+
+    </mat-toolbar>
+    <router-outlet></router-outlet>
   </div>
 
 </mat-drawer-container>
-
-
-
-

@@ -374,7 +374,7 @@ export class GestionDeContactosComponent implements OnInit {
     // console.log(this.cuentaID);
     // console.log(this.carteraID);
     // return
-    this.service.getPestaniaUno(this.cuentaID, this.carteraID).subscribe(r => {
+    this.service.getPestaniaUno(this.cuentaID, this.carteraID,this.cuenta).subscribe(r => {
       var data = this.auth.desencriptar(r.data);
       this.ListaPestaniaUno = JSON.parse(data);
       console.log(this.ListaPestaniaUno);

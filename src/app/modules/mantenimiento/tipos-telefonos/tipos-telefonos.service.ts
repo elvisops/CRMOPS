@@ -50,7 +50,7 @@ export class TiposTelefonosService {
     return this.http.post<any>(`${this.api}/api/get`, { payload })
       .pipe(
         tap(),
-        catchError(this.handleError("No se pudo obtener la lista de tipos de telefonos"))
+        catchError(this.handleError("No se logra obtener la lista de tipos de telefonos"))
       )
   }
 

@@ -41,7 +41,7 @@
           <!-- Paso 1 -->
 
           <!-- Paso 2 -->
-          <div >
+          <div *ngIf="steps.CargaArchivo">
             <!-- *ngIf="steps.CargaArchivo" -->
             <h2>Cargar Archivo</h2>
             <h3>Seleccione un archivo de excel con la informacion de la cartera que desea crear</h3>
@@ -67,14 +67,14 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            
+
             <button mat-raised-button color="primary" (click)="aplicarPalabraPrimer()">Siguiente</button>
-            
-            
-            
-            
+
+
+
+
           </div>
-         
+
           <!-- Paso 3 -->
           <div *ngIf="steps.SeleccionEncabezados">
             <!-- *ngIf="steps.SeleccionEncabezados" -->
@@ -101,18 +101,18 @@
             </mat-form-field> -->
             <mat-form-field class="w-100">
               <mat-label>Numero de Cuenta</mat-label>
-              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100">
+              <mat-select [(ngModel)]="EncNumeroCuenta" class="w-100" required="">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   <!-- {{encabezado.replace('primer', '') }} -->
                   {{ encabezado.replace('_PESTANIAUNO', '').replace('segundo', '').replace('tercero', '') }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            
+
 
             <mat-form-field class="w-100">
               <mat-label>Numero de Identidad</mat-label>
-              <mat-select [(ngModel)]="EncIdentidad" class="w-100">
+              <mat-select [(ngModel)]="EncIdentidad" class="w-100" required="">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   {{encabezado.replace('_PESTANIAUNO', '')}}
                 </mat-option>
@@ -121,12 +121,84 @@
 
             <mat-form-field class="w-100">
               <mat-label>Nombre de Cliente</mat-label>
-              <mat-select [(ngModel)]="EncNombreCliente" class="w-100">
+              <mat-select [(ngModel)]="EncNombreCliente" class="w-100" required="">
                 <mat-option *ngFor="let encabezado of Encabezados" [value]="encabezado">
                   {{encabezado.replace('_PESTANIAUNO', '')}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
+            <mat-form-field class="w-50">
+              <mat-label>Teléfono</mat-label>
+              <mat-select [(ngModel)]="EncTelefono" class="w-100">
+                <mat-option *ngFor="let phone of Encabezados" [value]="phone">
+                  {{ phone.replace('_PESTANIAUNO','') }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-50">
+              <mat-label>Tipo de Teléfono</mat-label>
+              <mat-select [(ngModel)]="selectedPhoneType" class="w-100">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let tipo of ListaTiposTelefonos" [value]="tipo.TELEFONOTIPOID">
+                  {{tipo.TIPO}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button class="mx-2 mb-3 btn btn-info text-white" (click)="GenerarObjetoTelefonos()">Agregar
+              Telefono</button>
+            <button class="mb-3 btn btn-danger text-white" (click)="RemoverObjetoTelefonos()">Remover Telefono</button>
+
+            <!-- lista direcciones -->
+            <mat-form-field class="w-50">
+              <mat-label>Dirección</mat-label>
+              <mat-select [(ngModel)]="EncDireccion" class="w-100">
+                <mat-option *ngFor="let direccion of Encabezados" [value]="direccion">
+                  {{ direccion.replace('_PESTANIAUNO','') }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-50">
+              <mat-label>Tipo de Dirección</mat-label>
+              <mat-select [(ngModel)]="tipoDireccionSeleccionado" class="w-100">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let tipo of ListaTiposDirecciones" [value]="tipo.TIPODIRECCIONID">
+                  {{tipo.TIPODIRECCION}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button class="mx-2 mb-3 btn btn-info text-white" (click)="GenerarObjetoDirecciones()">Agregar
+              Dirección</button>
+            <button class="mb-3 btn btn-danger text-white" (click)="RemoverObjetoDirecciones()">Remover
+              Dirección</button>
+            <!-- fin lista direcciones -->
+
+            <!-- lista correos -->
+            <mat-form-field class="w-50">
+              <mat-label>Correo</mat-label>
+              <mat-select [(ngModel)]="EncCorreo" class="w-100">
+                <mat-option *ngFor="let correo of Encabezados" [value]="correo">
+                  {{ correo.replace('_PESTANIAUNO','') }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-50">
+              <mat-label>Tipo de Correo</mat-label>
+              <mat-select [(ngModel)]="tipoCorreoSeleccionado" class="w-100">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let tipo of ListaTiposCorreos" [value]="tipo.TIPOCORREOID">
+                  {{tipo.TIPOCORREO}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button class="mx-2 mb-3 btn btn-info text-white" (click)="GenerarObjetoCorreos()">Agregar
+              Correo</button>
+            <button class="mb-3 btn btn-danger text-white" (click)="RemoverObjetoCorreos()">Remover
+              Correo</button>
+            <!-- fin lista correos -->
 
             <mat-form-field class="w-100">
               <mat-label>Telefono</mat-label>
@@ -167,7 +239,110 @@
               </pre>              
             </code>
           </div>
+          <!-- <div *ngIf="steps.SeleccionEncabezados">
+            <div style="min-height: 25vh;">
+              <h2>Campos que se utilizaran como telefonos</h2>
+              <mat-divider class="pb-3"></mat-divider>
+              <div *ngFor="let telefono of arregloTelefonos">
+                <div class="row">
+                  <div class="col-md-6">
+                    Campo: {{ telefono.telefono }}
+                  </div>
+                  <div class="col-md-6">
+                    Tipo Telefono: {{ telefono.tipoLeyenda }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div *ngIf="steps.SeleccionEncabezados">
+            <div style="min-height: 25vh;">
+              <h2>Campos que se utilizaran como telefonos</h2>
+              <mat-divider class="pb-3"></mat-divider>
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>Campo</strong>
+                </div>
+                <div class="col-md-6">
+                  <strong>Tipo Telefono</strong>
+                </div>
+              </div>
+              <div *ngFor="let telefono of arregloTelefonos">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{ telefono.telefono }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ telefono.tipoLeyenda }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="steps.SeleccionEncabezados">
+            <div style="min-height: 25vh;">
+              <h2>Campos que se utilizaran como Direcciones</h2>
+              <mat-divider class="pb-3"></mat-divider>
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>Campo</strong>
+                </div>
+                <div class="col-md-6">
+                  <strong>Tipo Dirección</strong>
+                </div>
+              </div>
+              <div *ngFor="let direccion of arregloDirecciones">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{ direccion.direccion }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ direccion.tipoLeyenda }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="steps.SeleccionEncabezados">
+            <div style="min-height: 25vh;">
+              <h2>Campos que se utilizaran como Correos</h2>
+              <mat-divider class="pb-3"></mat-divider>
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>Campo</strong>
+                </div>
+                <div class="col-md-6">
+                  <strong>Tipo Correo</strong>
+                </div>
+              </div>
+              <div *ngFor="let correo of arregloCorreos">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{ correo.correo }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ correo.tipoLeyenda }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+        <!-- <div class="col-md-6">
+          <div>
+            <h2>Telefonos</h2>
+            <mat-divider></mat-divider>
+            <code>
+              <pre>
+                {{arregloTelefonos}}
+              </pre>              
+            </code>
+          </div>
+        </div> -->
       </div>
 
     </mat-card-content>

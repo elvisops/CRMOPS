@@ -1,0 +1,121 @@
+.chat-container {
+    height: 55vh;
+    /* 400px Establece una altura para el contenedor del chat */
+    overflow-y: scroll;
+    /* Agrega desplazamiento vertical si hay muchos mensajes */
+
+}
+
+.message-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Cambiar la alineación a la derecha para los mensajes del emisor */
+    margin-bottom: 10px;
+
+}
+
+.message {
+    max-width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #dcf8c6;
+    /* Cambiar el color de fondo para los mensajes del emisor */
+    border: solid #5f5f5f 1px;
+}
+
+.other-message .message {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border: solid #5f5f5f 1px;
+    margin-right: 25%;
+}
+
+
+.other-message .message {
+    align-self: flex-start;
+    background-color: #ffffff;
+}
+
+.message-content {
+    word-wrap: break-word;
+}
+
+.message-timestamp {
+    font-size: 0.8rem;
+    color: #666666;
+}
+
+
+/* dar color al chat seleccionado */
+.selected {
+    background-color: #d4d4d4 !important;
+    border-radius: 10px;
+}
+
+.notificacion {
+    background-color: #08fc00 !important;
+    border-radius: 10px;
+}
+
+/* nuevo */
+
+.message-container {
+    position: relative;
+    /* Establecer posición relativa para poder posicionar el nombre de usuario de forma absoluta */
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.username {
+    position: absolute;
+    top: -24px;
+    /* background-color: #dcf8c6; */
+    padding: 5px 0px;
+    border-radius: 10px;
+    font-weight: bold;
+    /* Opcional: hacer el nombre de usuario en negrita */
+}
+
+/* Estilos para mensajes del emisor */
+/* .own-message .username {
+}
+
+.other-message .username {
+} */
+
+/* zoom de una imagen */
+.image-container {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* width: 80%; */
+    height: 80%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.file-input{
+    display: none;
+}
+
+/* centrar icono de descarga */
+
+.image-container {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el contenido */
+}
+
+.download-button {
+    margin-right: 10px; /* Espacio entre el botón y el div */
+}

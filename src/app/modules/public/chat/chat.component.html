@@ -1,1 +1,142 @@
-<p>chat works!</p>
+<div class="col-lg-12">
+    <!-- class="container mt-4" -->
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title> Chat Interno</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <!-- <div class="col-sm-4">
+                    <div style="max-height: 555px; overflow: auto;">
+                        <h3 class="col-md-8">
+                            Usuarios
+                        </h3>
+                        <div class="row" *ngFor="let dato of ListaContactos" class="px-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button mat-menu-item (click)="VerChat(dato.USUARIOID)">{{ dato.USUARIO }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="col-sm-4">
+                    <div style="max-height: 555px; overflow: auto;">
+                        <h3 class="col-md-8">Usuarios</h3>
+                        <div class="row" *ngFor="let dato of ListaContactos" class="px-4" >
+                            <div  class="row">
+                                <div class="col-md-12">
+                                    <button mat-menu-item (click)="VerChat(dato.ID_USUARIO_O_GRUPO,dato.GRUPO)"
+                                    [ngClass]="{'selected': dato.ID_USUARIO_O_GRUPO === selectedUserId || emisor == dato.ID_USUARIO_O_GRUPO, 'notificacion': recibidos && recibidos.includes(dato.ID_USUARIO_O_GRUPO)}"
+                                        >
+                                        {{ dato.USUARIO_O_GRUPO }}
+                                    </button>
+                                </div>
+                                <!-- [ngClass]="{'selected': dato.ID_USUARIO_O_GRUPO === selectedUserId || emisor == dato.ID_USUARIO_O_GRUPO}" -->
+                                <!-- [ngClass]="{'notificacion': recibidos && recibidos.includes(dato.ID_USUARIO_O_GRUPO)}" -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8">
+                    <div class="row px-3 py-3">
+                        <div class="col-lg-12 chat-container" #chatContainer>
+                            <!-- <div class="col-lg-12 chat-container" #chatContainer></div> -->
+                            <ng-container *ngFor="let chat of ListaChats; let i = index">
+
+                                <!-- Mostrar la fecha si es diferente de la fecha anterior -->
+                                <ng-container *ngIf="shouldShowDateSeparator(i)">
+                                    <div class="date-separator" style="margin-left: 40%;">{{chat.CREACION | date:
+                                        'shortDate'}}</div>
+                                </ng-container>
+                                <div class="message-container"
+                                    [ngClass]="{'own-message': chat.EMISOR === usuarioIdEmisor, 'other-message': chat.EMISOR !== usuarioIdEmisor}">
+                                    <div class="message" style="min-width: 20%; margin-bottom: 7%;">
+                                        <div class="username">{{chat.USUARIO}}</div>
+                                        <div class="message-content"
+                                            *ngIf="chat.TIPO_ARCHIVO !== ''; else regularContent">
+                                            <!-- <div *ngIf="chat.TIPO_ARCHIVO == 'png' || chat.TIPO_ARCHIVO == 'PNG' || chat.TIPO_ARCHIVO =='jpg' || chat.TIPO_ARCHIVO =='jpeg'" -->
+                                            <div *ngIf="esImagenValida(chat.TIPO_ARCHIVO)"
+                                            
+                                                class="image-container">
+                                                <button color="primary" mat-icon-button
+                                                    (click)="descargarDocumento(chat.imagenUrl,chat.MENSAJE)"
+                                                    class="download-button">
+                                                    <mat-icon>save_alt</mat-icon>
+                                                </button>
+
+                                                <div class="message-content" *ngIf="chat.imagenUrl">
+                                                    <img *ngIf="chat.imagenUrl" height="150px" style="max-width: 100%"
+                                                        [src]="chat.imagenUrl" alt="Vista previa de la imagen"
+                                                        (click)="zoomImage($event, i)"
+                                                        [ngClass]="{'zoomed': isZoomed && i === imagenAmpliadaIndex}" />
+                                                </div>
+                                            </div>
+
+
+                                            <!-- <div *ngIf="chat.TIPO_ARCHIVO == 'doxc' || chat.TIPO_ARCHIVO =='pdf' || chat.TIPO_ARCHIVO =='xls' || chat.TIPO_ARCHIVO =='xlsx'" -->
+                                                <div *ngIf="esDocumentoValido(chat.TIPO_ARCHIVO)"
+                                                class="image-container">
+                                                <!-- <mat-icon color="primary">insert_drive_file</mat-icon>  -->
+                                                <button class="download-button" color="primary" mat-icon-button
+                                                    (click)="descargarDocumento(chat.documento,chat.MENSAJE)"><mat-icon>save_alt</mat-icon>
+                                                </button>
+                                                {{chat.MENSAJE}}
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Contenido regular si TIPO_ARCHIVO es nulo -->
+                                        <ng-template #regularContent>
+                                            <div class="message-content">{{chat.MENSAJE}}</div>
+                                        </ng-template>
+                                        <div class="message-timestamp">{{chat.CREACION | date: 'shortTime'}}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <mat-form-field class="example-full-width col-lg-10">
+                                    <mat-label>Escribe un mensaje</mat-label>
+                                    <input matInput [(ngModel)]="mensaje" (keyup.enter)="EnviarMensaje()">
+                                </mat-form-field>
+                                <!-- <input class="col-lg-10" type="text"> -->
+                                <button class="col-lg-2" mat-icon-button color="primary"
+                                    (click)="EnviarMensaje()"><mat-icon>send</mat-icon></button>
+
+                                <!-- archivos -->
+                                <div class="col-lg-12">
+                                    <input type="file" class="file-input"
+                                        accept=".png, .jpg, .jpeg, .docx, .pdf, .xls, .xlsx, .txt"
+                                        (change)="handleFileInput($event)" #fileUpload>
+                                    <div class="file-upload">
+                                        <button mat-mini-fab color="primary" class="upload-btn"
+                                            (click)="fileUpload.click()">
+                                            <mat-icon>attach_file</mat-icon>
+                                        </button>
+                                        {{nombreArchivo || "Aún no se ha seleccionado ningún archivo."}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+<!-- <iframe src="http://10.8.8.115:3008/variable-x/5" frameborder="0"></iframe> -->
+
+<!-- <iframe width="100%" src="./prueba.html" frameborder="0"></iframe> -->
+
+<!-- <iframe src="./prueba.js" frameborder="0"></iframe> -->
+
+<!-- <iframe src="http://10.8.8.115:3007/" frameborder="2"></iframe> -->
+<!-- <h3>datos mqtt recibidos</h3> -->
+<!-- <h4>{{messages}}</h4> -->

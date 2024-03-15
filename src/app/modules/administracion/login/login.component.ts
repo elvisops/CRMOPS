@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     }
     this.service.login(this.usuario, this.password).subscribe(res => {
       var respuesta = JSON.parse(this.auth.desencriptar(res.response))
-      console.log(respuesta)
+      // console.log(respuesta)
       respuesta = respuesta[0]
       if (respuesta.status == 1) {
 
@@ -82,13 +82,15 @@ export class LoginComponent implements OnInit {
         estadoLogin = this.auth.encriptar(estadoLogin).toString()
 
         var rolID = (obj.rolID)
+        var usuarioID = this.auth.encriptar(obj.usuarioid).toString()
 
 
-        console.log(respuesta.data[0])
+        // console.log(respuesta.data[0])
         sessionStorage.setItem("token", token)
         sessionStorage.setItem('usuario', username)
         sessionStorage.setItem('EstadoOperativo',estadoLogin)
         sessionStorage.setItem('rolID',rolID)
+        sessionStorage.setItem('usuarioID',usuarioID)
         this.service.setSessionStorage()        
         this.timerService.startTimer();        
         window.location.href = "./"

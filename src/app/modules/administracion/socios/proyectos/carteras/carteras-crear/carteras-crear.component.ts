@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 import { concatMap, from } from 'rxjs';
 import * as FileSaver from 'file-saver';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModalConfirmacionComponent } from 'src/app/modules/administracion/modal-confirmacion/modal-confirmacion.component';
 
 @Component({
   selector: 'app-carteras-crear',
@@ -22,7 +24,9 @@ export class CarterasCrearComponent implements OnInit {
     private auth: AuthService,
     private ActivatedRoute: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    // private dialogRef: MatDialogRef<ModalConfirmacionComponent>,
+    private dialog: MatDialog,
   ) { }
 
   //Variables Globales
@@ -42,6 +46,8 @@ export class CarterasCrearComponent implements OnInit {
   EncIdentidad: string = ""
   EncNombreCliente: string = ""
   EncTelefono: string = ""
+  EncDireccion: string = ""
+  EncCorreo: string = ""
   EncTelefonoTrabajo: string = ""
   EncabezadosCuentas: any = {
     NumeroCuenta: "",
@@ -68,10 +74,124 @@ export class CarterasCrearComponent implements OnInit {
   NombreCartera: string = ""
   TipoCarteraID: number = 0
 
+  // selectedOptions: any[] = []
+  // arreglo de telefonos
+  selectedPhone: string = '';
+  selectedPhoneType: string = '';
+  tipoDireccionSeleccionado: string = '';
+  tipoCorreoSeleccionado: string = '';
+  ListaTiposTelefonos: any[] = []
+  arregloTelefonos: { telefono: string, tipo: string, tipoLeyenda: string }[] = [];
+  arregloDirecciones: { direccion: string, tipo: string, tipoLeyenda: string }[] = [];
+  arregloCorreos: { correo: string, tipo: string, tipoLeyenda: string }[] = [];
+
+  ListaTiposDirecciones: any[] = []
+  ListaTiposCorreos: any[] = []
+
+
+  phones: string[] = ['Teléfono 1', 'Teléfono 2', 'Teléfono 3']; // Define tus teléfonos aquí
+
   ngOnInit(): void {
     this.ObtenerIDProyecto()
     this.ObtenerTiposCarteras()
   }
+
+  GenerarObjetoTelefonos(): void {
+    if (this.EncTelefono == '' || this.selectedPhoneType == '') {
+      this.service.notificacion('Debe seleccionar el campo que sera utilizado como telefono y su tipo.')
+      return
+    }
+
+    let tipoTelefonoSeleccionado = this.ListaTiposTelefonos.find(tipo => tipo.TELEFONOTIPOID === this.selectedPhoneType)?.TIPO;
+
+    const selectedObject = {
+      telefono: this.EncTelefono,
+      tipo: this.selectedPhoneType,
+      tipoLeyenda: tipoTelefonoSeleccionado
+    };
+    this.arregloTelefonos.push(selectedObject);
+
+    this.EncTelefono = ''
+    this.selectedPhoneType = ''
+  }
+
+  RemoverObjetoTelefonos(): void {
+    if (this.EncTelefono == '') {
+      this.service.notificacion('Debe seleccionar el campo a remover.')
+      return
+    }
+
+    const nuevoArreglo = this.arregloTelefonos.filter(obj => obj.telefono !== this.EncTelefono);
+    this.arregloTelefonos = []
+    this.arregloTelefonos.push(...nuevoArreglo);
+
+    this.EncTelefono = ''
+  }
+
+
+  GenerarObjetoDirecciones(): void {
+    if (this.EncDireccion == '' || this.tipoDireccionSeleccionado == '') {
+      this.service.notificacion('Debe seleccionar el campo que sera utilizado como dirección y su tipo.')
+      return
+    }
+
+    let tipoDireccionSeleccionadoLeyenda = this.ListaTiposDirecciones.find(tipo => tipo.TIPODIRECCIONID === this.tipoDireccionSeleccionado)?.TIPODIRECCION;
+
+    const selectedObject = {
+      direccion: this.EncDireccion,
+      tipo: this.tipoDireccionSeleccionado,
+      tipoLeyenda: tipoDireccionSeleccionadoLeyenda
+    };
+    this.arregloDirecciones.push(selectedObject);
+
+    this.EncDireccion = ''
+    this.tipoDireccionSeleccionado = ''
+  }
+
+  RemoverObjetoDirecciones(): void {
+    if (this.EncDireccion == '') {
+      this.service.notificacion('Debe seleccionar el campo a remover.')
+      return
+    }
+
+    const nuevoArreglo = this.arregloDirecciones.filter(obj => obj.direccion !== this.EncDireccion);
+    this.arregloDirecciones = []
+    this.arregloDirecciones.push(...nuevoArreglo); 
+    this.EncDireccion = ''
+  }
+
+  //correos
+  GenerarObjetoCorreos(): void {
+    if (this.EncCorreo == '' || this.tipoCorreoSeleccionado == '') {
+      this.service.notificacion('Debe seleccionar el campo que sera utilizado como correo y su tipo.')
+      return
+    }
+
+    let tipoCorreoSeleccionadoLeyenda = this.ListaTiposCorreos.find(tipo => tipo.TIPOCORREOID === this.tipoCorreoSeleccionado)?.TIPOCORREO;
+
+    const selectedObject = {
+      correo: this.EncCorreo,
+      tipo: this.tipoCorreoSeleccionado,
+      tipoLeyenda: tipoCorreoSeleccionadoLeyenda
+    };
+    this.arregloCorreos.push(selectedObject);
+
+    this.EncCorreo = ''
+    this.tipoCorreoSeleccionado = ''
+  }
+
+  RemoverObjetoCorreos(): void {
+    if (this.EncCorreo == '') {
+      this.service.notificacion('Debe seleccionar el campo a remover.')
+      return
+    }
+
+    const nuevoArreglo = this.arregloCorreos.filter(obj => obj.correo !== this.EncCorreo);
+    this.arregloCorreos = []
+    this.arregloCorreos.push(...nuevoArreglo); 
+    this.EncCorreo = ''
+  }
+  // fin correos
 
   //Bitacora agregar registro
   BitaAgregarRegistro(msg: string) {
@@ -166,7 +286,10 @@ export class CarterasCrearComponent implements OnInit {
 
 
   aplicarPalabraPrimer() {
-    console.log('primer:',this.EncNumerosCuenta)
+    console.log('primer:', this.EncNumerosCuenta)
+    if (this.EncNumeroCuenta == '') {
+      this.OpenModelConfirmacion();
+    }
     return
     this.Encabezados = this.Encabezados.map((encabezado: any) => {
       const estaSeleccionado = this.EncNumerosCuenta.includes(encabezado);
@@ -183,8 +306,85 @@ export class CarterasCrearComponent implements OnInit {
 
   }
 
+  OpenModelConfirmacion() {
+    var msj = ''
+
+    if (this.EncNumerosCuenta == '') {
+      msj = '¿Está seguro que no desea agregar datos a la primer pestaña?'
+    } else {
+      msj = '¿Desea continuar?'
+    }
+
+    const dialogRef = this.dialog.open(ModalConfirmacionComponent, {
+      width: '400px',
+      data: msj
+    })
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // this.service.notificacion("Seleeciono continuar")
+        this.Encabezados = this.Encabezados.map((encabezado: any) => {
+          const estaSeleccionado = this.EncNumerosCuenta.includes(encabezado);
+          return estaSeleccionado ? encabezado + '_PESTANIAUNO' : encabezado;
+        });
+
+        // console.log("Encabezados:", this.Encabezados);
+        // console.log("Encabezado telefono:",this.EncTelefonoTrabajo)
+
+        // Llamar a la función crearTablaCarteras con los encabezados actualizados
+        // this.crearTablaCarteras();
+
+        this.service.GetTiposTelefonos().subscribe(r => {
+          var data = this.auth.desencriptar(r.data)
+          this.ListaTiposTelefonos = JSON.parse(data)
+          // console.log('lista de telefonos', this.ListaTiposTelefonos)
+        })
+
+        this.service.GetTiposDirecciones().subscribe(r => {
+          var data = this.auth.desencriptar(r.data)
+          this.ListaTiposDirecciones = JSON.parse(data)
+          // console.log('lista tipos direcciones: ', this.ListaTiposDirecciones)
+        })
+
+        this.service.GetTiposCorreos().subscribe(r => {
+          var data = this.auth.desencriptar(r.data)
+          this.ListaTiposCorreos = JSON.parse(data)
+          console.log('lista de tipos de correos: ',this.ListaTiposCorreos)
+        })
+        this.steps.SeleccionPestanias = false;
+        this.steps.SeleccionEncabezados = true;
+
+      } else {
+        // this.service.notificacion("Selecciono no continuar")
+        // this.CloseDialog()
+      }
+    })
+  }
+
+  // CloseDialog() {
+  //   this.dialogRef.close();
+  // }
+
   // crearTablaCarteras(objetoJSON:any) {
   crearTablaCarteras() {
+
+    // console.log(this.arregloTelefonos)
+    if (this.EncNumeroCuenta == "" || this.EncIdentidad == "" || this.EncNombreCliente == "") {
+      this.service.notificacion("Los campos con asteriscos son obligatorios")
+      return
+    }
+
+    if (this.arregloTelefonos.length == 0) {
+      this.service.notificacion("Debe agregar al menos un telefono para el cliente")
+      return
+    }
+
+
+
+    // this.service.notificacion("Bien");
+
+    // return
+
     this.steps.SeleccionEncabezados = false
     this.steps.SeleccionPestanias = false;
 
@@ -248,7 +448,8 @@ export class CarterasCrearComponent implements OnInit {
 
     // console.log(this.DatosCartera,nombreTabla,this.EncIdentidad,this.EncNombreCliente,this.EncNumeroCuenta,this.EncTelefono,this.EncTelefonoTrabajo);
     // return
-    this.service.insertarDatosTabla(this.DatosCartera, nombreTabla, this.EncIdentidad, this.EncNombreCliente, this.EncNumeroCuenta, this.EncTelefono, this.EncTelefonoTrabajo).subscribe(r => {
+    this.service.insertarDatosTabla(this.DatosCartera, nombreTabla, this.EncIdentidad, this.EncNombreCliente, this.EncNumeroCuenta, this.EncTelefono, 
+      this.EncTelefonoTrabajo, this.arregloTelefonos, this.arregloDirecciones, this.arregloCorreos).subscribe(r => {
       // var respuesta = this.auth.desencriptar(r)
       var respuesta = (r.respuesta.response)
       respuesta = this.auth.desencriptar(respuesta)
