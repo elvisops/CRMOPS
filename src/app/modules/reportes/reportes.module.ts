@@ -12,6 +12,11 @@ import { FiltroDialogComponent } from './reportes-listas/filtro-dialog/filtro-di
 import { MonitoresListasComponent } from './monitores-listas/monitores-listas.component';
 import { VentanaMonitorComponent } from './monitores-listas/ventana-monitor/ventana-monitor.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReportesEditarComponent } from './reportes-editar/reportes-editar.component';
+import { ReportesCrearComponent } from './reportes-crear/reportes-crear.component';
+import { ModalConfirmacionComponent } from './modal-confirmacion/modal-confirmacion.component';
+import { MonitoresEditarComponent } from './monitores-editar/monitores-editar.component';
+import { MonitoresCrearComponent } from './monitores-crear/monitores-crear.component';
 
 
 
@@ -21,7 +26,12 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ReportesListasComponent,
     FiltroDialogComponent,
     MonitoresListasComponent,
-    VentanaMonitorComponent
+    VentanaMonitorComponent,
+    ReportesEditarComponent,
+    ReportesCrearComponent,
+    ModalConfirmacionComponent,
+    MonitoresEditarComponent,
+    MonitoresCrearComponent
 
   ],
   imports: [

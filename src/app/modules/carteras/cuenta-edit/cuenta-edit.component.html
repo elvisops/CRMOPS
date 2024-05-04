@@ -1,5 +1,5 @@
 <!-- <div class="container pt-2"> -->
-<div style="max-height: 600px; overflow: auto; margin-bottom: 5px;">
+<div>
     <mat-card>
         <mat-card-header class="bgops-indigo">
             <button style="margin-top: -5px;" mat-icon-button color="accent" (click)="CloseDiaglog()">
@@ -10,7 +10,7 @@
             <!-- </mat-card-title> -->
         </mat-card-header>
         <!-- <mat-divider class="my-4"></mat-divider> -->
-        <mat-card-content>
+        <mat-card-content  style="max-height: 450px; overflow: auto; margin-bottom: 5px;">
             <div class="row">
                 <div class="col-lg-4">
                     <mat-form-field appearance="outline" class="w-100 my-2">
@@ -204,7 +204,7 @@
         </mat-card-content>
         <mat-card-actions>
             <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="ActualizarData()">Actualizar</button>
-            <button mat-raised-button color="Basic" class="mx-2" (click)="Gestiones()">Gestiones</button>
+            <!-- <button mat-raised-button color="Basic" class="mx-2" (click)="Gestiones()">Gestiones</button> -->
             <button mat-raised-button color="warn" class="mx-2" (click)="CloseDiaglog()">Cancelar</button>
         </mat-card-actions>
     </mat-card>

@@ -295,6 +295,10 @@ export class GestionAtencionClienteComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.service.savePantalla('Gestion de Cliente').subscribe(r => {
+
+    })
+
     // this.startTimer1();
     this.router.queryParams.subscribe(params => {
       this.cuentaID = params['cuentaID']
@@ -497,6 +501,10 @@ export class GestionAtencionClienteComponent implements OnInit {
     localStorage.removeItem('tiempoPantalla');
     localStorage.removeItem('contadorG');
     localStorage.removeItem('tiempoPantallaG');
+
+    this.service.removeUserPantalla().subscribe(r => {
+
+    })
   }
   ngAfterViewChecked() {
     // this.scrollToBottom();

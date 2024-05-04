@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort'
 import { MatDialog } from '@angular/material/dialog';
 import { ProyectoCrearComponent } from './proyecto-crear/proyecto-crear.component';
 import { ProyectoEditarComponent } from './proyecto-editar/proyecto-editar.component';
+import { ProyectosUsuariosComponent } from './proyectos-usuarios/proyectos-usuarios.component';
 
 @Component({
   selector: 'app-proyectos',
@@ -88,6 +89,14 @@ export class ProyectosComponent implements OnInit{
   GotoCarteras(proyecto:any){    
     var id = this.auth.mkurl_enc(JSON.stringify(proyecto)).toString()    
     this.navigate.navigate(['administracion/socios/carteras/'+id])
+  }
+
+  UsuariosPermitidos(proyecto: any){
+    const dialogRef = this.dialog.open(ProyectosUsuariosComponent, {
+      width: '50%',
+      data: proyecto,
+      disableClose: true
+    })
   }
 
   CrearProyecto(SocioID:number){

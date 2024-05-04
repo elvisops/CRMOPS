@@ -6,31 +6,16 @@
         </mat-card-header>
         <mat-card-content>
             <div class="row">
-                <!-- <div class="col-sm-4">
-                    <div style="max-height: 555px; overflow: auto;">
-                        <h3 class="col-md-8">
-                            Usuarios
-                        </h3>
+                <div class="col-sm-4">
+                    <div style="height: 555px !important;max-height: 555px; overflow: auto;">
+                        <h3 class="col-md-8">Conversaciones</h3>
                         <div class="row" *ngFor="let dato of ListaContactos" class="px-4">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button mat-menu-item (click)="VerChat(dato.USUARIOID)">{{ dato.USUARIO }}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <div class="col-sm-4">
-                    <div style="max-height: 555px; overflow: auto;">
-                        <h3 class="col-md-8">Usuarios</h3>
-                        <div class="row" *ngFor="let dato of ListaContactos" class="px-4" >
-                            <div  class="row">
-                                <div class="col-md-12">
-                                    <button mat-menu-item (click)="VerChat(dato.ID_USUARIO_O_GRUPO,dato.GRUPO)"
-                                    [ngClass]="{'selected': dato.ID_USUARIO_O_GRUPO === selectedUserId || emisor == dato.ID_USUARIO_O_GRUPO, 'notificacion': recibidos && recibidos.includes(dato.ID_USUARIO_O_GRUPO)}"
-                                        >
+                                    <button mat-menu-item (click)="VerChat(dato.ID_USUARIO_O_GRUPO,dato.ES_GRUPO)"
+                                        [ngClass]="{'selected': dato.ID_USUARIO_O_GRUPO === selectedUserId || emisor == dato.ID_USUARIO_O_GRUPO, 'notificacion': recibidos && recibidos.includes(dato.ID_USUARIO_O_GRUPO)}">
                                         {{ dato.USUARIO_O_GRUPO }}
+                                        <!-- <mat-icon *ngIf="recibidos && recibidos.includes(dato.ID_USUARIO_O_GRUPO)">notifications_active</mat-icon> -->
                                     </button>
                                 </div>
                                 <!-- [ngClass]="{'selected': dato.ID_USUARIO_O_GRUPO === selectedUserId || emisor == dato.ID_USUARIO_O_GRUPO}" -->
@@ -41,6 +26,26 @@
                 </div>
 
                 <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <mat-form-field *ngIf="idUsuarioOGrupo != ''"
+                                        class="w-100 mat-form-field-underline-none">
+                                        <mat-label>Busqueda por numero de orden o identidad</mat-label>
+                                        <input matInput [(ngModel)]="filtrar"  type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-2 mt-2">
+                                    <div *ngIf="idUsuarioOGrupo != ''">
+                                        <button mat-raised-button class="bg-info" (click)="buscarEnChat()">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
                     <div class="row px-3 py-3">
                         <div class="col-lg-12 chat-container" #chatContainer>
                             <!-- <div class="col-lg-12 chat-container" #chatContainer></div> -->
@@ -48,8 +53,9 @@
 
                                 <!-- Mostrar la fecha si es diferente de la fecha anterior -->
                                 <ng-container *ngIf="shouldShowDateSeparator(i)">
-                                    <div class="date-separator" style="margin-left: 40%;">{{chat.CREACION | date:
-                                        'shortDate'}}</div>
+                                    <div class="date-separator" style="margin-left: 30%; margin-bottom: 3%;">
+                                        {{chat.CREACION | date:
+                                        'fullDate'}}</div>
                                 </ng-container>
                                 <div class="message-container"
                                     [ngClass]="{'own-message': chat.EMISOR === usuarioIdEmisor, 'other-message': chat.EMISOR !== usuarioIdEmisor}">
@@ -58,33 +64,35 @@
                                         <div class="message-content"
                                             *ngIf="chat.TIPO_ARCHIVO !== ''; else regularContent">
                                             <!-- <div *ngIf="chat.TIPO_ARCHIVO == 'png' || chat.TIPO_ARCHIVO == 'PNG' || chat.TIPO_ARCHIVO =='jpg' || chat.TIPO_ARCHIVO =='jpeg'" -->
-                                            <div *ngIf="esImagenValida(chat.TIPO_ARCHIVO)"
-                                            
-                                                class="image-container">
+                                            <div *ngIf="esImagenValida(chat.TIPO_ARCHIVO)" class="image-container">
                                                 <button color="primary" mat-icon-button
-                                                    (click)="descargarDocumento(chat.imagenUrl,chat.MENSAJE)"
+                                                    (click)="descargarDocumento(chat.imagenUrl,chat.NOMBRE_ARCHIVO)"
                                                     class="download-button">
                                                     <mat-icon>save_alt</mat-icon>
                                                 </button>
 
-                                                <div class="message-content" *ngIf="chat.imagenUrl">
-                                                    <img *ngIf="chat.imagenUrl" height="150px" style="max-width: 100%"
+                                                <div class="message-content center-image" *ngIf="chat.imagenUrl">
+                                                    <img *ngIf="chat.imagenUrl" height="150px" style="max-width: 100%;"
                                                         [src]="chat.imagenUrl" alt="Vista previa de la imagen"
                                                         (click)="zoomImage($event, i)"
                                                         [ngClass]="{'zoomed': isZoomed && i === imagenAmpliadaIndex}" />
                                                 </div>
+
                                             </div>
 
 
                                             <!-- <div *ngIf="chat.TIPO_ARCHIVO == 'doxc' || chat.TIPO_ARCHIVO =='pdf' || chat.TIPO_ARCHIVO =='xls' || chat.TIPO_ARCHIVO =='xlsx'" -->
-                                                <div *ngIf="esDocumentoValido(chat.TIPO_ARCHIVO)"
-                                                class="image-container">
+                                            <div *ngIf="esDocumentoValido(chat.TIPO_ARCHIVO)" class="image-container">
                                                 <!-- <mat-icon color="primary">insert_drive_file</mat-icon>  -->
                                                 <button class="download-button" color="primary" mat-icon-button
                                                     (click)="descargarDocumento(chat.documento,chat.MENSAJE)"><mat-icon>save_alt</mat-icon>
                                                 </button>
-                                                {{chat.MENSAJE}}
+                                                {{chat.NOMBRE_ARCHIVO}}
 
+                                            </div>
+
+                                            <div *ngIf="chat.MENSAJE != ''">
+                                                {{chat.MENSAJE}}
                                             </div>
                                         </div>
 
@@ -92,7 +100,8 @@
                                         <ng-template #regularContent>
                                             <div class="message-content">{{chat.MENSAJE}}</div>
                                         </ng-template>
-                                        <div class="message-timestamp">{{chat.CREACION | date: 'shortTime'}}</div>
+                                        <div class="message-timestamp">{{chat.CREACION | date: 'shortTime':'GMT / UTC'}}
+                                        </div>
                                     </div>
                                 </div>
                             </ng-container>
@@ -101,13 +110,19 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="row">
+                            <div class="row" *ngIf="idUsuarioOGrupo != ''">
                                 <mat-form-field class="example-full-width col-lg-10">
                                     <mat-label>Escribe un mensaje</mat-label>
-                                    <input matInput [(ngModel)]="mensaje" (keyup.enter)="EnviarMensaje()">
+                                    <input matInput [(ngModel)]="mensaje" [disabled]="isLoading"
+                                        (keyup.enter)="EnviarMensaje()">
+
+
+                                    <!-- <textarea class="example-form" matInput [(ngModel)]="mensaje" [disabled]="isLoading"
+                                        (keyup.enter)="EnviarMensaje()" rows="3" cols="40"></textarea> -->
+
                                 </mat-form-field>
                                 <!-- <input class="col-lg-10" type="text"> -->
-                                <button class="col-lg-2" mat-icon-button color="primary"
+                                <button class="col-lg-2" mat-icon-button color="primary" [disabled]="isLoading"
                                     (click)="EnviarMensaje()"><mat-icon>send</mat-icon></button>
 
                                 <!-- archivos -->
@@ -116,7 +131,7 @@
                                         accept=".png, .jpg, .jpeg, .docx, .pdf, .xls, .xlsx, .txt"
                                         (change)="handleFileInput($event)" #fileUpload>
                                     <div class="file-upload">
-                                        <button mat-mini-fab color="primary" class="upload-btn"
+                                        <button mat-mini-fab color="primary" [disabled]="isLoading" class="upload-btn"
                                             (click)="fileUpload.click()">
                                             <mat-icon>attach_file</mat-icon>
                                         </button>

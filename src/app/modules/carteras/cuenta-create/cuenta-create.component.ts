@@ -95,6 +95,8 @@ export class CuentaCreateComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+
+    this.guardarPantallaActual()
     this.router.queryParams.subscribe(params => {
       this.carteraID = params['carteraID']
     });
@@ -128,6 +130,13 @@ export class CuentaCreateComponent implements OnInit {
     // });
   }
 
+  guardarPantallaActual(){
+    this.service.savePantalla('Creacion de Cliente').subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.data)
+      // respuesta = JSON.parse(respuesta)
+    })
+  }
+
   genTiempoPantalla() {
     const tiempoAlmacenado = localStorage.getItem('tiempoPantalla');
 
@@ -138,7 +147,6 @@ export class CuentaCreateComponent implements OnInit {
       this.service.getTiempoPantalla(this.carteraID, 'BUSCAR').subscribe(r => {
         var respuesta = this.auth.desencriptar(r.data);
         respuesta = JSON.parse(respuesta);
-        console.log(respuesta);
 
         if (respuesta.length > 0 && respuesta[0].TIEMPOSEGUNDOS) {
           this.contador = respuesta[0].TIEMPOSEGUNDOS;
@@ -155,11 +163,9 @@ export class CuentaCreateComponent implements OnInit {
       if (this.contador > 0) {
         this.contador--;
         localStorage.setItem('contador', this.contador.toString());
-        console.log('Tiempo transcurrido:', this.contador);
       } else {
         this.timerSubscription.unsubscribe();
         localStorage.removeItem('contador'); // Elimina el contador del almacenamiento local al finalizar
-        console.log('Temporizador finalizado');
         window.location.reload()
         // this.service.GuadarGestionATCTimeOut(this.carteraID,this.cuentaID).subscribe(r => {
         //   var respuesta = this.auth.desencriptar(r.response)
@@ -176,6 +182,11 @@ export class CuentaCreateComponent implements OnInit {
     }
     localStorage.removeItem('tiempoPantalla');
     localStorage.removeItem('contador');
+    
+    this.service.removeUserPantalla().subscribe(r => {
+      // var respuesta = this.auth.desencriptar(r.data)
+      // respuesta = JSON.parse(respuesta)
+    })
   }
 
 
@@ -183,7 +194,6 @@ export class CuentaCreateComponent implements OnInit {
     this.service.getListaBuro().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.listaNivelBuro = JSON.parse(data)
-      console.log(this.listaNivelBuro)
     })
   }
 
@@ -191,7 +201,6 @@ export class CuentaCreateComponent implements OnInit {
     this.service.getListaDistribuidores().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.listaDistribuidor = JSON.parse(data)
-      console.log(this.listaDistribuidor)
     })
   }
 
@@ -199,7 +208,6 @@ export class CuentaCreateComponent implements OnInit {
     this.service.getListaConfirmacion().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.listaConfirmacion = JSON.parse(data)
-      console.log(this.listaConfirmacion)
     })
   }
 
@@ -207,7 +215,6 @@ export class CuentaCreateComponent implements OnInit {
     this.service.getListaEstadoValidacion().subscribe(r => {
       var data = this.auth.desencriptar(r.data)
       this.listaEstadoValidacion = JSON.parse(data)
-      console.log(this.listaEstadoValidacion)
     })
   }
 
@@ -282,7 +289,6 @@ export class CuentaCreateComponent implements OnInit {
         var respuesta = this.auth.desencriptar(r.response)
         respuesta = JSON.parse(respuesta)
         respuesta = respuesta[0]
-        console.log(respuesta)
         if (respuesta.status == 1) {
           this.service.notificacion(respuesta.message)
           this.limpiarInputs()

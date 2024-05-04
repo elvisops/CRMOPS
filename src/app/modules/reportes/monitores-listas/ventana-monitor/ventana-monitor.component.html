@@ -84,28 +84,40 @@
           </tbody> -->
 
           <tbody>
-            <tr *ngFor="let item of datos">
-              <td *ngFor="let columnName of encabezados">
+            <!-- <tr *ngFor="let item of datos" [ngClass]="{'red-row': item['ESTADO OPERATIVO'] !== 'LISTO', 'green-row': item['ESTADO OPERATIVO'] === 'LISTO'}"> -->
+            <tr *ngFor="let item of datos" [ngClass]="{'red-row': item['Estado Operativo'] !== 'LISTO','green-row': item['Estado Operativo'] == 'LISTO'}">
+              <td *ngFor="let columnName of encabezados" >
                 <ng-container *ngIf="columnName === 'INICIO'; else fechaColumn">
                   <!-- Lógica para cuando el encabezado es "INICIO" -->
-                  {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss"}}
+                  {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss":"GMT / UTC"}}
                 </ng-container>
                 <ng-template #fechaColumn>
-                  <ng-container *ngIf="columnName === 'FECHA'; else usuarioIdColumn">
+                  <ng-container *ngIf="columnName === 'Fecha y Hora'; else usuarioIdColumn">
                     <!-- Lógica para cuando el encabezado es "FECHA" -->
-                    {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss" }}
+                    {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss":"GMT / UTC" }}
                   </ng-container>
                   <ng-template #usuarioIdColumn>
                     <!-- <ng-container *ngIf="columnName === 'USUARIOID'; else otherColumn"> -->
-                    <ng-container *ngIf="columnName === 'USUARIOID'; else otherColumn">
+                    <!-- <ng-container *ngIf="columnName === 'USUARIOID'; else otherColumn"> -->
+                    <ng-container *ngIf="columnName === 'Logout'; else quitPausa">
                       <!-- Lógica para cuando el encabezado es "USUARIOID" -->
-                      <!-- <a href="['/ruta', item[columnName]]">{{ item[columnName] }}</a> -->
+
+
                       <mat-button-toggle-group>
                         <mat-button-toggle (click)="DesloguearUsuario(item[columnName])">
                           <mat-icon class="text-success" title="Desloguear Agente">exit_to_app</mat-icon>
                         </mat-button-toggle>
                       </mat-button-toggle-group>
                     </ng-container>
+                    <ng-template #quitPausa>
+                      <ng-container *ngIf="columnName === 'Quitar Pausa'; else otherColumn">
+                        <mat-button-toggle-group [disabled]="item['Estado Operativo'] == 'LISTO'">
+                          <mat-button-toggle  (click)="QuitarPausaUsuario(item[columnName], item['Estado Operativo'])">
+                            <mat-icon class="text-info" title="Quitar la pausa del Agente">play_arrow</mat-icon>
+                          </mat-button-toggle>
+                        </mat-button-toggle-group>
+                      </ng-container>
+                    </ng-template>
                     <ng-template #otherColumn>
                       <!-- Lógica para otros encabezados que no son ni "INICIO", "FECHA" ni "USUARIOID" -->
                       {{ item[columnName] }}

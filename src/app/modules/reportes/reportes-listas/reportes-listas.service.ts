@@ -118,6 +118,57 @@ export class ReportesListasService {
     })
   }
 
+  createReporte(carteraID: number,reporte: string,query: string,filtroF:number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "reportes_create",
+      token: token,
+      carteraID: carteraID,
+      reporte: reporte,
+      query: query,
+      filtroF: filtroF
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al crear el reporte"))
+    )
+  }
+
+  updateReporte(reporte:string, reporteID: number, query: string, filtroFecha: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "reporte_update",
+      token: token,
+      reporte: reporte,
+      reporteID: reporteID,
+      query: query,
+      filtroFecha: filtroFecha
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Modificar el reporte"))
+    )
+  }
+
+  deleteReporte(reporteID: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'reportes_delete',
+      token: token,
+      reporteID: reporteID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Eliminar el reporte"))
+    )
+  }
+
   notificacion(msg: string): void {
     this.snack.open(msg, 'Cerrar', {
       horizontalPosition: 'center',

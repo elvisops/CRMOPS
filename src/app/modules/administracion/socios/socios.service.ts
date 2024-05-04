@@ -174,6 +174,42 @@ export class SociosService {
       )
   }
 
+  getUsuariosCarteras(carteraID: number): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: 'usuarios_carteras_lista', token: token, carteraID: carteraID })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de usuarios de la cartera"))
+      )
+  }
+
+  getUsuariosCarterasDisponibles(carteraID: number): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({ proc: 'usuarios_carteras_dispo_lista', token: token, carteraID: carteraID })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo obtener la lista de usuarios"))
+      )
+  }
+
+  updatePermisoUsuario(usuarioID: number, proyectoID: number): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: 'usuarios_carteras_update', 
+      token: token,
+      usuarioID: usuarioID,
+      // estadoUsuario: estadoUsuario,
+      proyectoID: proyectoID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("No se pudo actualizar el permiso del usuario"))
+      )
+  }
+
 
   //manejo de errores mensaje
   notificacion(msg: string): void {

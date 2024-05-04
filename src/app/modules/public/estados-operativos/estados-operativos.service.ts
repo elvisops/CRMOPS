@@ -47,6 +47,18 @@ export class EstadosOperativosService {
       )
   }
 
+  getEstadoActual(): Observable<any>{
+    var token = this.auth.ParseToken()
+    var payload = this.auth.mkpayload({
+      proc: "estado_operativo_actual_get",
+      token: token
+    })
+    return this.http.post<any>(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al obtener el Estado Operativo actual"))
+      )  
+  }
   
 
   notificacion(msg: string): void {

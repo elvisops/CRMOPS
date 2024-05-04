@@ -32,9 +32,15 @@ export class LoginComponent implements OnInit {
   inactiveMsg: string = ""
 
   elapsedTime?: number
+  isLoading: boolean = false
 
   ngOnInit(): void {
     this.validarSesionActiva()
+
+    this.service.removeUserPantalla().subscribe(r => {
+      // var respuesta = this.auth.desencriptar(r.data)
+      // respuesta = JSON.parse(respuesta)
+    })
   }
 
   notificacion(msg: string) {
@@ -58,6 +64,7 @@ export class LoginComponent implements OnInit {
   }
 
   IniciarSesion() {
+    this.isLoading = true
     if (this.inactive) {
       this.notificacion("!No se puede ingresar al sistema con un usuario bloqueado!")
       return;
@@ -95,12 +102,15 @@ export class LoginComponent implements OnInit {
         this.timerService.startTimer();        
         window.location.href = "./"
 
+        this.isLoading = false
+
       } else {
         //Validar si el usuario esta inactivo
         if (respuesta.data == "-1") {
           this.inactive = true
           this.inactiveMsg = "Su usuario esta bloqueado o deshabilitado, pongase en contacto con un administrador"
         }
+        this.isLoading = false
         this.notificacion(respuesta.message)
 
 

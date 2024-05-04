@@ -1,0 +1,10 @@
+<h2 class="text-center" mat-dialog-title>Confirmación</h2>
+<mat-dialog-content>
+  <p>{{ data }}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="pull-to-end">
+        <button mat-raised-button class="bgops-indigo txtwhite mx-2" [mat-dialog-close]="true">Confirmar</button>
+        <button mat-raised-button color="warn" class="mx-2" [mat-dialog-close]="false">Cancelar</button>
+    </div>
+</mat-dialog-actions>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -19,6 +19,16 @@ export class ChatService {
   ) { }
 
   api = environment.api
+
+
+  private _datos = '0'
+  get datos(){
+    return this._datos
+  }
+
+  setdatos(valor: any){
+    this._datos = valor
+  }
 
   // getIdUsuario():Observable<any>{
   //   var token = sessionStorage.getItem('token')
@@ -53,21 +63,99 @@ export class ChatService {
     )
   }
 
-  enviarMensaje(usuarioEmisor:number | null, usuarioReceptor:number|null, mensaje:string, extencion: null|string):Observable<any>{
+  getMensajes(usuarioID:string|null|number,esGrupo:number|null):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({proc:"traer_chats",token:token,usuarioID:usuarioID,esGrupo:esGrupo})
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al traer el chat del usuario"))
+    )
+  }
+
+  
+  getMasMensajes(grupo:string|null, esGrupo:number, primerMensaje: string):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
-      proc:"enviar_mensaje",
+        proc:"traer_mas_mensajes",
+        token:token,
+        // usuarioID:usuarioID,
+        grupo:grupo,
+        esGrupo:esGrupo,
+        primerMensaje:primerMensaje
+      })
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al traer el chat del usuario"))
+    )
+  }
+
+
+  enviarMensaje(usuarioEmisor:number | null, usuarioReceptor:number|null, mensaje:string, extencion: null|string, archivo: string, nombreArchivo: string| undefined):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      // proc:"enviar_mensaje",
       token:token,
       usuarioEmisor:usuarioEmisor,
       usuarioReceptor:usuarioReceptor,
       mensaje:mensaje,
-      extencion:extencion
+      extencion:extencion,
+      archivo: archivo,
+      nombreArchivo: nombreArchivo
     })
-    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    var data = { 'payload': payload }
+    return this.http.post<any>('http://10.8.8.115:3004/send-message', data, httpOptions)
     .pipe(
       tap(),
       catchError(this.handleError("Error al enviar el mensaje"))
+    )
+
+  }
+  
+
+  // enviarMensaje(usuarioEmisor:number | null, usuarioReceptor:number|null, mensaje:string, extencion: null|string):Observable<any>{
+  //   var token = sessionStorage.getItem('token')
+  //   token = this.auth.desencriptar(token)
+  //   var payload = this.auth.mkpayload({
+  //     proc:"enviar_mensaje",
+  //     token:token,
+  //     usuarioEmisor:usuarioEmisor,
+  //     usuarioReceptor:usuarioReceptor,
+  //     mensaje:mensaje,
+  //     extencion:extencion
+  //   })
+  //   return this.http.post<any>(`${this.api}/api/proc`,{payload})
+  //   .pipe(
+  //     tap(),
+  //     catchError(this.handleError("Error al enviar el mensaje"))
+  //   )
+  // }
+
+  filtrarEnChat(receptorID: number|null, busqueda: string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "buscar_en_chat",
+      token: token,
+      receptorID: receptorID,
+      busqueda: busqueda
+    })
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al realizar la busqueda de mensajes"))
     )
   }
   

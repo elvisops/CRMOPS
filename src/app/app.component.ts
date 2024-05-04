@@ -6,6 +6,8 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-shee
 import { EstadosOperativosComponent } from './modules/public/estados-operativos/estados-operativos.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatComponent } from './modules/public/chat/chat.component';
+import { ChatService } from './modules/public/chat/chat.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +29,19 @@ export class AppComponent implements OnInit {
   carteraId: number = 1
 
   messages: string = "";
-  notificacion: string | null = localStorage.getItem('notificacion')
 
+
+
+  not: string = ''
+  // get datos() {
+
+  //   if (this.datosService.datos == "1") {
+  //     this.notificacion = "0"
+  //   }
+
+
+  //   return this.datosService.datos
+  // }
 
 
   constructor(
@@ -38,10 +51,40 @@ export class AppComponent implements OnInit {
     private timer: TimerServiceService,
     private service: AuthService,
     private bottomSheet: MatBottomSheet,
-    private dialog: MatDialog
-  ) {
-    this.ValidarSesion()
+    private dialog: MatDialog,
+    private router: Router,
 
+    private datosService: ChatService
+  ) {
+
+    var val = localStorage.getItem('notificacion')
+
+    if (val == undefined || val == null || val == '') {
+      this.notificacion = ""
+      // console.log("validar sesion")
+    }
+
+    // console.log(this.datos)
+    this.ValidarSesion()
+    // if (this.not == "1") {
+    //   console.log("ya no existen notificaciones")
+    // }else{
+
+    //   console.log("existen notificaciones")
+    // }
+    // this.notificacion = localStorage.getItem('notificacion')
+
+  }
+
+
+  notificacion: string | null = localStorage.getItem('notificacion')
+
+
+  msj: string = "";
+
+  recibirMensaje(mensajes: any) {
+    this.msj = mensajes;
+    // console.log(this.msj)
   }
 
   AbrirChat(): void {
@@ -54,6 +97,176 @@ export class AppComponent implements OnInit {
   AbrirEstados(): void {
     this.bottomSheet.open(EstadosOperativosComponent)
   }
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler(event: BeforeUnloadEvent) {
+  //   // Mostrar un mensaje de confirmación al usuario
+  //   const confirmationMessage = '¿Seguro que quieres salir?';
+  //   event.returnValue = confirmationMessage; // Para compatibilidad con navegadores antiguos
+
+  //   // Realizar la solicitud HTTP antes de que la página se descargue
+  //   const usuarioID = sessionStorage.getItem('usuarioID');
+  //   if (usuarioID) {
+  //     const desencriptado = this.service.desencriptar(usuarioID);
+  //     this.timerService.actualizarEstadoOperativo(desencriptado)
+  //       .subscribe(
+  //         () => {
+  //           console.log('Solicitud HTTP enviada correctamente antes de cerrar la página.');
+  //         },
+  //         error => {
+  //           console.error('Error al enviar la solicitud HTTP:', error);
+  //         }
+  //       );
+  //   }
+  // }
+
+  // private ventanaCerrandose: boolean = false;
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler(event: BeforeUnloadEvent) {
+  //   // Establecer la bandera para indicar que la ventana se está cerrando
+  //   this.ventanaCerrandose = true;
+  // }
+
+  // @HostListener('window:unload', ['$event'])
+  // unloadHandler(event: Event) {
+  //   // Verificar si la ventana realmente se está cerrando
+  //   if (this.ventanaCerrandose) {
+  //     // Realizar la solicitud HTTP antes de que la página se descargue
+  //     const usuarioID = sessionStorage.getItem('usuarioID');
+  //     if (usuarioID) {
+  //       const desencriptado = this.service.desencriptar(usuarioID);
+  //       this.timerService.actualizarEstadoOperativo(desencriptado)
+  //         .subscribe(
+  //           () => {
+  //             console.log('Solicitud HTTP enviada correctamente antes de cerrar la página.');
+  //           },
+  //           error => {
+  //             console.error('Error al enviar la solicitud HTTP:', error);
+  //           }
+  //         );
+  //     }
+  //   }
+  // }
+
+  @HostListener('window:beforeunload', ['$event'])
+   onWindowClose(event: any): void {
+    // Do something
+
+    // this.timerService.actualizarEstadoOperativo('4').subscribe(r => {
+    //   var res = this.auth.desencriptar(r.data)
+    //   console.log(res)
+    // })
+    // debugger;
+
+    //  event.preventDefault();
+    //  event.returnValue = false;
+
+    // debugger; 
+    
+    window.addEventListener('beforeunload',() => {
+      console.log('cerrando pestaña del navegador')
+      // const desencriptado = this.service.desencriptar(usuarioID);
+      // this.timerService.actualizarEstadoOperativo(desencriptado)
+      
+      debugger;
+      event.preventDefault();
+      event.returnValue = false;
+ 
+      // window.open("https://ionicframework.com/", '_blank')
+    })
+
+  }
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // onWindowClose(event: any): void {
+  //   if (event.currentTarget.performance.navigation.type === 1) {
+  //     // Aquí colocas lo que deseas hacer solo cuando se está cerrando la ventana o el navegador
+  //     // Por ejemplo:
+
+  //     event.preventDefault();
+  //     event.returnValue = false;
+
+  //     console.log("La ventana se está cerrando o el navegador está siendo cerrado");
+  //   }
+  // }
+
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // unloadHandler(event: BeforeUnloadEvent) {
+  //     // Aquí colocas lo que deseas hacer cuando se cierra la ventana o pestaña
+  //     // event.preventDefault();
+  //     event.returnValue = false;
+  //     // console.log('La ventana del navegador se está cerrando o la pestaña se está cerrando.');
+  // }
+
+
+  // enviarSolicitudAlCerrarVentana() {
+  //   // Detectar el evento unload
+  //   window.addEventListener('unload', () => {
+  //     // Realizar la solicitud HTTP al servidor
+  //     // const usuarioID = sessionStorage.getItem('usuarioID');
+  //     const usuarioID = this.service.encriptar("4")
+  //     if (usuarioID) {
+  //       const desencriptado = this.service.desencriptar(usuarioID);
+  //       this.timerService.actualizarEstadoOperativo(desencriptado).subscribe(
+  //           () => {
+  //             console.log('Solicitud HTTP enviada correctamente al cerrar la ventana.');
+  //           },
+  //           error => {
+  //             console.error('Error al enviar la solicitud HTTP al cerrar la ventana:', error);
+  //           }
+  //         );
+  //     }
+  //   });
+  // }
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler(event: BeforeUnloadEvent) {
+  //   localStorage.setItem('reloading', 'true'); // Establecer indicador de recarga
+  // }
+
+  // @HostListener('window:unload', ['$event'])
+  // unloadHandler(event: Event) {
+  //   if (localStorage.getItem('reloading') !== 'true') {
+  //     // Realizar la solicitud HTTP solo si la página se está cerrando definitivamente
+  //     const usuarioID = sessionStorage.getItem('usuarioID');
+  //     if (usuarioID) {
+  //       const desencriptado = this.service.desencriptar(usuarioID);
+  //       this.timerService.actualizarEstadoOperativo(desencriptado)
+  //         .subscribe(
+  //           () => {
+  //             console.log('Solicitud HTTP enviada correctamente antes de cerrar la página.');
+  //           },
+  //           error => {
+  //             console.error('Error al enviar la solicitud HTTP:', error);
+  //           }
+  //         );
+  //     }
+  //   }
+  //   localStorage.removeItem('reloading'); // Eliminar indicador de recarga
+  // }
+
+  // @HostListener('window:unload', ['$event'])
+  // unloadHandler(event: Event) {
+  //   if (localStorage.getItem('reloading') !== 'true') {
+  //     // Realizar la solicitud HTTP solo si la página se está cerrando definitivamente
+  //     const usuarioID = sessionStorage.getItem('usuarioID');
+  //     if (usuarioID) {
+  //       const desencriptado = this.service.desencriptar(usuarioID);
+  //       this.timerService.actualizarEstadoOperativo(desencriptado)
+  //         .subscribe(
+  //           () => {
+  //             console.log('Solicitud HTTP enviada correctamente antes de cerrar la página.');
+  //           },
+  //           error => {
+  //             console.error('Error al enviar la solicitud HTTP:', error);
+  //           }
+  //         );
+  //     }
+  //   }
+  //   localStorage.removeItem('reloading'); // Eliminar indicador de recarga
+  // }
 
 
   @HostListener('window:storage', ['$event'])
@@ -77,12 +290,12 @@ export class AppComponent implements OnInit {
       }, 500);
     }
 
-    console.log(this.status)
+    // console.log(this.status)
 
 
     const token = sessionStorage.getItem('token')
     if (token != null) {
-      const eventSource = new EventSource('http://10.8.8.115:3007/events');
+      const eventSource = new EventSource('http://10.8.8.115:3004/events');
       eventSource.addEventListener('message', (event: any) => {
         const jsonData = JSON.parse(event.data)
         const dataContent = jsonData.data
@@ -96,15 +309,15 @@ export class AppComponent implements OnInit {
 
           var dataResult = JSON.parse(respuesta.data)
           dataResult = dataResult[0]
-          if (dataResult.receptor == usuarioId || dataResult.receptor == 4025) {
-            localStorage.setItem('notificacion', "1")
-            this.notificacion = localStorage.getItem('notificacion')
-          }
+          // if (dataResult.RECEPTOR == usuarioId || dataResult.RECEPTOR == 4025) {
+          localStorage.setItem('notificacion', "1")
+          this.notificacion = localStorage.getItem('notificacion')
+          // }
 
           let arregloDatos: any[] = JSON.parse(localStorage.getItem('recibido') || '[]');
 
           // Agregar el nuevo valor de dataResult.emisor al arreglo si no existe previamente
-          const nuevoValor = dataResult.receptor;
+          const nuevoValor = dataResult.RECEPTOR;
           if (!arregloDatos.includes(nuevoValor)) {
             arregloDatos.push(nuevoValor);
           }
@@ -115,11 +328,54 @@ export class AppComponent implements OnInit {
       });
     }
 
+    // this.close()
 
   }
 
+  // close(){
+  //   window.addEventListener('beforeunload',() => {
+  //     console.log('cerrando pestaña del navegador')
+  //     // const desencriptado = this.service.desencriptar(usuarioID);
+  //     // this.timerService.actualizarEstadoOperativo(desencriptado)
+  //     this.timerService.actualizarEstadoOperativo('4').subscribe(r => {
+  //       var res = this.auth.desencriptar(r.data)
+  //       console.log(res)
+  //     })
+  //     debugger;
+
+  //     window.open("https://ionicframework.com/", '_blank')
+  //   })
+  // }
+
 
   ValidarSesion() {
+
+    var usaurioID = sessionStorage.getItem('usuarioID')
+    if (usaurioID) {
+      // var usaurioID = sessionStorage.getItem('usuarioID')
+      usaurioID = this.service.desencriptar(usaurioID)
+
+      this.timerService.validarSesion(usaurioID).subscribe(r => {
+        var respuesta = this.auth.desencriptar(r.response)
+        respuesta = JSON.parse(respuesta)
+        respuesta = respuesta[0]
+        // console.log('SESSION ACTIVA: ',respuesta)
+        if (respuesta.status == 0) {
+          this.service.notificacion(respuesta.message)
+          this.LoginService.sesionDestroy()
+          this.router.navigate(['./login'])
+        }
+        // else{
+        //   this.service.notificacion(respuesta.message)
+        // }
+
+
+      })
+    }
+
+
+
+
     this.isLogged = (sessionStorage.getItem('logged') == "true") ? true : false;
     if (sessionStorage.getItem('logged') == "true") {
       this.LoginService.getPermisos()?.subscribe(res => {
@@ -129,7 +385,13 @@ export class AppComponent implements OnInit {
         this.ListModulos()
       })
     }
+    // console.log("validar session")
 
+    // var permisos = sessionStorage.getItem('permisos')
+    // if (permisos == undefined) {
+    //   console.log('usuario sin session')
+    //   this.router.navigate(['./login'])
+    // }
   }
 
   cerrarSesion() {
@@ -177,7 +439,7 @@ export class AppComponent implements OnInit {
     resultado = resultado.replace('í', 'i')
     resultado = resultado.replace('ó', 'o')
     resultado = resultado.replace('ú', 'u')
-    console.log(resultado)
+    // console.log(resultado)
     return resultado.toUpperCase()
   }
 }

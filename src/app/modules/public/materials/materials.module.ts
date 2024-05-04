@@ -36,6 +36,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { HttpClientModule } from '@angular/common/http';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 const modules = [    
     MatCheckboxModule,
     MatCheckboxModule,
@@ -70,7 +72,8 @@ const modules = [
     MatPaginatorModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    DragDropModule
 
 ]
 

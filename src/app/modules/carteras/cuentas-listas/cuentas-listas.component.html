@@ -9,6 +9,7 @@
     <mat-card-content>
       <mat-form-field appearance="outline" class="w-25 px-1">
         <mat-label>Filtro</mat-label>
+        <!-- <label class="mat-label">Select</label> -->
         <mat-select [(ngModel)]="filtroID" (ngModelChange)="onChangeFiltro()">
           <mat-option></mat-option>
           <mat-option *ngFor="let accion of ListaFiltros" [value]="accion.ID">
@@ -16,6 +17,16 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline" class="w-25 px-1">
+        <div class="mat-form-field-wrapper">
+          <label class="mat-label">Select</label>
+          <mat-select [(ngModel)]="filtroID" (ngModelChange)="onChangeFiltro()" class="mat-select"></mat-select>
+        </div>
+      </mat-form-field> -->
+      
+      
+      
 
       <button *ngIf="botonFiltrar" style="height: 56px;" class="btn btn-success mx-3"
         (click)="genData()">Filtrar</button>

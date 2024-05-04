@@ -36,7 +36,7 @@ export class MonitoresListasService {
       );
   }
 
-  getListaReportes(carteraID:number): Observable<any> {
+  getListaMonitores(carteraID:number): Observable<any> {
     var token = sessionStorage.getItem('token');
     token = this.auth.desencriptar(token);
     var payload = this.auth.mkpayload({
@@ -79,6 +79,88 @@ export class MonitoresListasService {
     .pipe(
       tap(),
       catchError(this.handleError("Error al desloguear el usuario"))
+    )
+  }
+
+  quitarPausa(usuarioID: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "remove_user_pause",
+      token: token,
+      usuarioID: usuarioID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al quitar la pausa del usuario"))
+    )
+  }
+
+  getMonitor(monitorID: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'monitores_informacion',
+      token: token,
+      monitorID: monitorID
+    })
+    return this.http.post<any>(`${this.api}/api/get`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Eliminar el reporte"))
+    )
+  }
+
+  createMonitor(carteraID: number, monitor: string,query: string, tipoMonitor: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "monitores_create",
+      token: token,
+      carteraID: carteraID,
+      monitor: monitor,
+      query: query,
+      tipoMonitor: tipoMonitor
+    })
+    return this.http.post<any>(`${this.api}/api/proc`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al crear el monitor"))
+    )
+  }
+
+  updateMonitor(monitor:string, monitorID: number, query: string, tipoMonitor:number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "monitores_update",
+      token: token,
+      monitor: monitor,
+      monitorID: monitorID,
+      query: query,
+      tipoMonitor: tipoMonitor
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, { payload })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Modificar el reporte"))
+    )
+  }
+
+
+  deleteMonitor(monitorID: number){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'monitores_delete',
+      token: token,
+      monitorID: monitorID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al Eliminar el reporte"))
     )
   }
 

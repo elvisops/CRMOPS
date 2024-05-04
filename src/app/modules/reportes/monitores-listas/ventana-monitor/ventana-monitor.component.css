@@ -2,3 +2,13 @@
     background-color: rgb(152, 252, 152) !important;
     /* color: white; */
 }
+
+
+
+.red-row {
+    background-color: rgb(255, 153, 122);
+}
+
+.green-row {
+    background-color: rgb(164, 255, 141) !important;
+}

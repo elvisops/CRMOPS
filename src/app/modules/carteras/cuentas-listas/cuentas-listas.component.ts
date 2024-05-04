@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CarterasService } from '../carteras.service';
 import { AuthService } from 'src/app/guards/auth/auth.service';
@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CuentaEditComponent } from '../cuenta-edit/cuenta-edit.component';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-cuentas-listas',
@@ -46,6 +47,7 @@ export class CuentasListasComponent implements OnInit {
     private auth: AuthService,
     private route: Router,
     private dialog: MatDialog,
+    private labelElement: ElementRef
   ) { }
 
   ListaCuentas: CuentasListas[] = []
@@ -54,9 +56,28 @@ export class CuentasListasComponent implements OnInit {
   Columnas: string[] = ["OPCIONES", "CUENTA", "NOMBRE", "IDENTIFICACION", "TIPIFICACION", "SUBTIPIFICACION", "ACCION", "RESULTADO", "USUARIO", "ESTADO", "CREACION"]
 
   ngOnInit(): void {
+    this.guardarPantallaActual()
     this.getVariables()
     //  this.genListaCuentas()
     // alert(this.cartera)
+  }
+
+  ngOnDestroy() {    
+    this.service.removeUserPantalla().subscribe(r => {
+      // var respuesta = this.auth.desencriptar(r.data)
+      // respuesta = JSON.parse(respuesta)
+    })
+  }
+
+  ngAfterViewInit() {
+    const label: HTMLLabelElement = this.labelElement.nativeElement;
+    label.removeAttribute('aria-owns');
+  }
+  guardarPantallaActual(){
+    this.service.savePantalla('Busqueda de Cliente').subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.data)
+      respuesta = JSON.parse(respuesta)
+    })
   }
 
   getVariables() {

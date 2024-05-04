@@ -42,7 +42,7 @@ export class ModulosCrearComponent implements OnInit{
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      console.log(respuesta)
+      // console.log(respuesta)
       if(respuesta.status == 1){
         this.data = respuesta.data  
         this.resetForm()     

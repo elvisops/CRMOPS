@@ -1,8 +1,8 @@
-import { Component,OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { EstadosOperativosService } from './estados-operativos.service';
 import { LoginService } from 'src/app/modules/administracion/login/login.service';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 
 
@@ -11,60 +11,74 @@ import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet'
   templateUrl: './estados-operativos.component.html',
   styleUrls: ['./estados-operativos.component.css']
 })
-export class EstadosOperativosComponent implements  OnInit{
+export class EstadosOperativosComponent implements OnInit {
   // @Input() variableCompartida: string = "Texto compartido";
 
   constructor(
-    private auth:AuthService,
-    private service:EstadosOperativosService,
-    private loginService:LoginService,
+    private auth: AuthService,
+    private service: EstadosOperativosService,
+    private loginService: LoginService,
     private _bottomSheet: MatBottomSheet
   ) { }
 
   EstadosOperativos: any[] = []
-  EstadoActual:number = 0
+  EstadoActual: number = 0
   EstadoActualName = ""
 
-  openlink(event: MouseEvent){  
-      
+  openlink(event: MouseEvent) {
+
     event.preventDefault();
-  } 
-
-  ListarEstadosOperativos(){
-
-    var EstadoActual = sessionStorage.getItem('EstadoOperativo')
-    
-     var estadoSesion = this.auth.desencriptar(EstadoActual)
-     this.EstadoActual = estadoSesion
-    this.service.getEstadosOperativos().subscribe(res=>{      
-      var respuesta = this.auth.desencriptar(res.data)
-      respuesta = JSON.parse(respuesta)
-      var ArrFiltro = respuesta.filter((elemento:any) => elemento.ESTADOOPERATIVOID != estadoSesion);
-      var NombreEstado = respuesta.filter((elemento:any) => elemento.ESTADOOPERATIVOID == estadoSesion);
-      this.EstadoActualName = NombreEstado[0].ESTADOOPERATIVO
-      this.EstadosOperativos = ArrFiltro      
-    })    
   }
 
-  ActualizarEstado(estadoOperativoID:number):void{
-    this.service.SetUserState(estadoOperativoID).subscribe(res=>{
+  ListarEstadosOperativos() {
+    var EstadoActual = sessionStorage.getItem('EstadoOperativo')
+    var estadoSesion = this.auth.desencriptar(EstadoActual)
+    this.EstadoActual = estadoSesion
+
+    // validar si el estado a cambiado tal ves por deslogueo de supervisor
+    this.service.getEstadoActual().subscribe(res => {
+      var respuesta = this.auth.desencriptar(res.data)
+      respuesta = JSON.parse(respuesta)
+      respuesta = respuesta[0]
+      respuesta = respuesta.ESTADOOPERATIVOID
+
+      if (respuesta != Number(this.EstadoActual)) {
+        this.EstadoActual = respuesta
+        estadoSesion = this.EstadoActual
+        respuesta = respuesta.toString()
+        const newEstado = this.auth.encriptar(respuesta).toString()
+        sessionStorage.setItem('EstadoOperativo', newEstado)
+      }
+
+      this.service.getEstadosOperativos().subscribe(res => {
+        var respuesta = this.auth.desencriptar(res.data)
+        respuesta = JSON.parse(respuesta)
+        var ArrFiltro = respuesta.filter((elemento: any) => elemento.ESTADOOPERATIVOID != estadoSesion);
+        var NombreEstado = respuesta.filter((elemento: any) => elemento.ESTADOOPERATIVOID == estadoSesion);
+        this.EstadoActualName = NombreEstado[0].ESTADOOPERATIVO
+        this.EstadosOperativos = ArrFiltro
+      })
+    })
+  }
+
+  ActualizarEstado(estadoOperativoID: number): void {
+    this.service.SetUserState(estadoOperativoID).subscribe(res => {
       var respuesta = this.auth.desencriptar(res.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      if(respuesta.status == 1){
-        sessionStorage.setItem('EstadoOperativo',this.auth.encriptar(estadoOperativoID.toString()).toString())        
-        this.service.notificacion("Estado operativo actualizado")     
+      if (respuesta.status == 1) {
+        sessionStorage.setItem('EstadoOperativo', this.auth.encriptar(estadoOperativoID.toString()).toString())
+        this.service.notificacion("Estado operativo actualizado")
         this._bottomSheet.dismiss();
-           
-      }else{
+
+      } else {
         this.service.notificacion("Error al actualizar el estado operativo")
-      }      
+      }
     })
-    
+
   }
 
-
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.ListarEstadosOperativos()
   }
 

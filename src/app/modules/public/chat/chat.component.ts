@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ChatService } from './chat.service';
 import { AuthService } from 'src/app/guards/auth/auth.service';
 import { Chat } from './chat';
@@ -11,6 +11,9 @@ import { IMqttMessage, MqttService } from 'ngx-mqtt';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
+
+  @Output() mensajes: EventEmitter<string>;
+
 
   ListaContactos: any[] = []
   ListaChats: any[] = []
@@ -42,6 +45,17 @@ export class ChatComponent implements OnInit {
 
   prueba: string = ""
 
+  idUsuarioOGrupo: string | null = ""
+  esGrupo: number = 0
+  // prueba: string = ''
+
+  isLoading: boolean = false
+  archivo: string = ""
+
+  filtrar: string = ""
+
+  listaMensajesFiltrados: any[] = []
+
 
 
   @ViewChild('chatContainer') chatContainer!: ElementRef;
@@ -50,34 +64,11 @@ export class ChatComponent implements OnInit {
     private auth: AuthService,
     private http: HttpClient,
     private elementRef: ElementRef
-
-    // private mqttService: MqttService
   ) {
 
-    // this.mqttService.observe(this.topic).subscribe((message: IMqttMessage) => {
-    //   this.message = message.payload.toString();
-    //   console.log('Mensaje recibido:', this.message);
-    // });
-
+    this.mensajes = new EventEmitter();
   }
 
-
-
-  // ngAfterViewInit() {
-  //   if (this.chatContainer && this.chatContainer.nativeElement) {
-  //     this.chatContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
-  //   }
-  // }
-
-  // onScroll() {
-  //   if (this.chatContainer && this.chatContainer.nativeElement) {
-  //     const atTop = this.chatContainer.nativeElement.scrollTop === 0;
-  //     if (atTop) {
-  //       console.log('El scroll está en la parte superior');
-  //       // llamar a la funcion con los siguiente mensajes
-  //     }
-  //   }
-  // }
 
 
   ngAfterViewInit() {
@@ -86,25 +77,52 @@ export class ChatComponent implements OnInit {
     }
   }
 
+
   onScroll() {
     if (this.chatContainer && this.chatContainer.nativeElement) {
       const container = this.chatContainer.nativeElement;
       const atTop = container.scrollTop === 0;
-      // const atBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
 
       if (atTop) {
-        console.log('El scroll está en la parte superior');
-        // llamar a la funcion con los siguiente mensajes
+        // console.log('El scroll está en la parte superior');
 
-        this.service.getChatUsuarios("4", 4025).subscribe(r => {
+        var primerMensaje = this.ListaChats[0]
+        primerMensaje = primerMensaje.CHATID
+        // console.log(primerMensaje)
+
+        // Llamar a la función con los siguientes mensajes
+        // console.log("getMensajes2: ",this.idUsuarioOGrupo, ' ', this.esGrupo, ' ', primerMensaje)
+        this.service.getMasMensajes(this.idUsuarioOGrupo, this.esGrupo, primerMensaje).subscribe(r => {
           var res = this.auth.desencriptar(r.data);
-          this.ListaChats = JSON.parse(res);
-          console.log('lista chats: ', this.ListaChats);
-        })
-      } 
 
+          if (JSON.parse(res).length > 0) {
+            const nuevosChats = JSON.parse(res);
+            // console.log('Nuevos chats: ', nuevosChats);
+
+            // mover el scroll
+            container.scrollTop += container.scrollHeight * 0.005;
+
+            // Concatenar los nuevos chats al principio de la lista existente
+            this.ListaChats = nuevosChats.concat(this.ListaChats);
+
+
+            // console.log('nuevos msj: ', this.ListaChats)
+            // Opcional: Limitar la longitud de la lista, si es necesario
+            // const maxLength = 1000; // Límite máximo de longitud de la lista
+            // if (this.ListaChats.length > maxLength) {
+            // this.ListaChats = this.ListaChats.slice(0);
+            // }
+
+            // console.log('Lista actualizada: ', this.ListaChats);
+            this.traerArchivos()
+          }
+
+
+        });
+      }
     }
   }
+
 
   ngOnInit(): void {
 
@@ -112,7 +130,23 @@ export class ChatComponent implements OnInit {
     // this.genIdUsuario()
     this.usuarioIdEmisor = Number(this.auth.desencriptar(sessionStorage.getItem('usuarioID')).toString());
 
-    const eventSource = new EventSource('http://10.8.8.115:3007/events');
+    this.eventListener()
+
+
+    var not = localStorage.getItem('recibido')
+
+    if (not != null) {
+      // console.log('notificaciones: ', not)
+      this.recibidos = not
+    }
+
+    // console.log(this.usuarioIdReceptor)
+  }
+
+
+
+  eventListener() {
+    const eventSource = new EventSource('http://10.8.8.115:3004/events');
     eventSource.addEventListener('message', (event: any) => {
       // this.messages.push(event.data);
       // console.log(this.messages)
@@ -124,99 +158,86 @@ export class ChatComponent implements OnInit {
       var respuesta = JSON.parse(resultado)
       respuesta = respuesta[0]
 
+      // console.log("respuesta: ", respuesta.status)
+
       if (respuesta.status == 1) {
         var dataResult = JSON.parse(respuesta.data)
         dataResult = dataResult[0]
-        // console.log(dataResult.receptor)
+        // console.log('data resulta: ', dataResult)
 
         var usuarioId = sessionStorage.getItem('usuarioID')
         usuarioId = this.auth.desencriptar(usuarioId)
 
-        this.prueba = dataResult.receptor
-        console.log("receptor: ", this.prueba)
-        if (dataResult.receptor == usuarioId || dataResult.receptor == 4025) {
-
-          // localStorage.setItem('mensaje', JSON.stringify(dataResult))
-
-          // var notificacionStr = localStorage.getItem('mensaje')
-
-          // if (notificacionStr != null) {
-          //   // this.messages = JSON.parse(this.messages)
-          //   // if (this.messages != null) {
-          //   var notificacion: { emisor: number } = JSON.parse(notificacionStr)
-          //   var emisor = notificacion.emisor
-          //   // console.log('en el chat: ', emisor)
-          //   this.emisor = emisor
-          //   // this.messages = this.messages.emisor
-          //   // }
-          // }
-
-          // guardar notificaciones de msj
-          let arregloDatos: any[] = JSON.parse(localStorage.getItem('recibido') || '[]');
-
-          // Agregar el nuevo valor de dataResult.emisor al arreglo si no existe previamente
-          const nuevoValor = dataResult.receptor;
-          if (!arregloDatos.includes(nuevoValor)) {
-            arregloDatos.push(nuevoValor);
-          }
 
 
-
-          // Almacenar el arreglo actualizado en el localStorage
-          localStorage.setItem('recibido', JSON.stringify(arregloDatos));
+        // if (dataResult.RECEPTOR == this.idUsuarioOGrupo) {
 
 
-          var not = localStorage.getItem('recibido')
+        this.prueba = dataResult.RECEPTOR
+        dataResult["EMISOR"] = parseInt(dataResult.EMISOR);
+        dataResult["RECEPTOR"] = parseInt(dataResult.RECEPTOR);
 
-          if (not != null) {
-            // console.log('notificaciones: ', not)
-            this.recibidos = not
-          }
-
-          // console.log("fin event source")
+        if (dataResult.RECEPTOR == this.idUsuarioOGrupo) {
+          this.ListaChats.push(dataResult);
         }
+        // console.log('nuevos msj: ', this.ListaChats)
+
+        // localStorage.setItem('mensaje', JSON.stringify(dataResult))
+
+        // var notificacionStr = localStorage.getItem('mensaje')
+
+        // if (notificacionStr != null) {
+        //   // this.messages = JSON.parse(this.messages)
+        //   // if (this.messages != null) {
+        //   var notificacion: { emisor: number } = JSON.parse(notificacionStr)
+        //   var emisor = notificacion.emisor
+        //   // console.log('en el chat: ', emisor)
+        //   this.emisor = emisor
+        //   // this.messages = this.messages.emisor
+        //   // }
+        // }
+
+        // guardar notificaciones de msj
+        let arregloDatos: any[] = JSON.parse(localStorage.getItem('recibido') || '[]');
+
+        // Agregar el nuevo valor de dataResult.emisor al arreglo si no existe previamente
+        const nuevoValor = dataResult.RECEPTOR.toString();
+        if (!arregloDatos.includes(nuevoValor)) {
+          arregloDatos.push(nuevoValor);
+        }
+
+
+
+        // console.log("arreglo de datos modificado: ", arregloDatos)
+        // Almacenar el arreglo actualizado en el localStorage
+        localStorage.setItem('recibido', JSON.stringify(arregloDatos));
+
+
+        var not = localStorage.getItem('recibido')
+
+        if (not != null) {
+          // console.log('notificaciones: ', not)
+          this.recibidos = not
+        }
+
+
+        // console.log("Lista chats", this.ListaChats)
+        // console.log("Recibidos: ", this.recibidos)
+        this.traerArchivos()
+
+
+        setTimeout(() => {
+          if (this.chatContainer && this.chatContainer.nativeElement) {
+            this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+
+          }
+        }, 0);
+        // console.log("fin event source")
+        // }
 
       }
     });
-
-    // var notificacionStr = localStorage.getItem('mensaje')
-
-    // if (notificacionStr != null) {
-    //   // this.messages = JSON.parse(this.messages)
-    //   // if (this.messages != null) {
-    //   var notificacion: { emisor: number } = JSON.parse(notificacionStr)
-    //   var emisor = notificacion.emisor
-    //   console.log(emisor)
-    //   this.emisor = emisor
-    //   // this.messages = this.messages.emisor
-    //   // }
-    // }
-
-    // this.messages = s(this.messages)
-
-    var not = localStorage.getItem('recibido')
-
-    if (not != null) {
-      console.log('notificaciones: ', not)
-      this.recibidos = not
-    }
-
-
-
-    // logica para detectar el movimiento del scroll
-    // window.onscroll = function () {
-    //   // Obtenemos la posicion del scroll en pantall
-    //   var scroll = document.documentElement.scrollTop || document.body.scrollTop;
-
-    //   // Realizamos alguna accion cuando el scroll este entre la posicion 300 y 400
-    //   if (scroll > 3 && scroll < 4) {
-    //     console.log("Pasaste la posicion 300 del scroll");
-    //   }
-    // }
   }
-
-
-
 
   ngOnDestroy() {
     localStorage.removeItem('mensaje')
@@ -241,7 +262,7 @@ export class ChatComponent implements OnInit {
       }
 
       // res = JSON.parse(res)
-      console.log("lista contactos: ", this.ListaContactos)
+      // console.log("lista contactos: ", this.ListaContactos)
     })
   }
   getPropiedades(objeto: any): string[] {
@@ -249,38 +270,30 @@ export class ChatComponent implements OnInit {
     return Object.keys(objeto);
   }
 
-  // VerChat(usuarioID: string | null, grupo: number) {
-  //   this.selectedUserId = usuarioID;
-  //   this.usuarioIdReceptor = Number(usuarioID)
-  //   this.grupoChat = grupo
-
-  //   console.log('usuario receptor', this.usuarioIdReceptor)
-  //   this.service.getChatUsuarios(usuarioID, grupo).subscribe(r => {
-  //     var res = this.auth.desencriptar(r.data)
-  //     this.ListaChats = JSON.parse(res)
-  //     console.log('lista chats: ',this.ListaChats)
-  //     setTimeout(() => {
-  //       if (this.chatContainer && this.chatContainer.nativeElement) {
-  //         this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  //         // alert("bien")
-  //       }
-  //     }, 0);
-  //   })
-  // }
-
-  VerChat(usuarioID: string | null, grupo: number) {
 
 
-    // if (usuarioID == this.emisor) {
+  VerChat(IdUsuario_o_Grupo: string | null, esGrupo: number) {
+
+    // console.log(this.usuarioIdReceptor)
+
+    // this.eventListener()
+
+    this.idUsuarioOGrupo = IdUsuario_o_Grupo
+    this.esGrupo = esGrupo
+    // console.log("IdUsuario_o_Grupo: ",IdUsuario_o_Grupo, " ","grupo: ", grupo)
+
+    // if (IdUsuario_o_Grupo == this.emisor) {
     // this.emisor = 0
     // localStorage.removeItem('mensaje')
-    localStorage.removeItem('notificacion')
+
+
+
 
     // Obtener el arreglo actual del localStorage, si existe
     let arregloDatos: any[] = JSON.parse(localStorage.getItem('recibido') || '[]');
 
     // Supongamos que deseas quitar el elemento que tiene el valor 'elementoAQuitar'
-    const elementoAQuitar = usuarioID;
+    const elementoAQuitar = IdUsuario_o_Grupo;
 
     // Filtrar el arreglo para excluir el elemento que deseas quitar
     arregloDatos = arregloDatos.filter(elemento => elemento != elementoAQuitar);
@@ -289,66 +302,63 @@ export class ChatComponent implements OnInit {
     localStorage.removeItem('recibido')
     localStorage.setItem('recibido', JSON.stringify(arregloDatos));
 
-    console.log('chats recibidos: ', arregloDatos)
+    // console.log('chats recibidos: ', arregloDatos)
     this.recibidos = localStorage.getItem('recibido')
 
 
-    // puedo generar una actualizacion del msj para confirmar lectura
-    // }
-    this.selectedUserId = usuarioID;
-    this.usuarioIdReceptor = Number(usuarioID);
-    this.grupoChat = grupo;
 
-    // console.log('usuario receptor', this.usuarioIdReceptor);
-    this.service.getChatUsuarios(usuarioID, grupo).subscribe(r => {
+    // console.log('datos recibidos',this.recibidos?.toString())
+    // if (this.recibidos?.toString() != "[]") {
+    if (this.recibidos?.toString() == "[]") {
+      // cambio el valor de la notificaicon para la campanita
+      // this.service.setdatos('0')
+      localStorage.removeItem('notificacion')
+
+      // mando la señal de que no existen notificaciones ya 
+      // this.service.setdatos('1')
+
+      // console.log('no existen notificacioens')
+    }
+
+    this.selectedUserId = IdUsuario_o_Grupo;
+    this.usuarioIdReceptor = Number(IdUsuario_o_Grupo);
+    this.grupoChat = esGrupo;
+
+    // console.log(IdUsuario_o_Grupo, esGrupo);
+    this.service.getMensajes(IdUsuario_o_Grupo, esGrupo).subscribe(r => {
       var res = this.auth.desencriptar(r.data);
       this.ListaChats = JSON.parse(res);
-      console.log('lista chats: ', this.ListaChats);
+      // console.log('primeros: ',this.ListaChats)
+      // console.log('lista chats: ', this.ListaChats);
 
       setTimeout(() => {
         if (this.chatContainer && this.chatContainer.nativeElement) {
           this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-          // alert("bien")
-
-
-          if (this.chatContainer.nativeElement.scrollTop === 0) {
-            // El scroll está en la parte superior
-            console.log('El scroll está en la parte superior');
-          } else {
-            // El scroll no está en la parte superior, desplázalo hacia abajo
-            console.log('El scroll en la parte inferior')
-          }
         }
       }, 0);
 
-      // Asignar la URL de la imagen directamente al objeto chat
-      // this.ListaChats.forEach(chat => {
-      //   if (chat.TIPO_ARCHIVO === 'png' || chat.TIPO_ARCHIVO === 'jpg' || chat.TIPO_ARCHIVO === 'jpeg') {
-      //     chat.imagenUrl = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
-      //   }
-      // });
-
-      // Llama a la función dentro del forEach para validar cada archivo de imagen
-      this.ListaChats.forEach(chat => {
-        if (this.esImagenValida(chat.TIPO_ARCHIVO)) {
-          chat.imagenUrl = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
-        }
-      });
-
-      // this.ListaChats.forEach(chat => {
-      //   if (chat.TIPO_ARCHIVO == 'doxc' || chat.TIPO_ARCHIVO == 'pdf' || chat.TIPO_ARCHIVO == 'xls' || chat.TIPO_ARCHIVO == 'xlsx') {
-      //     chat.documento = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
-      //   }
-      // });
-      // Llama a la función dentro del forEach para validar cada archivo
-      this.ListaChats.forEach(chat => {
-        if (this.esDocumentoValido(chat.TIPO_ARCHIVO)) {
-          chat.documento = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
-        }
-      });
+      // console.log('lista de chats: ', this.ListaChats)
+      this.traerArchivos()
 
 
     });
+  }
+
+
+  traerArchivos() {
+    this.ListaChats.forEach(chat => {
+      if (this.esImagenValida(chat.TIPO_ARCHIVO)) {
+        chat.imagenUrl = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.ARCHIVO}`;
+      }
+    });
+    // Llama a la función dentro del forEach para validar cada archivo
+    this.ListaChats.forEach(chat => {
+      if (this.esDocumentoValido(chat.TIPO_ARCHIVO)) {
+        chat.documento = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.ARCHIVO}`;
+      }
+    });
+
+    // console.log(this.ListaChats)
   }
 
 
@@ -391,6 +401,9 @@ export class ChatComponent implements OnInit {
 
   EnviarMensaje() {
 
+    // this.mensajes.emit("Gaaaaaa Este es el mensaje");
+
+
     // if(this.selectedFile == null){
     //   this.service.notificacion("No ay archivo")
     // }
@@ -398,7 +411,8 @@ export class ChatComponent implements OnInit {
     // console.log(this.selectedFile)
     // return
 
-    console.log(this.usuarioIdEmisor)
+    // console.log(this.usuarioIdEmisor)
+
 
     if (this.mensaje == "" && this.selectedFile == null) {
       return
@@ -415,7 +429,9 @@ export class ChatComponent implements OnInit {
     }
     // console.log(this.mensaje)
     if (this.mensaje == "" && this.selectedFile != undefined) {
-      this.mensaje = this.selectedFile?.name
+      // this.mensaje = this.selectedFile?.name
+
+      this.nombreArchivo = this.selectedFile?.name
 
       // this.nombreArchivo = this.mensaje.replace(' ','')
       // const ext = this.selectedFile.name.split('.').pop()
@@ -447,14 +463,27 @@ export class ChatComponent implements OnInit {
         this.extencion = extencion
         // console.log(this.extencion)
       }
+
+      // se asigna un nombre al archivo apartir de la fecha actual
+      this.archivo = Date.now().toString() + '.' + this.extencion
+
+      // console.log('archivo: ', this.archivo)
+
+
     }
 
-    this.service.enviarMensaje(this.usuarioIdEmisor, this.usuarioIdReceptor, this.mensaje, this.extencion).subscribe(r => {
-      var respuesta = this.auth.desencriptar(r.response)
-      respuesta = JSON.parse(respuesta)
-      respuesta = respuesta[0]
-      // console.log(respuesta)
-      if (respuesta.status == 1) {
+    this.isLoading = true
+    // console.log("enviar mensaje")
+
+    this.mensaje = this.mensaje.replace(/\n/g, '\r\n')
+    // console.log(this.mensaje)
+    this.service.enviarMensaje(this.usuarioIdEmisor, this.usuarioIdReceptor, this.mensaje, this.extencion, this.archivo, this.nombreArchivo).subscribe(r => {
+      var respuesta = (r)
+      // respuesta = JSON.parse(respuesta)
+      // console.log("respuesta al enviar el mensaje: ", respuesta)
+      // respuesta = respuesta[0]
+
+      if (respuesta.success) {
 
         //guardar la imagen
         if (this.selectedFile != null) {
@@ -464,7 +493,7 @@ export class ChatComponent implements OnInit {
 
           const nombreArchivoSinEspacios = this.selectedFile.name.replace(/\s+/g, '');
 
-          formData.append('image', this.selectedFile, nombreArchivoSinEspacios);
+          formData.append('image', this.selectedFile, this.archivo);
 
 
           this.http.post<any>(`http://10.8.8.115:3002/upload/${this.usuarioIdReceptor}`, formData).subscribe(
@@ -476,11 +505,41 @@ export class ChatComponent implements OnInit {
             }
           );
         }
+
+        // console.log("lista chats: ", this.ListaChats)
+        // // console.log("usuario Receptor: ",this.usuarioIdReceptor)
+        // // console.log("Lista chats: ", this.ListaChats)
+        // // this.traerArchivos()
+
+        // this.ListaChats.forEach(chat => {
+        //   console.log("Tipo Archivo: ", chat.TIPO_ARCHIVO)
+        //   if (this.esImagenValida(chat.TIPO_ARCHIVO)) {
+        //     chat.imagenUrl = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
+        //     console.log(`http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`)
+        //     // this.prueba = 'string'
+        //   }else{
+        //     console.log("no es una imagen")
+        //   }
+        // });
+
+        // console.log("Lista chats con la url: ", this.ListaChats)
+        // Llama a la función dentro del forEach para validar cada archivo
+        // this.ListaChats.forEach(chat => {
+        //   if (this.esDocumentoValido(chat.TIPO_ARCHIVO)) {
+        //     chat.documento = `http://10.8.8.115:3002/image/${this.usuarioIdReceptor}/${chat.NOMBRE_ARCHIVO}`;
+        //   }
+        // });
+
         this.mensaje = ""
         this.selectedFile = null
         this.nombreArchivo = ""
         this.extencion = ""
-        this.VerChat(String(this.usuarioIdReceptor), this.grupoChat)
+
+
+
+        this.isLoading = false
+
+        // this.VerChat(String(this.usuarioIdReceptor), this.grupoChat)
         // logica para guardar la imagen si existe
 
         // this.scrollChatContainerDown();
@@ -538,11 +597,13 @@ export class ChatComponent implements OnInit {
   // }
 
   descargarDocumento(nombreArchivo: string, nombre: string) {
+
+    // console.log('nombre archivo: ', nombreArchivo, ' nombre: ', nombre)
     const url = nombreArchivo; // URL de la imagen
     // const nombreArchivo = 'imagen.jpg'; // Nombre del archivo de imagen
 
     // Realizar solicitud GET para obtener la imagen como un blob
-    console.log(url)
+    // console.log(url)
     this.http.get(url, { responseType: 'blob' }).subscribe((imagenBlob: Blob) => {
       // Crear un enlace temporal para la descarga
       const enlaceDescarga = document.createElement('a');
@@ -563,6 +624,54 @@ export class ChatComponent implements OnInit {
   //   window.open(nombreArchivo, '_blank');
   // }
 
+  buscarEnChat(){
+    // console.log("Buscar en el chat con id: ", this.usuarioIdReceptor, ' la palabra: ', this.filtrar)
+
+    if (this.filtrar == '') {
+      return
+    }
+
+    if (this.filtrar.length < 4) {
+      this.service.notificacion('Debe ingresar al menos 4 caracteres')
+      return
+    }
+    
+    this.service.filtrarEnChat(this.usuarioIdReceptor,this.filtrar).subscribe(r => {
+      var respuesta = this.auth.desencriptar(r.data)
+      const nuevosChats = JSON.parse(respuesta);
+      // this.listaMensajesFiltrados = JSON.parse(respuesta)
+
+      // console.log(nuevosChats)
+
+      if (nuevosChats.length == 0) {
+        this.service.notificacion('No ay resultados para la búsqueda')
+      }else{
+        this.ListaChats = this.ListaChats.concat(nuevosChats)
+        setTimeout(() => {
+          if (this.chatContainer && this.chatContainer.nativeElement) {
+            const element = this.chatContainer.nativeElement;
+            element.scrollTop = element.scrollHeight;
+          }
+        }, 1);
+        this.traerArchivos()
+      }
+
+
+      // this.ListaChats = nuevosChats.concat(this.ListaChats);
+
+      // this.ListaChats = nuevosChats.concat(this.ListaChats)
+      
+
+      // const nuevosChats = JSON.parse(res);
+      //       // console.log('Nuevos chats: ', nuevosChats);
+
+      //       // mover el scroll
+      //       container.scrollTop += container.scrollHeight * 0.15;
+
+      //       // Concatenar los nuevos chats al principio de la lista existente
+      //       this.ListaChats = nuevosChats.concat(this.ListaChats);
+    })
+  }
 
   handleFileInput(event: any) {
     this.selectedFile = event.target.files[0];

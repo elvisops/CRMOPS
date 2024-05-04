@@ -1,0 +1,53 @@
+<div class="mx-5 mt-4">
+    <mat-card>
+        <mat-card-header>
+            <button style="margin-top: -5px;" mat-icon-button color="accent" (click)="Cancelar()">
+                <mat-icon>keyboard_return</mat-icon>
+            </button>
+            <h2>Editar el reporte <b>{{reporte}}</b> con id de cartera <b>{{carteraID}}</b></h2>
+        </mat-card-header>
+        <mat-card-content>
+            <!-- <p>
+                {{query}}
+            </p> -->
+            <!-- <mat-form-field>
+                <mat-label>Query</mat-label>
+                <textarea name="" id="" cols="30" rows="10">{{query}}</textarea>
+            </mat-form-field> -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <mat-form-field class="w-50">
+                        <mat-label>Nombre del reporte</mat-label>
+                        <input matInput [(ngModel)]="reporte" type="text" required=""/>
+                    </mat-form-field>
+
+                    <mat-checkbox [(ngModel)]="filtroFecha">Filtro por Fecha</mat-checkbox>
+
+                </div>
+                <div class="col-lg-12">
+                    <mat-form-field class="example-form w-100">
+                        <mat-label>Query</mat-label>
+                        <textarea matInput [(ngModel)]="query" rows="18" class="custom-textarea" required="">
+                            {{query}}
+                        </textarea>
+                    </mat-form-field>
+                </div>
+
+                <!-- <div class="col-lg-12" style="color: red;">
+                    <h3>*Importante*</h3>
+                    <h3>
+                        Si necesita encerra un texto entre comillas simples(texto de 'ejemplo') encerrar el texto
+                        entre 8 comillas (texto de ''''ejemplo'''')
+                    </h3>
+                </div> -->
+            </div>
+
+        </mat-card-content>
+        <mat-card-actions class="mb-2">
+            <button mat-raised-button class="bgops-indigo txtwhite mx-2" type="submit" (click)="SaveReporte()">
+                Guardar
+            </button>
+            <button mat-raised-button color="warn" type="submit" (click)="Cancelar()">Cancelar</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

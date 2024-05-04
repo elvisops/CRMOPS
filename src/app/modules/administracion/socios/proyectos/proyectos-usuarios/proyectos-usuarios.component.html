@@ -1,0 +1,89 @@
+<!-- <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Usuarios permitidos
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="example-container">
+                    <h2>Usuarios</h2>
+
+                    <div  style="max-height: 600px; overflow: auto;" cdkDropList #todoList="cdkDropList" [cdkDropListData]="ListaUsuariosDisponibles"
+                        [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of ListaUsuariosDisponibles; trackBy: trackFn" class="example-box"
+                            cdkDrag>{{
+                            item.USUARIO }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="example-container">
+                    <h2>Asignados</h2>
+
+                    <div  style="max-height: 600px; overflow: auto;" cdkDropList #doneList="cdkDropList" [cdkDropListData]="ListaUsuarios"
+                        [cdkDropListConnectedTo]="[todoList]" class="example-list" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of ListaUsuarios; trackBy: trackFn" class="example-box" cdkDrag>{{
+                            item.USUARIO
+                            }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="warn" style="margin-right: 4px;" (click)="CloseDialog()">Cancelar</button>
+    </mat-card-actions>
+</mat-card> -->
+
+
+<!-- Usuarios permitidos -->
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Usuarios permitidos en el proyecto <b>{{proyecto}}</b>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="example-container">
+                    <h2>Disponibles</h2>
+                    <!-- <div style="max-height: 600px; overflow: auto;" cdkDropList #todoList="cdkDropList" [cdkDropListData]="ListaUsuariosDisponibles"
+                        [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of ListaUsuariosDisponibles; trackBy: trackFn" class="example-box"
+                            cdkDrag>{{ item.USUARIOID }}</div>
+                    </div> -->
+
+                    <div style="max-height: 600px; overflow: auto;" cdkDropList #todoList="cdkDropList"
+                        [cdkDropListData]="ListaUsuariosDisponibles" [cdkDropListConnectedTo]="[doneList]"
+                        class="example-list" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of ListaUsuariosDisponibles; trackBy: trackFn" class="example-box" cdkDrag
+                            [cdkDragData]="item">
+                            {{ item.USUARIO }}
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="example-container">
+                    <h2>Asignados</h2>
+                    <div style="max-height: 600px; overflow: auto;" cdkDropList #doneList="cdkDropList"
+                        [cdkDropListData]="ListaUsuarios" [cdkDropListConnectedTo]="[todoList]" class="example-list"
+                        (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let item of ListaUsuarios; trackBy: trackFn" class="example-box" cdkDrag
+                            [cdkDragData]="item">{{
+                            item.USUARIO }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="warn" style="margin-right: 4px;" (click)="CloseDialog()">Cerrar</button>
+    </mat-card-actions>
+</mat-card>

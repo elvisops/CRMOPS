@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Lista de Carteras</mat-card-title>
+            <mat-card-title>Reportes - Lista de Carteras</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <div class="table-responsive">
@@ -30,10 +30,17 @@
                         <th mat-header-cell *matHeaderCellDef>Opciones</th>
                         <td mat-cell *matCellDef="let element">
                             <mat-button-toggle-group>
-                                <mat-button-toggle (click)="genListaReportes(element.CARTERAID)">
+                                <mat-button-toggle (click)="genListaReportes(element.CARTERAID,element.CARTERA)">
                                     <mat-icon class="text-primary">assessment</mat-icon>
                                 </mat-button-toggle>
+                                <mat-button-toggle *ngIf="rolID == '1'" (click)="CreateReporte(element.CARTERAID,element.CARTERA)">
+                                    <mat-icon class="text-success">add</mat-icon>
+                                </mat-button-toggle>                               
                             </mat-button-toggle-group>
+                            <!-- 
+                            <button mat-raised-button class="bgops-indigo txtwhite mx-2" type="submit" (click)="CreateReporte()">
+                                Crear Reporte
+                            </button> -->
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="Columnas"></tr>
@@ -51,10 +58,10 @@
     <div class="mt-2" [ngClass]="{'hidden': !tablaReportes}">
         <mat-card>
             <mat-card-header>
-                <mat-card-title>Lista de Reportes</mat-card-title>
+                <mat-card-title>Lista de Reportes de la cartera <b>{{cartera}}</b></mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <div class="table-responsive">
+                <div class="table-responsive" style="max-height: 350px; overflow: auto;">
                     <!-- "PROYECTO","CARTERA","TIPOCARTERA","OPCIONES" -->
                     <table mat-table [dataSource]="DataSourceReportes" matSort class="w-100 table">
                         <ng-container matColumnDef="REPORTE">
@@ -70,7 +77,15 @@
                                 {{ element.CREACION | date:"hh:mm:ss":"GMT / UTC"}}
                             </td>
                         </ng-container>
-
+                        <ng-container matColumnDef="ACTUALIZACION">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                ACTUALIZACION
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.ACTUALIZACION | date:"dd/MM/YYYY"}}
+                                {{ element.ACTUALIZACION | date:"hh:mm:ss":"GMT / UTC"}}
+                            </td>
+                        </ng-container>
 
                         <ng-container matColumnDef="OPCIONES">
                             <th mat-header-cell *matHeaderCellDef>Opciones</th>
@@ -79,19 +94,33 @@
                                     <mat-button-toggle (click)="descargarReporte(element)">
                                         <mat-icon class="text-success">cloud_download</mat-icon>
                                     </mat-button-toggle>
+
+                                    <mat-button-toggle *ngIf="rolID == '1'"
+                                        (click)="editarReporte(element.REPORTE,element.REPORTEID,element.QUERY,element.FILTRO_FECHA)">
+                                        <mat-icon class="text-primary">edit</mat-icon>
+                                    </mat-button-toggle>
+
+                                    <mat-button-toggle *ngIf="rolID == '1'" (click)="deleteReporte(element.REPORTEID,element.REPORTE)">
+                                        <mat-icon color="warn">delete</mat-icon>
+                                    </mat-button-toggle>
                                 </mat-button-toggle-group>
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="ColumnasReportes"></tr>
                         <tr mat-row *matRowDef="let row; columns: ColumnasReportes"></tr>
                         <tr class="mat-row" *matNoDataRow="">
-                            <td class="mat-cell" colspan="3">
+                            <td class="mat-cell" colspan="4">
                                 No se encontraron datos para la tabla
                             </td>
                         </tr>
                     </table>
                 </div>
             </mat-card-content>
+            <!-- <mat-card-actions> -->
+                <!-- <button mat-raised-button class="bgops-indigo txtwhite mx-2" type="submit" (click)="CreateReporte()">
+                    Crear Reporte
+                </button> -->
+            <!-- </mat-card-actions> -->
         </mat-card>
     </div>
 </div>

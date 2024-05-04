@@ -51,6 +51,22 @@ export class TimerServiceService {
   }
 
   api = environment.api
+
+  validarSesion(usuarioID: string|null){
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: "token_validate",
+      token: token,
+      usuarioID: usuarioID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al traer los datos"))
+    )
+  }
+  
   Guardar(estadoOperativoID:number, inicio:string, fin:string, carteraId:number): Observable<any>{
     var token = sessionStorage.getItem('token')
     var payload = this.auth.mkpayload({
@@ -60,6 +76,18 @@ export class TimerServiceService {
       inicio: inicio,
       fin: fin,
       carteraId: carteraId
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al ingresar el tiempo operativo"))
+    )
+  }
+
+  actualizarEstadoOperativo(usuarioID: string|null): Observable<any>{
+    var payload = this.auth.mkpayload({
+      proc: "estado_operativo_validate",
+      usuarioID: usuarioID
     })
     return this.http.post<any>(`${this.api}/api/proc`, {payload})
     .pipe(

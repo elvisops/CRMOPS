@@ -44,8 +44,6 @@ export class CarterasListasComponent implements OnInit{
       var data = this.auth.desencriptar(r.data)
       this.ListaCarteras = JSON.parse(data)
       this.FillTable(this.ListaCarteras)
-      console.log("LISTACARTERAS",this.ListaCarteras);
-      console.log("tipo Cartera",this.ListaCarteras[0])
     })
   }
 

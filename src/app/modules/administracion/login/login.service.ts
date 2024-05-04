@@ -82,7 +82,7 @@ export class LoginService {
       var permisos:any = sessionStorage.getItem('permisos')
       permisos = this.auth.desencriptar(permisos)
       permisos = JSON.parse(permisos)  
-      console.log(permisos)
+      // console.log(permisos)
   
       return permisos;
     }
@@ -91,13 +91,28 @@ export class LoginService {
   
   sesionDestroy(){  
     this.setLogoutDB().subscribe(res=>{
-      console.log(res)      
+      // console.log(res)      
       sessionStorage.clear()    
       window.location.href = './'
     })
     
     
   }
+
+  removeUserPantalla():Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'usuario_en_pantalla_remove',
+      token: token
+    })
+    return this.http.post(`${this.api}/api/get`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al remover la pantalla en la que se encuentra el usuario"))
+    )
+  }
+
 
   notificacion(msg:string):void{
     this.snack.open(msg,"Cerrar",{

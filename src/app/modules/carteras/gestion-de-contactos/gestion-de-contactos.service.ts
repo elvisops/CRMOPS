@@ -22,6 +22,35 @@ export class GestionDeContactosService {
   api = environment.api
   private apiUrl = 'http://10.8.8.115:3003/api';
 
+  savePantalla(pantalla: string):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'usuario_en_pantalla_save',
+      token: token,
+      pantalla: pantalla
+    })
+    return this.http.post(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al salvar en que pantalla se encuentra"))
+    )
+  }
+
+  removeUserPantalla():Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'usuario_en_pantalla_remove',
+      token: token
+    })
+    return this.http.post(`${this.api}/api/get`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al remover la pantalla en la que se encuentra el usuario"))
+    )
+  }
+
   getTiempoPantalla(carteraID:number,pantalla:string):Observable<any>{
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)

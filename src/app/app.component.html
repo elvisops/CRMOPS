@@ -1,3 +1,4 @@
+<!-- {{datos}} -->
 <mat-drawer-container class="nav-container" autosize="">
   <mat-drawer #drawer class="sidenav" mode="side">
     <div *ngIf="isLogged">
@@ -48,6 +49,7 @@
         <div class="icon-container">
           <mat-icon *ngIf="notificacion == '1'" class="notification-icon txtwhite">notifications</mat-icon>
           <mat-icon class="chat-icon">chat</mat-icon>
+          <!-- {{notificacion}} -->
         </div>
 
       </button>
