@@ -495,6 +495,7 @@ export class ChatComponent implements OnInit {
 
           formData.append('image', this.selectedFile, this.archivo);
 
+          // console.log('formdata:', formData)
 
           this.http.post<any>(`http://10.8.8.115:3002/upload/${this.usuarioIdReceptor}`, formData).subscribe(
             (response) => {
@@ -597,7 +598,6 @@ export class ChatComponent implements OnInit {
   // }
 
   descargarDocumento(nombreArchivo: string, nombre: string) {
-
     // console.log('nombre archivo: ', nombreArchivo, ' nombre: ', nombre)
     const url = nombreArchivo; // URL de la imagen
     // const nombreArchivo = 'imagen.jpg'; // Nombre del archivo de imagen
@@ -624,7 +624,7 @@ export class ChatComponent implements OnInit {
   //   window.open(nombreArchivo, '_blank');
   // }
 
-  buscarEnChat(){
+  buscarEnChat() {
     // console.log("Buscar en el chat con id: ", this.usuarioIdReceptor, ' la palabra: ', this.filtrar)
 
     if (this.filtrar == '') {
@@ -635,8 +635,8 @@ export class ChatComponent implements OnInit {
       this.service.notificacion('Debe ingresar al menos 4 caracteres')
       return
     }
-    
-    this.service.filtrarEnChat(this.usuarioIdReceptor,this.filtrar).subscribe(r => {
+
+    this.service.filtrarEnChat(this.usuarioIdReceptor, this.filtrar).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.data)
       const nuevosChats = JSON.parse(respuesta);
       // this.listaMensajesFiltrados = JSON.parse(respuesta)
@@ -645,7 +645,7 @@ export class ChatComponent implements OnInit {
 
       if (nuevosChats.length == 0) {
         this.service.notificacion('No ay resultados para la búsqueda')
-      }else{
+      } else {
         this.ListaChats = this.ListaChats.concat(nuevosChats)
         setTimeout(() => {
           if (this.chatContainer && this.chatContainer.nativeElement) {
@@ -660,7 +660,7 @@ export class ChatComponent implements OnInit {
       // this.ListaChats = nuevosChats.concat(this.ListaChats);
 
       // this.ListaChats = nuevosChats.concat(this.ListaChats)
-      
+
 
       // const nuevosChats = JSON.parse(res);
       //       // console.log('Nuevos chats: ', nuevosChats);

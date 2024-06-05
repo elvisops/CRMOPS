@@ -223,3 +223,20 @@
   max-width: 90%;
   max-height: 90%;
 }
+
+/* estilos de la barra de notificacion */
+
+/* .notificacion-custom {
+  background-color: #2196f3; 
+  color: #fff; 
+  position: relative;
+
+  &::before {
+    content: '\f05a'; 
+    font-family: 'Font Awesome 5 Free';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+} */

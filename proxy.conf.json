@@ -1,0 +1,7 @@
+{
+    "/api": {
+      "target": "http://10.8.8.20:8091",
+      "secure": false
+    }
+  }
+  

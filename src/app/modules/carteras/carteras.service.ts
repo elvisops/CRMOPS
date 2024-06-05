@@ -120,7 +120,17 @@ export class CarterasService {
       horizontalPosition: 'center',
       verticalPosition: 'top',
       duration: 5000,
+      panelClass: 'app-notifiacion-success'
     });
+  }
+
+  notificacionError(msg: string): void {
+    this.snack.open(msg, 'Cerrar', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 5000,
+      panelClass: 'app-notification-error'
+    })
   }
 
   private handleError<T>(operation = 'operacion', result?: T) {

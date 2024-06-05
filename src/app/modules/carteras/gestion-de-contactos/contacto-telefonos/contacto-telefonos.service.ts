@@ -74,10 +74,20 @@ export class ContactoTelefonosService {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",
       verticalPosition: "top",
-      duration: 5000
+      duration: 5000,
+      panelClass: 'app-notification-success'
     })
   }
 
+  notificacionError(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: 'app-notification-error'
+
+    })
+  }
   private handleError<T>(operation = 'operacion', result?: T) {
     return (error: any): Observable<T> => {
       console.log('Error en la aplicacion: ' + JSON.stringify(error))

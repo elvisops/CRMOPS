@@ -91,6 +91,10 @@ export class LoginComponent implements OnInit {
         var rolID = (obj.rolID)
         var usuarioID = this.auth.encriptar(obj.usuarioid).toString()
 
+        var extension = this.auth.encriptar(obj.extension).toString()
+        
+        // var extension = obj.extension
+
 
         // console.log(respuesta.data[0])
         sessionStorage.setItem("token", token)
@@ -98,11 +102,24 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('EstadoOperativo',estadoLogin)
         sessionStorage.setItem('rolID',rolID)
         sessionStorage.setItem('usuarioID',usuarioID)
+        sessionStorage.setItem('extension',extension)
         this.service.setSessionStorage()        
         this.timerService.startTimer();        
-        window.location.href = "./"
+        
 
         this.isLoading = false
+
+        // nuevo, validar sesiones
+        // this.service.enviarDatos(token,usuarioID).subscribe(res =>{
+
+        // }
+        console.log('usuarioID: ',usuarioID)
+        // this.service.enviarDatos(token,usuarioID).subscribe(res => {
+        //   var respuesta = JSON.parse(res)
+        //   console.log(respuesta)
+        // })
+
+        window.location.href = "./"
 
       } else {
         //Validar si el usuario esta inactivo

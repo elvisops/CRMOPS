@@ -57,7 +57,7 @@ export class ContactoTelefonoEditarComponent implements OnInit{
 
   EditarTelefono(){
     if (this.TelefonoControl.hasError('required') || this.TelefonoControl.hasError('minlength') || this.TipoTelefonoControl.hasError('required') || this.TipoTelefonoControl.hasError('min')) {
-      this.service.notificacion("Debe ingresar los datos solicitados")
+      this.service.notificacionError("Debe ingresar los datos solicitados")
       return
     }
     if (this.sms) {
@@ -76,13 +76,13 @@ export class ContactoTelefonoEditarComponent implements OnInit{
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      console.log(respuesta)
+      // console.log(respuesta)
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
         this.resetForm()
         this.CloseDialog()
       }else{
-        this.service.notificacion(respuesta.message) 
+        this.service.notificacionError(respuesta.message) 
       }
     })
   }

@@ -94,3 +94,40 @@ button[disabled] {
 .hidden {
     display: none;
 }
+
+/* 
+.mat-mdc-snack-bar-container {
+    --mat-mdc-snack-bar-button-color: red;
+    --mdc-snackbar-container-color: black;
+    --mdc-snackbar-supporting-text-color: yellow;
+  } */
+
+.mat-mdc-snack-bar-container {
+    /* --mat-mdc-snack-bar-button-color: #12293f; */
+    /* --mdc-snackbar-supporting-text-color: #12293f; */
+    
+    /* &.app-notification-error {
+        --mdc-snackbar-container-color: #ff493f;
+        --mdc-snackbar-supporting-text-color: #ffffff;
+        --mat-mdc-snack-bar-button-color: #ffffff;
+    }
+
+    &.app-notification-success {
+        --mdc-snackbar-container-color: #0dcf14;
+        --mdc-snackbar-supporting-text-color: #ffffff;
+        --mat-mdc-snack-bar-button-color: #ffffff;
+    } */
+}
+
+
+.app-notification-error {
+    --mdc-snackbar-container-color: #ff493f;
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-mdc-snack-bar-button-color: #ffffff;
+}
+
+.app-notification-success {
+    --mdc-snackbar-container-color: #0dcf14;
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-mdc-snack-bar-button-color: #ffffff;
+}

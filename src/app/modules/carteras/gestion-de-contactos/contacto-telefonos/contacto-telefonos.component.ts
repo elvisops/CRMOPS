@@ -52,7 +52,7 @@ export class ContactoTelefonosComponent implements OnInit {
     this.service.getListaTiposTelefonos().subscribe(r => {
       var res = this.auth.desencriptar(r.data)
       this.ListaTiposTelefonos = JSON.parse(res)
-      console.log(this.ListaTiposTelefonos)
+      // console.log(this.ListaTiposTelefonos)
     })
   }
 
@@ -70,7 +70,7 @@ export class ContactoTelefonosComponent implements OnInit {
 
     // if (this.telefono.length < 8 || this.tipoTelefonoID == 0) {
     if (this.TelefonoControl.hasError('required') || this.TelefonoControl.hasError('minlength') || this.TipoTelefonoControl.hasError('required') || this.TipoTelefonoControl.hasError('min')) {
-      this.service.notificacion("Debe ingresar los datos solicitados")
+      this.service.notificacionError("Debe ingresar los datos solicitados")
       return
     }
 
@@ -90,12 +90,12 @@ export class ContactoTelefonosComponent implements OnInit {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
-      console.log(respuesta)
+      // console.log(respuesta)
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
         this.resetForm()
       }else{
-        this.service.notificacion(respuesta.message) 
+        this.service.notificacionError(respuesta.message) 
       }
     })
   }

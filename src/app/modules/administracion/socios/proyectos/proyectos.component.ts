@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProyectoCrearComponent } from './proyecto-crear/proyecto-crear.component';
 import { ProyectoEditarComponent } from './proyecto-editar/proyecto-editar.component';
 import { ProyectosUsuariosComponent } from './proyectos-usuarios/proyectos-usuarios.component';
+// import { PrefijosComponent } from './prefijos/prefijos.component';
 
 @Component({
   selector: 'app-proyectos',
@@ -98,6 +99,19 @@ export class ProyectosComponent implements OnInit{
       disableClose: true
     })
   }
+
+  // PrefijoCartera(proyecto: any){
+  //   console.log(proyecto)
+  //   const dialogRef = this.dialog.open(PrefijosComponent, {
+  //     width: '50%',
+  //     data: proyecto,
+  //     disableClose: true
+  //   })
+
+  //   dialogRef.afterClosed().subscribe(datos => {
+  //     this.ObtenerListaProyectos
+  //   })
+  // }
 
   CrearProyecto(SocioID:number){
     const dialogRef = this.dialog.open(ProyectoCrearComponent,{

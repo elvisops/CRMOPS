@@ -41,6 +41,17 @@ export class UsuariosService {
     )
   }
 
+  getListaExtensiones():Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({proc:"extensiones_lista",token: token})
+    return this.http.post<any>(`${this.api}/api/get`,{payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al leer la lista de extensiones"))
+    )
+  }
+  
   Crear(usuario:string,clave:string,rolid:number|string):Observable<any>{    
     var payload = this.auth.mkpayload({
         proc:"user_create",
@@ -51,7 +62,7 @@ export class UsuariosService {
     return this.http.post<any>(`${this.api}/api/proc`,{payload})
     .pipe(
       tap(),
-      catchError(this.handleError("Error al leer la lista de usuarios"))
+      catchError(this.handleError("Error al crear el usuario"))
     )
   }
 

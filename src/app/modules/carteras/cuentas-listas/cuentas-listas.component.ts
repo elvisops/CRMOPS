@@ -28,8 +28,8 @@ export class CuentasListasComponent implements OnInit {
   filtroID: number = 0
   ListaFiltros: any[] = [
     { ID: '1', FILTRO: 'Toda la Asignacion' },
-    { ID: '2', FILTRO: 'Mi Asignacion' },
-    { ID: '3', FILTRO: 'Cola de trabajo' },
+    // { ID: '2', FILTRO: 'Mi Asignacion' },
+    // { ID: '3', FILTRO: 'Cola de trabajo' },
     { ID: '4', FILTRO: 'Identidad' },
     { ID: '5', FILTRO: 'Numero Orden' },
   ]
@@ -91,6 +91,12 @@ export class CuentasListasComponent implements OnInit {
 
   genData() {
     this.isLoading = true
+
+    if(this.filtroID == 0){
+        this.service.notificacion('Debe ingresar informacion para buscar')
+        this.isLoading = false
+        return
+    }
     // alert(this.filtroID)
     var token = sessionStorage.getItem('token');
     token = this.auth.desencriptar(token);
@@ -120,6 +126,11 @@ export class CuentasListasComponent implements OnInit {
     // this.searchIdentidad = this.searchIdentidad.replace(/[-\s]/g, '');
     this.searchIdentidad = this.searchIdentidad.replace(/[ -]/g, '');
     if (this.divSearch) {
+      if (this.searchIdentidad == '') {
+        this.service.notificacionError('Debe ingresar la identidad a buscar')
+        this.isLoading = false
+        return
+      }
       // this.searchIdentidad = this.searchIdentidad.replace(/[-\s]/g, '');
       this.service.searchIdentidad(this.carteraID, this.searchIdentidad).subscribe(r => {
         var data = this.auth.desencriptar(r.data)
@@ -131,6 +142,11 @@ export class CuentasListasComponent implements OnInit {
       })
     }else if(this.inputNumeroOrden){
       // console.log("Buscar por numero orden")
+      if (this.searchIdentidad == '') {
+        this.service.notificacionError('Debe ingresar el numero de orden a buscar')
+        this.isLoading = false
+        return
+      }
       this.service.searchNumeroOrden(this.carteraID, this.searchIdentidad).subscribe(r => {
         var data = this.auth.desencriptar(r.data)
         this.ListaCuentas = JSON.parse(data)

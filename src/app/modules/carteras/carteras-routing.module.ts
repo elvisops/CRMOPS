@@ -10,6 +10,7 @@ import { CuentasListasComponent } from './cuentas-listas/cuentas-listas.componen
 import { GestionAtencionClienteComponent } from './gestion-atencion-cliente/gestion-atencion-cliente.component';
 import { CuentaCreateComponent } from './cuenta-create/cuenta-create.component';
 import { ProyectosUsuarioComponent } from './proyectos-usuario/proyectos-usuario.component';
+import { ExtensionesUsuariosComponent } from '../administracion/extensiones/extensiones-usuarios/extensiones-usuarios.component';
 
 const routes:Routes = [
   { path:'', component :CarterasComponent},
@@ -21,7 +22,8 @@ const routes:Routes = [
   { path:'carteras_cuentas', component:GestionDeContactosComponent},
   //atencion al cliente Cuentas
   { path:'atencion_cliente', component:GestionAtencionClienteComponent},
-  { path:'cuenta_create', component: CuentaCreateComponent}
+  { path:'cuenta_create', component: CuentaCreateComponent},
+  { path: 'extensiones_usuarios', component: ExtensionesUsuariosComponent}
 
 ]
 

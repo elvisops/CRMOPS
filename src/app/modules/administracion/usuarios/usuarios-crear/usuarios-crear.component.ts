@@ -23,6 +23,8 @@ export class UsuariosCrearComponent implements OnInit {
   rolid:number | string=0
   
   ListaRoles:any[] = []
+  ListaExtenciones: any[] = []
+  extensionID: number = 0
   
   constructor(
     private dialogRef:MatDialogRef<UsuariosCrearComponent>,
@@ -42,12 +44,22 @@ export class UsuariosCrearComponent implements OnInit {
 
   ngOnInit(): void {
     this.genListaRoles()
+    this.genListaExtensiones()
   }
 
   genListaRoles(){
     this.service.getListaRoles().subscribe(r=>{
       var res = this.auth.desencriptar(r.data)
       this.ListaRoles = JSON.parse(res)
+    })
+  }
+
+  genListaExtensiones(){
+    this.service.getListaExtensiones().subscribe(r => {
+      var data = this.auth.desencriptar(r.data)
+      this.ListaExtenciones = JSON.parse(data)
+      console.log("extensiones: ",this.ListaExtenciones)
+      // this.FillTable(this.ListaExtenciones)
     })
   }
 
@@ -68,6 +80,7 @@ export class UsuariosCrearComponent implements OnInit {
         this.data = respuesta.data  
         this.resetForm()     
         this.service.notificacion(respuesta.message) 
+        
       }else{
         this.service.notificacion(respuesta.message) 
       }
@@ -78,6 +91,8 @@ export class UsuariosCrearComponent implements OnInit {
     this.usuario="";
     this.rolid=0;
     this.clave="";
+    // this.passwordControl.markAsUntouched()
+
   }
 
   CloseDialog():void{

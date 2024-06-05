@@ -15,118 +15,128 @@ export class LoginService {
 
   api = environment.api;
 
-  DataSend:HttpRequest = {proc:"",payload:""};
-  
+  private apiUrl = 'http://10.8.8.115:3007/login';
+
+  DataSend: HttpRequest = { proc: "", payload: "" };
+
   constructor(
-    private http:HttpClient,
-    private auth:AuthService,
-    private snack:MatSnackBar
+    private http: HttpClient,
+    private auth: AuthService,
+    private snack: MatSnackBar
   ) { }
 
-  login(usuario:string,password:string):Observable<any>{
-    var payload = this.auth.mkpayload({proc:"user_auth",usuario:usuario,password:password})
-    return this.http.post<any>(`${this.api}/api/proc`,{proc:"login",payload:payload})
-            .pipe(
-              tap(),
-              catchError(this.handleError("Error al iniciar la sesion"))
-            )
-  }  
+  login(usuario: string, password: string): Observable<any> {
+    var payload = this.auth.mkpayload({ proc: "user_auth", usuario: usuario, password: password })
+    return this.http.post<any>(`${this.api}/api/proc`, { proc: "login", payload: payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al iniciar la sesion"))
+      )
+  }
 
-  getPermisos(){
+  enviarDatos(token:any, usuarioID:any):Observable<any>{
+    return this.http.post(this.apiUrl, { token, usuarioID })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al enviar los datos"))
+    )
+  }
+
+  getPermisos() {
     var token = sessionStorage.getItem('token')
-    if(token==undefined || token==""){
+    if (token == undefined || token == "") {
       this.sesionDestroy()
       return
     }
     token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({proc:"user_permisos",token:token})
+    var payload = this.auth.mkpayload({ proc: "user_permisos", token: token })
 
-    return this.http.post<any>(`${this.api}/api/get`,{proc:"get_permisos",payload:payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al obtener los permisos de usuario"))
-    )
+    return this.http.post<any>(`${this.api}/api/get`, { proc: "get_permisos", payload: payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al obtener los permisos de usuario"))
+      )
 
   }
 
-  setLogoutDB():Observable<any>{
+  setLogoutDB(): Observable<any> {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({proc:"USER_SET_LOGOUT",token:token})
-    return this.http.post<any>(`${this.api}/api/proc`,{proc:"logout",payload:payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al cerrar la sesion"))
-    )
+    var payload = this.auth.mkpayload({ proc: "USER_SET_LOGOUT", token: token })
+    return this.http.post<any>(`${this.api}/api/proc`, { proc: "logout", payload: payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al cerrar la sesion"))
+      )
   }
 
-  setUserState(EstadoID:number):Observable<any>{
+  setUserState(EstadoID: number): Observable<any> {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
-    var payload = this.auth.mkpayload({proc:"USER_SET_ESTADO",token:token,EstadoID:EstadoID})
-    return this.http.post<any>(`${this.api}/api/proc`,{proc:"USER_SET_ESTADO",payload:payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al cambiar el estado del usuario"))
-    )
+    var payload = this.auth.mkpayload({ proc: "USER_SET_ESTADO", token: token, EstadoID: EstadoID })
+    return this.http.post<any>(`${this.api}/api/proc`, { proc: "USER_SET_ESTADO", payload: payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al cambiar el estado del usuario"))
+      )
   }
-  
+
   /*inicializar variables de sessionStorage*/
-  setSessionStorage(){
-    sessionStorage.setItem('logged','true')  
-      
-  }  
+  setSessionStorage() {
+    sessionStorage.setItem('logged', 'true')
 
-  leerPermisos():any{
-    if(sessionStorage.getItem('permisos')!=undefined){
-      var permisos:any = sessionStorage.getItem('permisos')
+  }
+
+  leerPermisos(): any {
+    if (sessionStorage.getItem('permisos') != undefined) {
+      var permisos: any = sessionStorage.getItem('permisos')
       permisos = this.auth.desencriptar(permisos)
-      permisos = JSON.parse(permisos)  
+      permisos = JSON.parse(permisos)
       // console.log(permisos)
-  
+
       return permisos;
     }
-    
-  }
-  
-  sesionDestroy(){  
-    this.setLogoutDB().subscribe(res=>{
-      // console.log(res)      
-      sessionStorage.clear()    
-      window.location.href = './'
-    })
-    
-    
+
   }
 
-  removeUserPantalla():Observable<any>{
+  sesionDestroy() {
+    this.setLogoutDB().subscribe(res => {
+      // console.log(res)      
+      sessionStorage.clear()
+      window.location.href = './'
+    })
+
+
+  }
+
+  removeUserPantalla(): Observable<any> {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
       proc: 'usuario_en_pantalla_remove',
       token: token
     })
-    return this.http.post(`${this.api}/api/get`, {payload})
-    .pipe(
-      tap(),
-      catchError(this.handleError("Error al remover la pantalla en la que se encuentra el usuario"))
-    )
+    return this.http.post(`${this.api}/api/get`, { payload })
+      .pipe(
+        tap(),
+        catchError(this.handleError("Error al remover la pantalla en la que se encuentra el usuario"))
+      )
   }
 
 
-  notificacion(msg:string):void{
-    this.snack.open(msg,"Cerrar",{
-      horizontalPosition:"center",
-      verticalPosition:"top",
-      duration:5000
+  notificacion(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000
     })
   }
 
-  private handleError<T>(operation = 'operacion', result?:T){
-    return(error:any):Observable<T>=>{
-      console.log('Error en la aplicacion: '+JSON.stringify(error));
+  private handleError<T>(operation = 'operacion', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log('Error en la aplicacion: ' + JSON.stringify(error));
       console.log(error)
-      return of(result as T)      
+      return of(result as T)
     }
   }
 

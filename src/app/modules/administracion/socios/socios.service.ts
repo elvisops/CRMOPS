@@ -210,6 +210,22 @@ export class SociosService {
       )
   }
 
+  updatePrefijo(prefijoID: number, prefijo: string,carteraID: number):Observable<any>{
+    var token = sessionStorage.getItem('token')
+    token = this.auth.desencriptar(token)
+    var payload = this.auth.mkpayload({
+      proc: 'prefijo_cartera_update',
+      token: token,
+      prefijoID: prefijoID,
+      prefijo: prefijo,
+      carteraID: carteraID
+    })
+    return this.http.post<any>(`${this.api}/api/proc`, {payload})
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al actualizar el prefijo"))
+    )
+  }
 
   //manejo de errores mensaje
   notificacion(msg: string): void {

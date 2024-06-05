@@ -52,9 +52,15 @@
                   <mat-icon class="text-primary">remove_red_eye</mat-icon>
                 </mat-button-toggle>
 
-                <mat-button-toggle *ngIf="element.TIPOCARTERAID === 3" (click)="CreateCuenta(element.CARTERAID,element.TIPOCARTERAID)">
-                  <mat-icon class="text-success">add</mat-icon>
+                <mat-button-toggle (click)="extensionesUsuarios(element.CARTERAID,element.CARTERA)">
+                  <mat-icon class="text-success">list</mat-icon>
                 </mat-button-toggle>
+
+                <mat-button-toggle *ngIf="element.TIPOCARTERAID === 3" (click)="CreateCuenta(element.CARTERAID,element.TIPOCARTERAID)">
+                  <mat-icon color="primary">add</mat-icon>
+                </mat-button-toggle>
+
+                
               </mat-button-toggle-group>
             </td>
           </ng-container>

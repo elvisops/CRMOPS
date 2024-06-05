@@ -65,7 +65,17 @@ export class EstadosOperativosService {
     this.snack.open(msg, "Cerrar", {
       horizontalPosition: "center",
       verticalPosition: "top",
-      duration: 5000
+      duration: 5000,
+      panelClass: 'app-notification-success'
+    })
+  }
+
+  notificacionError(msg: string):void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: 'app-notification-error'
     })
   }
 

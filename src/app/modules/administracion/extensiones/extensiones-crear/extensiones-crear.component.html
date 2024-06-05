@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title class="txtwhite">
+            <h1>Creacion de extension</h1>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Extension</mat-label>
+            <input matInput [(ngModel)]="extension" type="number" required="" min="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Cartera</mat-label>
+            <!-- <input matInput [(ngModel)]="carteraID" type="number"> -->
+            <mat-select [(ngModel)]="carteraID" required="">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let carteras of listaCarteras" [value]="carteras.CARTERAID">
+                    {{carteras.CARTERA}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Usuario</mat-label>
+            <mat-select [(ngModel)]="usuarioID" required="">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let usuarios of listaUsuarios" [value]="usuarios.USUARIOID">
+                    {{usuarios.USUARIO}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Descripcion</mat-label>
+            <input matInput [(ngModel)]="descripcion" type="text">
+        </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="CrearExtension()">Crear</button>
+        <button mat-raised-button color="warn" class="mx-2" (click)="CloseDialog()">Cancelar</button>
+    </mat-card-actions>
+</mat-card>

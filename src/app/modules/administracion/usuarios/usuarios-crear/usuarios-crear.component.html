@@ -4,11 +4,11 @@
             <h1>Creacion de usuario</h1>
         </mat-card-title>
     </mat-card-header>
-    <mat-divider class="my-4"></mat-divider>
+    <!-- <mat-divider class="my-4"></mat-divider> -->
     <mat-card-content>
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Nombre Usuario</mat-label>
-            <input matInput [(ngModel)]="usuario" type="text">
+            <input matInput [(ngModel)]="usuario" type="text" required="">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Contraseña</mat-label>
@@ -30,15 +30,26 @@
         </div>
         <mat-form-field appearance="outline" class="w-100 my-2">
             <mat-label>Rol de usuario</mat-label>
-            <mat-select [(ngModel)]="rolid">
+            <mat-select [(ngModel)]="rolid" required="">
                 <mat-option></mat-option>
                 <mat-option *ngFor="let rol of ListaRoles" [value]="rol.ROLID">
                     {{rol.ROL}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
+
+        <!-- nuevo -->
+        <!-- <mat-form-field appearance="outline" class="w-100 my-2">
+            <mat-label>Extensiones</mat-label>
+            <mat-select [(ngModel)]="extensionID" required="">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let extensiones of ListaExtenciones" [value]="extensiones.EXTENSIONID">
+                    {{extensiones.EXTENSION}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field> -->
     </mat-card-content>
-    <mat-divider class="my-4"></mat-divider>
+    <mat-divider class="mb-2"></mat-divider>
     <mat-card-actions>
         <button mat-raised-button class="bgops-indigo txtwhite mx-2" (click)="CrearUsuario()">Crear</button>
         <button mat-raised-button color="warn" class="mx-2" (click)="CloseDialog()">Cancelar</button>

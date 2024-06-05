@@ -38,6 +38,13 @@ import { RolesVistasComponent } from './modulos/vistas/roles-vistas/roles-vistas
 import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
 import { ModalConfirmacionComponent } from './modal-confirmacion/modal-confirmacion.component';
 import { ProyectosUsuariosComponent } from './socios/proyectos/proyectos-usuarios/proyectos-usuarios.component';
+import { ExtensionesComponent } from './extensiones/extensiones.component';
+import { ExtensionesCrearComponent } from './extensiones/extensiones-crear/extensiones-crear.component';
+import { ExtensionesUsuariosComponent } from './extensiones/extensiones-usuarios/extensiones-usuarios.component';
+import { ExtensionesUsuariosCrearComponent } from './extensiones/extensiones-usuarios/extensiones-usuarios-crear/extensiones-usuarios-crear.component';
+import { ExtensionesEditComponent } from './extensiones/extensiones-edit/extensiones-edit.component';
+import { ExtensionesUsuariosEditComponent } from './extensiones/extensiones-usuarios/extensiones-usuarios-edit/extensiones-usuarios-edit.component';
+import { PrefijosComponent } from './socios/proyectos/prefijos/prefijos.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +79,13 @@ import { ProyectosUsuariosComponent } from './socios/proyectos/proyectos-usuario
     PerfilUsuarioComponent,
     ModalConfirmacionComponent,
     ProyectosUsuariosComponent,
+    ExtensionesComponent,
+    ExtensionesCrearComponent,
+    ExtensionesUsuariosComponent,
+    ExtensionesUsuariosCrearComponent,
+    ExtensionesEditComponent,
+    ExtensionesUsuariosEditComponent,
+    PrefijosComponent,
   ],
   imports: [
     CommonModule,

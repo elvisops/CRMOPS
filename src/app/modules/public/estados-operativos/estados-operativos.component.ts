@@ -72,7 +72,7 @@ export class EstadosOperativosComponent implements OnInit {
         this._bottomSheet.dismiss();
 
       } else {
-        this.service.notificacion("Error al actualizar el estado operativo")
+        this.service.notificacionError("Error al actualizar el estado operativo")
       }
     })
 

@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CarterasService } from './carteras.service';
 import { Carteras } from './carteras';
 import { MatTableDataSource } from '@angular/material/table';
+import { PrefijosComponent } from '../prefijos/prefijos.component';
 
 
 
@@ -35,7 +36,7 @@ export class CarterasComponent implements OnInit{
   DataSource:MatTableDataSource<Carteras> = new MatTableDataSource()
   @ViewChild(MatSort) sort!: MatSort
   @ViewChild(MatPaginator) paginator!: MatPaginator
-  Columnas:string[] = ['CARTERA','TIPOCARTERA','CREACION','ACTUALIZACION','OPCIONES']
+  Columnas:string[] = ['CARTERA','TIPOCARTERA','CREACION','ACTUALIZACION','PREFIJO','OPCIONES']
 
   ngOnInit(): void {
     var RouteData = this.ActivatedRoute.snapshot.params['proyectoid']
@@ -72,6 +73,18 @@ export class CarterasComponent implements OnInit{
   GotoCrearCartera(){
     var id = this.auth.mkurl_enc(JSON.stringify(this.Proyecto.PROYECTOID)).toString()    
     this.router.navigate(['administracion/socios/crear-cartera/'+id])
+  }
+
+  PrefijoCartera(cartear: any){
+    const dialogRef = this.dialog.open(PrefijosComponent, {
+      width: '50%',
+      data: cartear,
+      disableClose: true
+    })
+
+    dialogRef.afterClosed().subscribe(datos => {
+      this.ObtenerListaCarteras()
+    })
   }
 
   back(){

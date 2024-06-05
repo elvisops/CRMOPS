@@ -13,6 +13,7 @@ import { CarterasComponent } from './socios/proyectos/carteras/carteras.componen
 import { CarterasCrearComponent } from './socios/proyectos/carteras/carteras-crear/carteras-crear.component';
 import { MantenimientoComponent } from '../mantenimiento/mantenimiento.component';
 import { VistasComponent } from './modulos/vistas/vistas.component';
+import { ExtensionesComponent } from './extensiones/extensiones.component';
 
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
   { path:'socios/proyectos/:id',component:ProyectosComponent },  
   { path: 'socios/carteras/:proyectoid',component:CarterasComponent },
   { path: 'socios/crear-cartera/:id',component:CarterasCrearComponent },
-  { path: 'mantenimiento', component:MantenimientoComponent }
+  { path: 'mantenimiento', component:MantenimientoComponent },
+  { path: 'extensiones', component:ExtensionesComponent}
 
 ];
 

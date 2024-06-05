@@ -39,6 +39,7 @@ import { ContactoTelefonosComponent } from '../gestion-de-contactos/contacto-tel
 import { ConfirmationDialogComponent } from '../gestion-de-contactos/confirmation-dialog/confirmation-dialog.component';
 import { MatTab } from '@angular/material/tabs';
 import { CuentaEditComponent } from '../cuenta-edit/cuenta-edit.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-gestion-atencion-cliente',
@@ -93,6 +94,10 @@ export class GestionAtencionClienteComponent implements OnInit {
   saldoLempiras: string = ''
   tipoCarteraID: number = 0
 
+  telefonoSeleccionado: string | null = null; // Inicialízalo con null o algún valor predeterminado
+
+  btnGuardar: boolean = false
+
   // filtro: string = ''
 
   estadoCivil: number | string = 0;
@@ -141,7 +146,8 @@ export class GestionAtencionClienteComponent implements OnInit {
   oldEstadoOperativo: number = 0
   estadoOp: number = 0
 
-  llamadaEfectiva: number = 0
+  llamadaEfectiva: number | null = 0
+  existeLlamada: number = 0
 
 
   ListaDetalles: Detalles[] = []
@@ -283,6 +289,7 @@ export class GestionAtencionClienteComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: Router,
     private datePipe: DatePipe,
+    private http: HttpClient
 
   ) { }
 
@@ -574,7 +581,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       var data = this.auth.desencriptar(r.data)
       this.ListaGestiones = JSON.parse(data)
       // this.datosFiltrados = this.ListaGestiones
-      // console.log(this.ListaGestiones)
+      console.log('HISTORAL: ',this.ListaGestiones)
       this.deshabilitarTablas()
       this.FillTable<GestionDeContactosHistorial>(this.ListaGestiones, this.DataSourceHistorial, this.sortHistorial, this.paginatorHistorial)
       this.tablaHistorial = true
@@ -627,7 +634,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
       } else {
-        this.service.notificacion(respuesta.message)
+        this.service.notificacionError(respuesta.message)
       }
     })
   }
@@ -648,7 +655,7 @@ export class GestionAtencionClienteComponent implements OnInit {
       if (respuesta.status == 1) {
         this.service.notificacion(respuesta.message)
       } else {
-        this.service.notificacion(respuesta.message)
+        this.service.notificacionError(respuesta.message)
       }
     })
   }
@@ -747,6 +754,10 @@ export class GestionAtencionClienteComponent implements OnInit {
       width: '80%',
       data: cliente,
       disableClose: true
+    })
+
+    dialogRef.afterClosed().subscribe(datos => {
+      this.genListaTelefonos()
     })
 
   }
@@ -1010,7 +1021,23 @@ export class GestionAtencionClienteComponent implements OnInit {
     });
   }
 
+  private markFormGroupUntouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsUntouched();
+      control.markAsPristine();
+      if (control instanceof FormGroup) {
+        this.markFormGroupUntouched(control);
+      }
+    });
+  }
+  
+
   SaveGestion() {
+
+    this.btnGuardar = true
+
+
+
     // alert(this.llamadaEfectiva)
     if (this.llamadaEfectiva == 0) {
       // this.service.notificacion("Debe seleccionar si la llamada es efectiva o no")
@@ -1023,54 +1050,56 @@ export class GestionAtencionClienteComponent implements OnInit {
     this.markFormGroupTouched(this.correoForm);
     if (this.telefonoControl.hasError('min') || this.accionControl.hasError('min') || this.resultadoControl.hasError('min') ||
       this.tipificacionControl.hasError('min') || this.subtipificacionControl.hasError('min') || this.razonMoraControl.hasError('min') || this.llamadaEfectiva == 3) {
-      this.service.notificacion("Debe llenar los datos solicitados")
+      this.service.notificacionError("Debe llenar los datos solicitados")
+      this.btnGuardar = false
       return
     }
 
     if (this.tipificacionID === 23) {
       if (this.fechaPromesaControl.hasError('required') || this.promesaControl.hasError('required') || this.promesaControl.hasError('min')) {
-        this.service.notificacion("Debe llenar los datos de la promesa")
+        this.service.notificacionError("Debe llenar los datos de la promesa")
+        this.btnGuardar = false
         return
       }
     }
 
+    if (!this.telefonoSeleccionado) {
+      this.service.notificacionError("Debe seleccionar el telefono")
+      return
+      // Agrega el resto de tu lógica para la función Llamar aquí
+    }
     // alert("bien");
     // return
     // console.log("Llamada efectiva: ",this.llamadaEfectiva)
-    this.service.GuadarGestionATC(this.telefonoID, this.cuentaID, this.resultadoID, this.subtipificacionID,this.llamadaEfectiva, this.observacion).subscribe(r => {
+
+
+    //validar si no a hecho una llamada
+    // if (this.existeLlamada == 2) {
+    //   this.service.notificacion("Debe realizar una llamada para guardar la gestión")
+    //   return
+    // }
+
+    console.log(this.existeLlamada)
+    this.service.GuadarGestionATC(this.telefonoID, this.cuentaID, this.resultadoID, this.subtipificacionID,this.llamadaEfectiva, this.observacion, this.telefonoSeleccionado, this.existeLlamada).subscribe(r => {
       var respuesta = this.auth.desencriptar(r.response)
       respuesta = JSON.parse(respuesta)
       respuesta = respuesta[0]
       if (respuesta.status == 1) {
-        // if (this.tipificacionID === 23) {
-        //   const gestionID = respuesta.data
-        //   this.service.GuadarPromesa(gestionID, this.valorPromesa, this.fechaPromesa).subscribe(r => {
-        //     var respuestaP = this.auth.desencriptar(r.response)
-        //     respuestaP = JSON.parse(respuestaP)
-        //     respuestaP = respuestaP[0]
-        //     console.log(respuestaP)
-        //   })
-        // }
-        // if (this.fechaProximaGestion !== null) {
-        //   this.service.CallBack(this.cuentaID, this.fechaProximaGestion).subscribe(r => {
-        //     var respuestaC = this.auth.desencriptar(r.response)
-        //     respuestaC = JSON.parse(respuestaC)
-        //     respuestaC = respuestaC[0]
-        //     console.log(respuestaC)
-        //     if (respuestaC.status == 1) {
 
-        //     } else {
-        //       this.service.notificacion(respuestaC.message)
-        //     }
-        //   })
-        // }
         this.service.notificacion(respuesta.message)
         this.limpiarCampos()
-        this.genDatosCliente()
+        // this.genDatosCliente()
+        this.genListaHistorial()
+        // this.btnGuardar = false
+        this.llamadaEfectiva = null
+        this.markFormGroupUntouched(this.correoForm);
 
       } else {
-        this.service.notificacion(respuesta.message)
+        this.service.notificacionError(respuesta.message)
+        // this.btnGuardar = false
       }
+
+      this.btnGuardar = false
     })
   }
 
@@ -1101,7 +1130,7 @@ export class GestionAtencionClienteComponent implements OnInit {
           window.location.reload()
         }, 1000);
       } else {
-        this.service.notificacion(respuesta.message)
+        this.service.notificacionError(respuesta.message)
         this.route.navigate(['carteras/cuenta_create'], { queryParams: { carteraID: this.carteraID, TipoCarteraID: this.tipoCarteraID } })
 
       }
@@ -1163,6 +1192,117 @@ export class GestionAtencionClienteComponent implements OnInit {
     // this.filtro = ''
   }
 
+  seleccionarTelefono(telefono: string) {
+    this.telefonoSeleccionado = telefono;
+  }
+  
+
+  // Llamar(event: Event){
+  //   event.stopPropagation(); 
+  //   // this.selectDisabled = true;
+  //   // console.log("Llamar al cliente: ", this.telefonoID)
+
+  //   // this.selectDisabled = false
+  // }
+
+  Llamar(event: Event) {
+    
+    event.stopPropagation(); // Evita que el clic se propague al mat-select
+
+    var estadoOperativo = this.auth.desencriptar(sessionStorage.getItem('EstadoOperativo'))
+
+    if (estadoOperativo != 1 && estadoOperativo != 3) {
+      this.service.notificacionError("No se pueden realizar llamadas con pausas")
+      return
+    }
+
+    if (!this.telefonoSeleccionado) {
+      this.service.notificacionError("Debe seleccionar el telefono al cual desea llamar")
+      return
+      // Agrega el resto de tu lógica para la función Llamar aquí
+    }
+
+    // const formData = new FormData();
+
+    // formData.append('image', this.selectedFile, this.archivo);
+
+    var extension = sessionStorage.getItem('extension')
+
+    extension = this.auth.desencriptar(extension).toString()
+    if (extension == '0') {
+      this.service.notificacionError('No tiene una extension asignada por favor reporte con su supervisor')
+      return
+    }
+
+    // console.log('carteraid: ', this.carteraID)
+    //traer el prefijo de la cartera
+    this.service.getPrefijo(this.carteraID).subscribe(r => {
+      // console.log('llamando')
+      var data = this.auth.desencriptar(r.data)
+      data = JSON.parse(data)
+      
+      if (!data[0]) {
+        this.service.notificacionError('La cartera no tiene ningun prefijo asignado, por favor reportelo con su supervisor')
+        return
+      }
+
+      /**
+       * sd
+       * dsf
+       * sdf
+       */
+      // console.log('PREFIJO DE LA BASE: ', data[0].PREFIJO)
+
+
+      // this.telefonoSeleccionado = data[0].PREFIJO+this.telefonoSeleccionado
+
+      var telefono = data[0].PREFIJO+this.telefonoSeleccionado
+
+      telefono = telefono.replace(/ /g, "")
+
+      // console.log("Teléfono:", telefono);
+  
+      var codigo = sessionStorage.getItem('usuario')
+      
+      this.service.llamar(telefono,extension,codigo).subscribe(r => {
+        var respuesta = r
+
+        console.log(respuesta)
+
+        if (respuesta.success == true) {
+          this.existeLlamada = 1
+          // console.log('se presiono el boton para realizar la llamada')
+        }else{
+          // guardar en la gestion que se hizo una llamada
+          this.service.notificacionError('Ocurrio un error al realizar la llamada, '+respuesta.error)
+          this.existeLlamada = 0
+          return
+        }
+      })
+
+    })
+
+  //  jhonathan.bethancurt
+
+    // const url = 'http://10.8.8.20:8091/entrantes/api/v1/marcar'
+    // const data = {
+    //   codigo: '00292',
+    //   extension: '1330',
+    //   telefono: '31888231',
+    //   transaccion: '12349'
+    // }
+
+    // this.http.post<any>(url,data).subscribe(
+    //   (response) => {
+    //     // console.log('Imagen subida con éxito');
+    //   },
+    //   (error) => {
+    //     console.error('Error al generar la llamada:', error);
+    //   }
+    // );
+  } 
+
+  
   OpenDialogTelefonos() {
     this.selectDisabled = true;
     const dialogRef = this.dialog.open(ContactoTelefonosComponent, {
@@ -1180,7 +1320,8 @@ export class GestionAtencionClienteComponent implements OnInit {
   OpenDialogEditar(Cliente: any) {
     const dialogRef = this.dialog.open(ContactoTelefonoEditarComponent, {
       width: '50%',
-      data: Cliente
+      data: Cliente,
+      disableClose: true
     });
     dialogRef.afterClosed().subscribe(datos => {
       this.genListaTelefonos()
@@ -1234,7 +1375,7 @@ export class GestionAtencionClienteComponent implements OnInit {
 
   EnviarCorreo(Correo: any) {
     if (Correo == 0) {
-      this.service.notificacion("Debe seleccionar un correo electronico")
+      this.service.notificacionError("Debe seleccionar un correo electronico")
       return
     }
 
@@ -1260,7 +1401,7 @@ export class GestionAtencionClienteComponent implements OnInit {
 
   EnviarSMS(Cliente: any) {
     if (Cliente == 0 || this.plantillaID == 0) {
-      this.service.notificacion("Debe seleccionar un telefono y la plantilla para enviar el sms")
+      this.service.notificacionError("Debe seleccionar un telefono y la plantilla para enviar el sms")
       return
     }
 

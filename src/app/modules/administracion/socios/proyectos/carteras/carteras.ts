@@ -6,7 +6,8 @@ export interface Carteras {
     TIPOCARTERA:string,
     PROYECTOID:number,
     CREACION:string,
-    ACTUALIZACION:string
+    ACTUALIZACION:string,
+    PREFIJO: number
 
 }
 

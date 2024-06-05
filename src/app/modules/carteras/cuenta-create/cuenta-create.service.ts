@@ -59,7 +59,7 @@ export class CuentaCreateService {
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
     var payload = this.auth.mkpayload({
-      proc: "CLIENTE_CREATE",
+      proc: "CLIENTE_CREATEV2",
       token: token,
       nombre:nombre,
       identidad:identidad,
@@ -175,11 +175,22 @@ export class CuentaCreateService {
   }
 
 
-  notificacion(msg:string):void{
-    this.snack.open(msg,"Cerrar",{
-      horizontalPosition:"center",
-      verticalPosition:"top",
-      duration:5000
+  notificacion(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: 'app-notification-success'
+    })
+  }
+
+  notificacionError(msg: string): void {
+    this.snack.open(msg, "Cerrar", {
+      horizontalPosition: "center",
+      verticalPosition: "top",
+      duration: 5000,
+      panelClass: 'app-notification-error'
+
     })
   }
 

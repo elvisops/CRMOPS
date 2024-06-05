@@ -232,7 +232,7 @@ export class CuentaCreateComponent implements OnInit {
     if (this.nombre == "" || this.identidad == "" || this.numeroCliente == "" ||
       this.refLaboral == "" || this.telRefLaboral == "" || this.refPersonal == "" || this.telRefPersonal == "" ||
       this.refFamiliar == "" || this.telRefFamiliar == "" || this.numeroOrden == "") {
-      this.service.notificacion("Los campos con asteriscos son obligatorios")
+      this.service.notificacionError("Los campos con asteriscos son obligatorios")
       return
     }
 
@@ -296,7 +296,7 @@ export class CuentaCreateComponent implements OnInit {
           // console.log(respuesta.data)
           this.route.navigate(['carteras/atencion_cliente'], { queryParams: { cuentaID: cuentaID,carteraID: this.carteraID } })
         } else {
-          this.service.notificacion(respuesta.message)
+          this.service.notificacionError(respuesta.message)
         }
       })
   }

@@ -63,6 +63,10 @@ export class CarterasListasComponent implements OnInit{
 
   }
 
+  extensionesUsuarios(carteraID: number,cartera: string){
+    this.router.navigate(['carteras/extensiones_usuarios'],{ queryParams: {carteraID:carteraID,cartera:cartera}})
+  }
+
   CreateCuenta(CarteraID: number, TipoCarteraID: number){
     this.router.navigate(['carteras/cuenta_create'],{ queryParams: {carteraID: CarteraID,TipoCarteraID:TipoCarteraID}})
   }
