@@ -113,12 +113,21 @@ export class LoginComponent implements OnInit {
         // this.service.enviarDatos(token,usuarioID).subscribe(res =>{
 
         // }
+        usuarioID = this.auth.desencriptar(usuarioID)
         console.log('usuarioID: ',usuarioID)
         // this.service.enviarDatos(token,usuarioID).subscribe(res => {
         //   var respuesta = JSON.parse(res)
         //   console.log(respuesta)
         // })
+        
 
+        // this.service.enviarDatos(usuarioID,token).subscribe(res => {
+        //   var respuesta = JSON.parse(res)
+        //   console.log(respuesta)
+        // });
+
+        // this.scheduleCheck(usuarioID, token);
+        
         window.location.href = "./"
 
       } else {
@@ -135,6 +144,17 @@ export class LoginComponent implements OnInit {
     })
 
   }
+
+  // scheduleCheck(usuarioID:any, token:any) {
+  //   setInterval(() => {
+  //     console.log('enviar')
+  //     this.service.check(usuarioID, token).subscribe(response => {
+  //       console.log(response);
+  //     }, error => {
+  //       console.error('Error en check:', error);
+  //     });
+  //   }, 60000); // 60000ms = 1 minuto
+  // }
 
 
 

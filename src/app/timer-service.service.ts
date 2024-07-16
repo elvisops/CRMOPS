@@ -52,6 +52,9 @@ export class TimerServiceService {
 
   api = environment.api
 
+  private apiUrl = 'http://10.8.8.115:3007';
+
+
   validarSesion(usuarioID: string|null){
     var token = sessionStorage.getItem('token')
     token = this.auth.desencriptar(token)
@@ -66,6 +69,16 @@ export class TimerServiceService {
       catchError(this.handleError("Error al traer los datos"))
     )
   }
+
+  check(userID: string, token: string): Observable<any> {
+    // console.log(`${this.apiUrl}/check`)
+    return this.http.post<any>(`${this.apiUrl}/check`, { userID:userID, token:token })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al enviar los datos 2"))
+    );
+  }
+
   
   Guardar(estadoOperativoID:number, inicio:string, fin:string, carteraId:number): Observable<any>{
     var token = sessionStorage.getItem('token')

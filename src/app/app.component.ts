@@ -149,34 +149,34 @@ export class AppComponent implements OnInit {
   //   }
   // }
 
-  @HostListener('window:beforeunload', ['$event'])
-   onWindowClose(event: any): void {
-    // Do something
+  // @HostListener('window:beforeunload', ['$event'])
+  // onWindowClose(event: any): void {
+  //   // Do something
 
-    // this.timerService.actualizarEstadoOperativo('4').subscribe(r => {
-    //   var res = this.auth.desencriptar(r.data)
-    //   console.log(res)
-    // })
-    // debugger;
+  //   // this.timerService.actualizarEstadoOperativo('4').subscribe(r => {
+  //   //   var res = this.auth.desencriptar(r.data)
+  //   //   console.log(res)
+  //   // })
+  //   // debugger;
 
-    //  event.preventDefault();
-    //  event.returnValue = false;
+  //   //  event.preventDefault();
+  //   //  event.returnValue = false;
 
-    // debugger; 
-    
-    window.addEventListener('beforeunload',() => {
-      console.log('cerrando pestaña del navegador')
-      // const desencriptado = this.service.desencriptar(usuarioID);
-      // this.timerService.actualizarEstadoOperativo(desencriptado)
-      
-      debugger;
-      event.preventDefault();
-      event.returnValue = false;
- 
-      // window.open("https://ionicframework.com/", '_blank')
-    })
+  //   // debugger; 
 
-  }
+  //   // window.addEventListener('beforeunload', () => {
+  //   //   console.log('cerrando pestaña del navegador')
+  //   //   // const desencriptado = this.service.desencriptar(usuarioID);
+  //   //   // this.timerService.actualizarEstadoOperativo(desencriptado)
+
+  //   //   debugger;
+  //   //   event.preventDefault();
+  //   //   event.returnValue = false;
+
+  //   //   // window.open("https://ionicframework.com/", '_blank')
+  //   // })
+
+  // }
 
   // @HostListener('window:beforeunload', ['$event'])
   // onWindowClose(event: any): void {
@@ -277,6 +277,12 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // @HostListener('window:unload', [ '$event' ])
+  // unloadHandler(event) {
+  //   localStorage.clear();
+
+  // }
+
   ngOnInit(): void {
     this.ValidarSesion()
     this.username = sessionStorage.getItem('usuario') || ""
@@ -290,10 +296,28 @@ export class AppComponent implements OnInit {
       }, 500);
     }
 
+    var usuarioID = sessionStorage.getItem('usuarioID')
+    usuarioID = this.auth.desencriptar(usuarioID)
+
+    // var token = sessionStorage.getItem('token')
+    // token = this.auth.desencriptar(token)
+
+
+
+
     // console.log(this.status)
 
 
     const token = sessionStorage.getItem('token')
+
+    // this.scheduleCheck(usuarioID, token);
+
+    // setInterval(() => {
+    //   // console.log('enviando datos')
+    //   this.scheduleCheck(usuarioID, token);
+    // },60000)
+
+
     if (token != null) {
       const eventSource = new EventSource('http://10.8.8.115:3004/events');
       eventSource.addEventListener('message', (event: any) => {
@@ -332,20 +356,27 @@ export class AppComponent implements OnInit {
 
   }
 
-  // close(){
-  //   window.addEventListener('beforeunload',() => {
-  //     console.log('cerrando pestaña del navegador')
-  //     // const desencriptado = this.service.desencriptar(usuarioID);
-  //     // this.timerService.actualizarEstadoOperativo(desencriptado)
-  //     this.timerService.actualizarEstadoOperativo('4').subscribe(r => {
-  //       var res = this.auth.desencriptar(r.data)
-  //       console.log(res)
-  //     })
-  //     debugger;
 
-  //     window.open("https://ionicframework.com/", '_blank')
-  //   })
+
+  // scheduleCheck(usuarioID:any, token:any) {
+
+  //   // setInterval(() => {
+  //     // console.log('enviar')
+  //     // token = '123klk'
+  //     // this.timerService.check(usuarioID, token).subscribe(response => {
+  //     //   // var respuesta = JSON.parse()
+  //     //   console.log(response);
+  //     // }, error => {
+  //     //   console.error('Error en check:', error);
+  //     // });
+  //     this.timerService.check(usuarioID,token).subscribe(res => {
+  //       // var respuesta = JSON.parse(res)
+  //       var respuesta = res
+  //       console.log(respuesta.message)
+  //     })
+  //   // }, 60000); // 60000ms = 1 minuto
   // }
+
 
 
   ValidarSesion() {

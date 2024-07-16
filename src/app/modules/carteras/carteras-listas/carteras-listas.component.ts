@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 export class CarterasListasComponent implements OnInit{
   
 
+  rolUsuario: string|null = ''
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -37,6 +38,9 @@ export class CarterasListasComponent implements OnInit{
   ngOnInit(): void {
     new Date().toLocaleString("en-US")
     this.genListaCarteras()
+
+    this.rolUsuario = sessionStorage.getItem('rolID')
+    console.log(this.rolUsuario)
   }
 
   genListaCarteras(){

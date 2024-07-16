@@ -192,9 +192,13 @@ export class CuentaEditComponent implements OnInit {
 
 
 
-    if (this.nombre == "" || this.identidad == "" || this.nivelBuro == 0 || this.distribuidor == 0 || this.numeroCliente == "" ||
-      this.refLaboral == "" || this.telRefLaboral == "" || this.refPersonal == "" || this.telRefPersonal == "" ||
-      this.refFamiliar == "" || this.telRefFamiliar == "" || this.numeroOrden == "") {
+    // if (this.nombre == "" || this.identidad == "" || this.nivelBuro == 0 || this.distribuidor == 0 || 
+    //   this.refLaboral == "" || this.telRefLaboral == "" || this.refPersonal == "" || this.telRefPersonal == "" ||
+    //   this.refFamiliar == "" || this.telRefFamiliar == "" || this.numeroOrden == "") {
+    //     // this.numeroCliente == "" ||
+    if (this.nombre == "" || this.identidad == "" || this.nivelBuro == 0 || this.distribuidor == 0 
+      ||  this.numeroOrden == "") {
+        
       this.service.notificacionError("Los campos con asteriscos son obligatorios")
       return
     }
@@ -221,7 +225,8 @@ export class CuentaEditComponent implements OnInit {
 
     const identidad = this.identidad.replace(/[^0-9]/g, "");
     // console.log(identidad)
-    const numeroCliente = this.numeroCliente.replace(/[^0-9]/g,"")
+    // const numeroCliente = this.numeroCliente.replace(/[^0-9]/g,"")
+    const numeroCliente = this.numeroCliente
     // console.log(numeroCliente)
     this.nombre = this.nombre.toUpperCase()
 

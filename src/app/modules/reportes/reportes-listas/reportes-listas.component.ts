@@ -183,7 +183,7 @@ export class ReportesListasComponent implements OnInit {
       if (result) {
         if (result.fechaInicio) {
           const fechaFormateada = this.datePipe.transform(result.fechaInicio, 'yyyy-MM-dd 01:00:00');
-          const fechaFormateada2 = this.datePipe.transform(result.fechaFin, 'yyyy-MM-dd 24:59:00');
+          const fechaFormateada2 = this.datePipe.transform(result.fechaFin, 'yyyy-MM-dd 23:59:00');
           // alert(fechaFormateada);
           // if (fechaFormateada !== null && fechaFormateada2 !== null) {
           //   query = query.replace("VARIABLE_FECHA_INICIO", fechaFormateada);

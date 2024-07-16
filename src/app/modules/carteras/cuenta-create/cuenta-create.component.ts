@@ -52,7 +52,7 @@ export class CuentaCreateComponent implements OnInit {
   tiempoTranscurridoSegundos: number = 0;
   flagTimer: boolean = false
 
-  searchTerm!: string;  
+  searchTerm!: string;
 
 
   constructor(
@@ -100,16 +100,16 @@ export class CuentaCreateComponent implements OnInit {
     this.router.queryParams.subscribe(params => {
       this.carteraID = params['carteraID']
     });
-  
+
     // console.log(this.carteraID)
     this.genListaBuro();
     this.genListaDistribuidores();
     this.genListaConfirmacion();
     this.genListaEstadoValidacion();
-  
+
     var estadoOperativo = sessionStorage.getItem('EstadoOperativo');
     var valestadoOperativo = this.auth.desencriptar(estadoOperativo);
-  
+
     if (!estadoOperativo || valestadoOperativo == 3) {
       this.genTiempoPantalla();
       const contadorGuardado = localStorage.getItem('contador');
@@ -117,7 +117,7 @@ export class CuentaCreateComponent implements OnInit {
         this.contador = parseInt(contadorGuardado, 10);
       }
     }
-  
+
     // Intervalo para validar cada segundo
     // interval(1000).subscribe(() => {
     //   var estadoOperativo = sessionStorage.getItem('EstadoOperativo');
@@ -130,7 +130,7 @@ export class CuentaCreateComponent implements OnInit {
     // });
   }
 
-  guardarPantallaActual(){
+  guardarPantallaActual() {
     this.service.savePantalla('Creacion de Cliente').subscribe(r => {
       var respuesta = this.auth.desencriptar(r.data)
       // respuesta = JSON.parse(respuesta)
@@ -182,7 +182,7 @@ export class CuentaCreateComponent implements OnInit {
     }
     localStorage.removeItem('tiempoPantalla');
     localStorage.removeItem('contador');
-    
+
     this.service.removeUserPantalla().subscribe(r => {
       // var respuesta = this.auth.desencriptar(r.data)
       // respuesta = JSON.parse(respuesta)
@@ -228,10 +228,11 @@ export class CuentaCreateComponent implements OnInit {
       cambioref = 0;
     }
 
-    // || this.nivelBuro == 0 || this.distribuidor == 0 ||
-    if (this.nombre == "" || this.identidad == "" || this.numeroCliente == "" ||
-      this.refLaboral == "" || this.telRefLaboral == "" || this.refPersonal == "" || this.telRefPersonal == "" ||
-      this.refFamiliar == "" || this.telRefFamiliar == "" || this.numeroOrden == "") {
+    // if (this.nombre == "" || this.identidad == "" || 
+    //   this.refLaboral == "" || this.telRefLaboral == "" || this.refPersonal == "" || this.telRefPersonal == "" ||
+    //   this.refFamiliar == "" || this.telRefFamiliar == "" || this.numeroOrden == "" ) {
+    if (this.nombre == "" || this.identidad == "" || this.nivelBuro == 0 || this.distribuidor == 0 
+      || this.numeroOrden == "") {
       this.service.notificacionError("Los campos con asteriscos son obligatorios")
       return
     }
@@ -258,10 +259,11 @@ export class CuentaCreateComponent implements OnInit {
     const identidad = this.identidad.replace(/[ -]/g, "");
     // console.log(identidad)
     // return
-    const numeroCliente = this.numeroCliente.replace(/[^0-9]/g,"")
+    // const numeroCliente = this.numeroCliente.replace(/[^0-9]/g,"")
+    const numeroCliente = this.numeroCliente
     // console.log(numeroCliente)
     // return
-    
+
     // console.log(identidad)
     // return
     this.nombre = this.nombre.toUpperCase()
@@ -294,7 +296,7 @@ export class CuentaCreateComponent implements OnInit {
           this.limpiarInputs()
           const cuentaID = respuesta.data
           // console.log(respuesta.data)
-          this.route.navigate(['carteras/atencion_cliente'], { queryParams: { cuentaID: cuentaID,carteraID: this.carteraID } })
+          this.route.navigate(['carteras/atencion_cliente'], { queryParams: { cuentaID: cuentaID, carteraID: this.carteraID } })
         } else {
           this.service.notificacionError(respuesta.message)
         }
@@ -335,17 +337,17 @@ export class CuentaCreateComponent implements OnInit {
     if (this.identidad !== null) {
       const tecla = event.key;
       const longitudValor = this.identidad.length;
-  
+
       if (longitudValor >= 20 && tecla !== 'Backspace') {
         event.preventDefault();
       }
-  
+
       if (!/^[0-9-]*$/.test(tecla) && tecla !== 'Backspace') {
         event.preventDefault();
       }
     }
   }
-  
+
 
   limpiarInputs() {
     this.nombre = "",

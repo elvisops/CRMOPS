@@ -8,6 +8,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpRequest } from './httprequest.interface';
 import { HttpResponse } from './httpresponse.interface';
 
+import { interval } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +18,7 @@ export class LoginService {
 
   api = environment.api;
 
-  private apiUrl = 'http://10.8.8.115:3007/login';
+  private apiUrl = 'http://10.8.8.115:3007';
 
   DataSend: HttpRequest = { proc: "", payload: "" };
 
@@ -34,12 +37,46 @@ export class LoginService {
       )
   }
 
-  enviarDatos(token:any, usuarioID:any):Observable<any>{
-    return this.http.post(this.apiUrl, { token, usuarioID })
+  // enviarDatos(token:any, usuarioID:any):Observable<any>{
+  //   return this.http.post(this.apiUrl, { token, usuarioID })
+  //   .pipe(
+  //     tap(),
+  //     catchError(this.handleError("Error al enviar los datos"))
+  //   )
+  // }
+
+  // startKeepAlive(usuarioID: string, token: string) {
+  //   // this.usuarioID = usuarioID;
+  //   // this.token = token;
+
+  //   // Enviar keep-alive cada 1 minuto (60000 milisegundos)
+  //   interval(60000).pipe(
+  //     switchMap(() => this.enviarDatos(token, usuarioID))
+  //   ).subscribe(
+  //     response => console.log('Keep-alive enviado', response),
+  //     error => console.error('Error en keep-alive', error)
+  //   );
+  // }
+  
+  enviarDatos(userID: string, token: string): Observable<any> {
+    console.log(`${this.apiUrl}/login`)
+    // token = '123456'
+    console.log('userID: ', userID, ' token: ',token)
+    return this.http.post<any>(`${this.apiUrl}/login`, { userID:userID, token:token })
+    .pipe(
+      tap(),
+      catchError(this.handleError("Error al enviar los datos 1"))
+    );
+  }
+
+  check(userID: string, token: string): Observable<any> {
+    console.log(`${this.apiUrl}/check`)
+
+    return this.http.post(`${this.apiUrl}/check`, { userID:userID, token:token })
     .pipe(
       tap(),
       catchError(this.handleError("Error al enviar los datos"))
-    )
+    );
   }
 
   getPermisos() {

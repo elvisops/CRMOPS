@@ -530,18 +530,25 @@ export class GestionDeContactosService {
     )
   }
   llamar(telefonoSeleccionado:any,extencion: any, codigo: any): Observable<any> {
-    const data = {
-      codigo: codigo,
-      extension: extencion,
-      telefono: telefonoSeleccionado,
-      transaccion: '12349'
-    };
+    // const data = {
+    //   codigo: codigo,
+    //   extension: extencion,
+    //   telefono: telefonoSeleccionado,
+    //   transaccion: '12349'
+    // };
 
-    return this.http.post<any>('http://10.8.8.115:3006/api-llamadas-dms', data)
+
+
+    return this.http.get(`http://10.8.8.100/crmcall.php?codigo=${codigo}&extension=${extencion}&telefono=${telefonoSeleccionado}`)
     .pipe(
       tap(),
-      catchError(this.handleError('Error al realizar la llamada'))
-    );
+      catchError(this.handleError("Error al realizar la llamada"))
+    )
+    // return this.http.post<any>('http://10.8.8.115:3006/api-llamadas-dms', data)
+    // .pipe(
+    //   tap(),
+    //   catchError(this.handleError('Error al realizar la llamada'))
+    // );
   }
 
   notificacion(msg: string): void {

@@ -1238,9 +1238,10 @@ export class GestionAtencionClienteComponent implements OnInit {
     //traer el prefijo de la cartera
     this.service.getPrefijo(this.carteraID).subscribe(r => {
       // console.log('llamando')
+      
       var data = this.auth.desencriptar(r.data)
       data = JSON.parse(data)
-      
+      console.log(data)
       if (!data[0]) {
         this.service.notificacionError('La cartera no tiene ningun prefijo asignado, por favor reportelo con su supervisor')
         return
@@ -1267,10 +1268,15 @@ export class GestionAtencionClienteComponent implements OnInit {
       this.service.llamar(telefono,extension,codigo).subscribe(r => {
         var respuesta = r
 
-        console.log(respuesta)
+        // respuesta = JSON.parse(respuesta)
+
+        respuesta = respuesta[3]
+        respuesta = JSON.parse(respuesta)
+        // console.log(respuesta)
 
         if (respuesta.success == true) {
           this.existeLlamada = 1
+          this.service.notificacion('Llamando....')
           // console.log('se presiono el boton para realizar la llamada')
         }else{
           // guardar en la gestion que se hizo una llamada

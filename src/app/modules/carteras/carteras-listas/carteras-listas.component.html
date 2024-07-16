@@ -52,7 +52,7 @@
                   <mat-icon class="text-primary">remove_red_eye</mat-icon>
                 </mat-button-toggle>
 
-                <mat-button-toggle (click)="extensionesUsuarios(element.CARTERAID,element.CARTERA)">
+                <mat-button-toggle *ngIf="rolUsuario == '1' || rolUsuario == '2'" (click)="extensionesUsuarios(element.CARTERAID,element.CARTERA)">
                   <mat-icon class="text-success">list</mat-icon>
                 </mat-button-toggle>
 

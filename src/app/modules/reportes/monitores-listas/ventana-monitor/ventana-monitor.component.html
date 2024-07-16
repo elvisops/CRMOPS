@@ -1,92 +1,17 @@
-<!-- <h1>Reporte de Monitores</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th>FECHA INICIO</th>
-      <th>ESTADOOPERATIVOID</th>
-      <th>ESTADOOPERATIVO</th>
-      <th>USUARIO</th>
-      <th>CARTERA</th>
-    </tr>
-  </thead>
-  <tbody id="tabla-body">
-      </tbody>
-</table> -->
 <div class="container mt-4">
   <mat-card *ngIf="graficoID == 0">
     <mat-card-header>Monitor</mat-card-header>
     <mat-card-content>
       <div class="table-responsive">
-        <!-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th>FECHA Y HORA INICIO</th>
-                            <th>ESTADOOPERATIVO</th>
-                            <th>USUARIO</th>
-                            <th>CARTERA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of datos" style="background-color: rgb(250, 137, 137);"
-                            [ngClass]="{'fila-verde': item.ESTADOOPERATIVO === 'LISTO'}">
-                            <td>
-                                {{ item.INICIO | date : "dd/MM/YYYY" }}
-                                {{ item.INICIO | date : "hh:mm:ss":"GMT / UTC" }}
-                            </td>
-                            <td>{{ item.ESTADOOPERATIVO }}</td>
-                            <td>{{ item.USUARIO }}</td>
-                            <td>{{ item.CARTERA }}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
-
-        <table class="table">
+        <table class="w-100">
           <thead>
             <tr>
               <th *ngFor="let columnName of encabezados">{{ columnName }}</th>
             </tr>
           </thead>
           <tbody>
-            <!-- <tr *ngFor="let item of datos">
-                        <div></div>
-                        <td *ngFor="let columnName of encabezados">{{ item[columnName] }}</td>
-                      </tr>
-                    </tbody> -->
-            <!-- <tbody>
-                        <tr *ngFor="let item of datos">
-                          <td *ngFor="let columnName of encabezados">
-                            <ng-container *ngIf="columnName === 'INICIO'; else otherColumn">
-                              {{ item[columnName] | date : "dd/MM/YYYY" }}
-                            </ng-container>
-                            <ng-template #otherColumn>
-                              {{ item[columnName] }}
-                            </ng-template>
-                          </td>
-                        </tr>
-                      </tbody> -->
-
-            <!-- <tbody>
-            <tr *ngFor="let item of datos">
-              <td *ngFor="let columnName of encabezados">
-                <ng-container *ngIf="columnName === 'INICIO'; else fechaColumn">
-                  {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss"}}
-                </ng-container>
-                <ng-template #fechaColumn>
-                  <ng-container *ngIf="columnName === 'FECHA'; else otherColumn">
-                    {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss" }}
-                  </ng-container>
-                  <ng-template #otherColumn>
-                    {{ item[columnName] }}
-                  </ng-template>
-                </ng-template>
-              </td>
-            </tr>
-          </tbody> -->
-
-          <tbody>
-            <!-- <tr *ngFor="let item of datos" [ngClass]="{'red-row': item['ESTADO OPERATIVO'] !== 'LISTO', 'green-row': item['ESTADO OPERATIVO'] === 'LISTO'}"> -->
             <tr *ngFor="let item of datos" [ngClass]="{'red-row': item['Estado Operativo'] !== 'LISTO','green-row': item['Estado Operativo'] == 'LISTO'}">
-              <td *ngFor="let columnName of encabezados" >
+              <td *ngFor="let columnName of encabezados" style="padding: 0px 10px !important;">
                 <ng-container *ngIf="columnName === 'INICIO'; else fechaColumn">
                   <!-- Lógica para cuando el encabezado es "INICIO" -->
                   {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss":"GMT / UTC"}}
@@ -97,12 +22,7 @@
                     {{ item[columnName] | date : "dd/MM/YYYY hh:mm:ss":"GMT / UTC" }}
                   </ng-container>
                   <ng-template #usuarioIdColumn>
-                    <!-- <ng-container *ngIf="columnName === 'USUARIOID'; else otherColumn"> -->
-                    <!-- <ng-container *ngIf="columnName === 'USUARIOID'; else otherColumn"> -->
                     <ng-container *ngIf="columnName === 'Logout'; else quitPausa">
-                      <!-- Lógica para cuando el encabezado es "USUARIOID" -->
-
-
                       <mat-button-toggle-group>
                         <mat-button-toggle (click)="DesloguearUsuario(item[columnName])">
                           <mat-icon class="text-success" title="Desloguear Agente">exit_to_app</mat-icon>
@@ -119,7 +39,6 @@
                       </ng-container>
                     </ng-template>
                     <ng-template #otherColumn>
-                      <!-- Lógica para otros encabezados que no son ni "INICIO", "FECHA" ni "USUARIOID" -->
                       {{ item[columnName] }}
                     </ng-template>
                   </ng-template>
@@ -127,11 +46,7 @@
               </td>
             </tr>
           </tbody>
-
-
         </table>
-
-
       </div>
     </mat-card-content>
   </mat-card>
